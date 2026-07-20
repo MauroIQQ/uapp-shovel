@@ -1,27 +1,31 @@
 import { prisma } from "@uapp/database";
 
 import { AgendaPage } from "@/modules/agenda/presentation/agenda-page";
+import { getServerAuth } from "@/lib/get-server-auth";
 
-// TODO: obtener rut_empresa desde auth/sesion
-const RUT_EMPRESA_FALLBACK = "76140290-0";
+export const dynamic = "force-dynamic";
 
 export default async function AgendaRoute() {
+  const auth = await getServerAuth();
+  if (!auth) return <AgendaPage tipos={[]} horarios={[]} resumen={[]} />;
+
+  const { rut_empresa } = auth;
   const today = new Date();
   const start = new Date(today.getFullYear(), today.getMonth(), 1);
   const end = new Date(today.getFullYear(), today.getMonth() + 1, 0, 23, 59, 59);
 
   const [tipos, horarios, citasMes] = (await Promise.all([
     prisma.uapp_tipos_horas.findMany({
-      where: { rut_empresa: RUT_EMPRESA_FALLBACK, estado: true },
+      where: { rut_empresa, estado: true },
       orderBy: { descripcion: "asc" },
     }),
     prisma.uapp_horarios.findMany({
-      where: { rut_empresa: RUT_EMPRESA_FALLBACK, activo: true },
+      where: { rut_empresa, activo: true },
       orderBy: { hora: "asc" },
     }),
     prisma.uapp_horas.findMany({
       where: {
-        rut_empresa: RUT_EMPRESA_FALLBACK,
+        rut_empresa,
         fecha_hora: { gte: start, lte: end },
       },
       select: { fecha_hora: true },

@@ -29,7 +29,7 @@ export async function POST(req: Request) {
     perfil: user.perfil,
   });
 
-  return NextResponse.json({
+  const response = NextResponse.json({
     token,
     user: {
       rut: user.rut,
@@ -41,4 +41,14 @@ export async function POST(req: Request) {
       rut_empresa: user.rut_empresa,
     },
   });
+
+  response.cookies.set("token", token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: 60 * 60 * 12,
+  });
+
+  return response;
 }
