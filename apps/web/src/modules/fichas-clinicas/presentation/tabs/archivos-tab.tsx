@@ -98,7 +98,7 @@ export function ArchivosTab({ fichaId }: ArchivosTabProps) {
 
   const subcategorias = categorias.find((c) => c.id === Number(catId))?.subcategorias ?? [];
 
-  async function load() {
+  const load = React.useCallback(async () => {
     setLoading(true);
     try {
       const [data, cats] = await Promise.all([
@@ -112,7 +112,7 @@ export function ArchivosTab({ fichaId }: ArchivosTabProps) {
     } finally {
       setLoading(false);
     }
-  }
+  }, [fichaId]);
 
   React.useEffect(() => {
     if (fichaId) load();

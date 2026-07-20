@@ -52,7 +52,7 @@ export function useFicha(rut: string | undefined) {
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
 
-  async function load() {
+  const load = React.useCallback(async () => {
     if (!rut) return;
     setLoading(true);
     setError(null);
@@ -67,7 +67,7 @@ export function useFicha(rut: string | undefined) {
     } finally {
       setLoading(false);
     }
-  }
+  }, [rut]);
 
   React.useEffect(() => {
     load();
@@ -86,7 +86,7 @@ function useList<T>(fetcher: (id: number) => Promise<T[]>) {
   const [data, setData] = React.useState<T[]>([]);
   const [loading, setLoading] = React.useState(false);
 
-  async function load(fichaId: number | undefined) {
+  const load = React.useCallback(async (fichaId: number | undefined) => {
     if (!fichaId) return;
     setLoading(true);
     try {
@@ -96,7 +96,7 @@ function useList<T>(fetcher: (id: number) => Promise<T[]>) {
     } finally {
       setLoading(false);
     }
-  }
+  }, [fetcher]);
 
   return { data, loading, setData, load };
 }
@@ -196,7 +196,7 @@ export function useHabitos(fichaId: number | undefined) {
   const [data, setData] = React.useState<Habitos | null>(null);
   const [loading, setLoading] = React.useState(false);
 
-  async function load() {
+  const load = React.useCallback(async () => {
     if (!fichaId) return;
     setLoading(true);
     try {
@@ -206,7 +206,7 @@ export function useHabitos(fichaId: number | undefined) {
     } finally {
       setLoading(false);
     }
-  }
+  }, [fichaId]);
 
   React.useEffect(() => {
     load();
@@ -226,7 +226,7 @@ export function useBitacoras(fichaId: number | undefined) {
   const [data, setData] = React.useState<Bitacora[]>([]);
   const [loading, setLoading] = React.useState(false);
 
-  async function load() {
+  const load = React.useCallback(async () => {
     if (!fichaId) return;
     setLoading(true);
     try {
@@ -236,7 +236,7 @@ export function useBitacoras(fichaId: number | undefined) {
     } finally {
       setLoading(false);
     }
-  }
+  }, [fichaId]);
 
   React.useEffect(() => {
     load();
