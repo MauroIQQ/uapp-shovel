@@ -6,6 +6,10 @@ import { AgendaPage } from "@/modules/agenda/presentation/agenda-page";
 const RUT_EMPRESA_FALLBACK = "76140290-0";
 
 export default async function AgendaRoute() {
+  const today = new Date();
+  const start = new Date(today.getFullYear(), today.getMonth(), 1);
+  const end = new Date(today.getFullYear(), today.getMonth() + 1, 0, 23, 59, 59);
+
   const [tipos, horarios, citasMes] = await Promise.all([
     prisma.uapp_tipos_horas.findMany({
       where: { rut_empresa: RUT_EMPRESA_FALLBACK, estado: true },
@@ -18,22 +22,14 @@ export default async function AgendaRoute() {
     prisma.uapp_horas.findMany({
       where: {
         rut_empresa: RUT_EMPRESA_FALLBACK,
+        fecha_hora: { gte: start, lte: end },
       },
       select: { fecha_hora: true },
     }),
   ]);
 
-  const today = new Date();
-  const start = new Date(today.getFullYear(), today.getMonth(), 1);
-  const end = new Date(today.getFullYear(), today.getMonth() + 1, 0, 23, 59, 59);
-
-  const citasDelMes = citasMes.filter((c) => {
-    const d = c.fecha_hora;
-    return d >= start && d <= end;
-  });
-
   const counts = new Map<string, number>();
-  for (const c of citasDelMes) {
+  for (const c of citasMes) {
     const dateStr = c.fecha_hora.toISOString().slice(0, 10);
     counts.set(dateStr, (counts.get(dateStr) ?? 0) + 1);
   }

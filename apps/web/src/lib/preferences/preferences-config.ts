@@ -101,6 +101,13 @@ export const PREFERENCE_REGISTRY = {
     persistence: "client-cookie",
     attribute: "data-sidebar-collapsible",
   }),
+
+  login_video_theme: definePreference({
+    values: ["playa", "cafe", "nostalgia", "otono", "invierno", "primavera", "verano"] as const,
+    defaultValue: "playa",
+    persistence: "client-cookie",
+    attribute: "data-login-video-theme",
+  }),
 } as const;
 
 export type PreferenceKey = keyof typeof PREFERENCE_REGISTRY;

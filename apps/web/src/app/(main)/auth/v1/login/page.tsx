@@ -1,23 +1,35 @@
 "use client";
 
-import * as React from "react";
-import { Palette } from "lucide-react";
+import { useShallow } from "zustand/react/shallow";
 
+import { Check, Palette } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { CloudflareIcon } from "@/components/ui/cloudflare-icon";
+import { usePreferencesStore } from "@/stores/preferences/preferences-provider";
 import { LoginForm } from "../../_components/login-form";
 
 export default function LoginV1() {
-  const [tema, setTema] = React.useState<"playa" | "cafe" | "nostalgia" | "otono" | "invierno" | "primavera" | "verano">("playa");
+  const { login_video_theme, setPreference } = usePreferencesStore(
+    useShallow((s) => ({
+      login_video_theme: s.values.login_video_theme,
+      setPreference: s.setPreference,
+    })),
+  );
+  const tema = login_video_theme as "playa" | "cafe" | "nostalgia" | "otono" | "invierno" | "primavera" | "verano";
+  const setTema = (v: typeof tema) => setPreference("login_video_theme", v);
 
   const videos: Record<string, string> = {
-    playa: "/video-verano.mp4",
+    playa: "/video-playa.mp4",
     cafe: "/video-cafe.mp4",
     nostalgia: "/video-nostalgia.mp4",
     otono: "/video-otono.mp4",
@@ -27,26 +39,64 @@ export default function LoginV1() {
   };
   const videoSrc = videos[tema] ?? "/video-verano.mp4";
 
+  const temaLabels: Record<string, string> = {
+    playa: "Playa",
+    cafe: "Café",
+    nostalgia: "Nostalgia",
+    otono: "Otoño",
+    invierno: "Invierno",
+    primavera: "Primavera",
+    verano: "Verano",
+  };
+
+  const temaColors: Record<string, string> = {
+    playa: "bg-sky-400",
+    cafe: "bg-amber-700",
+    nostalgia: "bg-purple-400",
+    otono: "bg-orange-500",
+    invierno: "bg-blue-200",
+    primavera: "bg-pink-400",
+    verano: "bg-yellow-400",
+  };
+
   return (
     <div className="flex h-dvh">
       <div className="relative hidden overflow-hidden lg:block lg:w-1/2">
         <div className="absolute top-4 right-4 z-20">
-          <Select value={tema} onValueChange={(v) => setTema(v as typeof tema)}>
-            <SelectTrigger className="w-36 rounded-full bg-black/30 text-white border-white/20 hover:bg-black/50">
-              <Palette className="size-4 mr-1" />
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="playa">Playa</SelectItem>
-              <SelectItem value="cafe">Café</SelectItem>
-              <SelectItem value="nostalgia">Nostalgia</SelectItem>
-              <div className="h-px bg-border/50 my-1" role="separator" />
-              <SelectItem value="otono">Otoño</SelectItem>
-              <SelectItem value="invierno">Invierno</SelectItem>
-              <SelectItem value="primavera">Primavera</SelectItem>
-              <SelectItem value="verano">Verano</SelectItem>
-            </SelectContent>
-          </Select>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="outline"
+                className="rounded-full bg-black/30 text-white border-white/20 hover:bg-black/50 hover:text-white gap-1.5 px-3"
+              >
+                <Palette className="size-4" />
+                {temaLabels[tema]}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-44" align="start">
+              <DropdownMenuLabel>Ambientes</DropdownMenuLabel>
+              <DropdownMenuGroup>
+                {(["playa", "cafe", "nostalgia"] as const).map((t) => (
+                  <DropdownMenuItem key={t} onSelect={() => setTema(t)}>
+                    <span className={`size-2 rounded-full ${temaColors[t]} mr-2 shrink-0`} />
+                    {temaLabels[t]}
+                    {tema === t && <Check className="size-3.5 ml-auto" />}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuLabel>Estaciones</DropdownMenuLabel>
+              <DropdownMenuGroup>
+                {(["otono", "invierno", "primavera", "verano"] as const).map((t) => (
+                  <DropdownMenuItem key={t} onSelect={() => setTema(t)}>
+                    <span className={`size-2 rounded-full ${temaColors[t]} mr-2 shrink-0`} />
+                    {temaLabels[t]}
+                    {tema === t && <Check className="size-3.5 ml-auto" />}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
         <video autoPlay muted loop playsInline key={tema} className="absolute inset-0 h-full w-full object-cover">

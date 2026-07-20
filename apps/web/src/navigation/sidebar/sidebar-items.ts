@@ -73,42 +73,6 @@ export const sidebarItems: NavGroup[] = [
     ],
   },
   {
-    id: 2,
-    items: [
-      {
-        id: "configuracion",
-        title: "Configuración",
-        icon: Settings,
-        subItems: [
-          {
-            id: "config-usuarios",
-            title: "Usuarios",
-            url: "/dashboard/configuracion/usuarios",
-            icon: UserCog,
-          },
-          {
-            id: "config-empresas",
-            title: "Empresas",
-            url: "/dashboard/configuracion/empresas",
-            icon: Building2,
-          },
-          {
-            id: "config-perfiles",
-            title: "Perfiles",
-            url: "/dashboard/configuracion/perfiles",
-            icon: Lock,
-          },
-          {
-            id: "config-categorias-documentos",
-            title: "Categorías Documentos",
-            url: "/dashboard/configuracion/categorias-documentos",
-            icon: FolderTree,
-          },
-        ],
-      },
-    ],
-  },
-  {
     id: 4,
     label: "Administración",
     items: [
@@ -159,6 +123,42 @@ export const sidebarItems: NavGroup[] = [
         title: "Fichas Clínicas",
         url: "/dashboard/fichas",
         icon: FileText,
+      },
+    ],
+  },
+  {
+    id: 2,
+    items: [
+      {
+        id: "configuracion",
+        title: "Configuración",
+        icon: Settings,
+        subItems: [
+          {
+            id: "config-usuarios",
+            title: "Usuarios",
+            url: "/dashboard/configuracion/usuarios",
+            icon: UserCog,
+          },
+          {
+            id: "config-empresas",
+            title: "Empresas",
+            url: "/dashboard/configuracion/empresas",
+            icon: Building2,
+          },
+          {
+            id: "config-perfiles",
+            title: "Perfiles",
+            url: "/dashboard/configuracion/perfiles",
+            icon: Lock,
+          },
+          {
+            id: "config-categorias-documentos",
+            title: "Categorías Documentos",
+            url: "/dashboard/configuracion/categorias-documentos",
+            icon: FolderTree,
+          },
+        ],
       },
     ],
   },
