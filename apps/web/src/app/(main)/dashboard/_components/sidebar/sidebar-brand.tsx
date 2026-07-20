@@ -1,7 +1,8 @@
 "use client";
 
-import { Building, ChevronsUpDown, Stethoscope } from "lucide-react";
 import Image from "next/image";
+
+import { Building, ChevronsUpDown, Stethoscope } from "lucide-react";
 
 import {
   DropdownMenu,
@@ -11,11 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "@/components/ui/sidebar";
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 
 export function SidebarBrand() {
   return (
@@ -23,7 +20,10 @@ export function SidebarBrand() {
       <SidebarMenuItem>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <SidebarMenuButton size="lg" className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
+            <SidebarMenuButton
+              size="lg"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+            >
               <div className="flex aspect-square size-10 items-center justify-center group-data-[collapsible=icon]:size-8">
                 <Image
                   src="/uapp-logo-system.png"

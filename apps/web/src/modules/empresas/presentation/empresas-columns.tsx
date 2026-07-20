@@ -35,16 +35,14 @@ export function useEmpresasColumns({ onEdit, onDelete }: EmpresasColumnsOptions)
       accessorKey: "giro",
       header: "Giro",
       cell: ({ row }) => (
-        <span className="text-xs text-muted-foreground line-clamp-1">
-          {row.getValue<string | null>("giro") ?? "-"}
-        </span>
+        <span className="line-clamp-1 text-muted-foreground text-xs">{row.getValue<string | null>("giro") ?? "-"}</span>
       ),
     },
     {
       accessorKey: "correo",
       header: "Correo",
       cell: ({ row }) => (
-        <span className="text-xs text-muted-foreground line-clamp-1">
+        <span className="line-clamp-1 text-muted-foreground text-xs">
           {row.getValue<string | null>("correo") ?? "-"}
         </span>
       ),
@@ -52,15 +50,13 @@ export function useEmpresasColumns({ onEdit, onDelete }: EmpresasColumnsOptions)
     {
       accessorKey: "telefono",
       header: "Teléfono",
-      cell: ({ row }) => (
-        <span className="text-xs tabular-nums">{row.getValue<string | null>("telefono") ?? "-"}</span>
-      ),
+      cell: ({ row }) => <span className="text-xs tabular-nums">{row.getValue<string | null>("telefono") ?? "-"}</span>,
     },
     {
       accessorKey: "nombre_representante",
       header: "Representante",
       cell: ({ row }) => (
-        <span className="text-xs text-muted-foreground line-clamp-1">
+        <span className="line-clamp-1 text-muted-foreground text-xs">
           {row.getValue<string | null>("nombre_representante") ?? "-"}
         </span>
       ),
@@ -70,10 +66,10 @@ export function useEmpresasColumns({ onEdit, onDelete }: EmpresasColumnsOptions)
       header: "Estado",
       cell: ({ row }) => {
         const estado = row.getValue<string | null>("estado");
-        if (!estado) return <span className="text-xs text-muted-foreground">-</span>;
+        if (!estado) return <span className="text-muted-foreground text-xs">-</span>;
         return (
           <span
-            className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${
+            className={`inline-block rounded-full px-2 py-0.5 font-medium text-xs ${
               estado === "activo"
                 ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400"
                 : "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"

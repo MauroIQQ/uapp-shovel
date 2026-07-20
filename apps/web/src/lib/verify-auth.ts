@@ -1,8 +1,6 @@
 import { jwtVerify, SignJWT } from "jose";
 
-const SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || "uapp-dev-secret-key-change-in-production"
-);
+const SECRET = new TextEncoder().encode(process.env.JWT_SECRET || "uapp-dev-secret-key-change-in-production");
 
 export interface JwtPayload {
   rut: string;
@@ -11,10 +9,7 @@ export interface JwtPayload {
 }
 
 export async function createToken(payload: JwtPayload): Promise<string> {
-  return new SignJWT({ ...payload })
-    .setProtectedHeader({ alg: "HS256" })
-    .setExpirationTime("12h")
-    .sign(SECRET);
+  return new SignJWT({ ...payload }).setProtectedHeader({ alg: "HS256" }).setExpirationTime("12h").sign(SECRET);
 }
 
 export async function verifyAuth(req: Request): Promise<JwtPayload> {

@@ -1,5 +1,7 @@
-import { prisma } from "@uapp/database";
 import { NextResponse } from "next/server";
+
+import { prisma } from "@uapp/database";
+
 import { verifyAuth } from "@/lib/verify-auth";
 
 function mapHorario(h: Record<string, unknown> & { activo: boolean }) {

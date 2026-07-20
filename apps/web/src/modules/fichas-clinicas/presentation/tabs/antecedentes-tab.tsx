@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+
 import { Plus, Trash2 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -10,31 +11,18 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Spinner } from "@/components/ui/spinner";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 import {
+  useAlergias,
+  useAnteFamiliares,
   useAntePersonales,
   useAnteQuirurgicos,
-  useAnteFamiliares,
-  useAlergias,
+  useHabitos,
   useMedicacionCronica,
   useProblemasActivos,
-  useHabitos,
 } from "../../application/use-ficha";
 
 interface AntecedentesTabProps {
@@ -74,7 +62,11 @@ function AntePersonalesSection({ fichaId }: { fichaId: number }) {
               <div className="space-y-4">
                 <Field className="gap-1.5">
                   <FieldLabel>Tipo</FieldLabel>
-                  <Input value={tipo} onChange={(e) => setTipo(e.target.value)} placeholder="Ej: Diabetes, Hipertensión" />
+                  <Input
+                    value={tipo}
+                    onChange={(e) => setTipo(e.target.value)}
+                    placeholder="Ej: Diabetes, Hipertensión"
+                  />
                 </Field>
                 <Button onClick={handleAdd}>Guardar</Button>
               </div>
@@ -84,12 +76,12 @@ function AntePersonalesSection({ fichaId }: { fichaId: number }) {
       </CardHeader>
       <CardContent>
         {loading ? (
-          <div className="flex flex-col items-center justify-center gap-2 py-4 text-sm text-muted-foreground">
+          <div className="flex flex-col items-center justify-center gap-2 py-4 text-muted-foreground text-sm">
             <Spinner className="size-4" />
             <span>Cargando antecedentes personales...</span>
           </div>
         ) : data.length === 0 ? (
-          <p className="text-sm text-muted-foreground">Sin antecedentes registrados</p>
+          <p className="text-muted-foreground text-sm">Sin antecedentes registrados</p>
         ) : (
           <div className="flex flex-wrap gap-2">
             {data.map((a) => (
@@ -146,19 +138,32 @@ function AnteQuirurgicosSection({ fichaId }: { fichaId: number }) {
               <div className="space-y-4">
                 <Field className="gap-1.5">
                   <FieldLabel>Procedimiento</FieldLabel>
-                  <Input value={form.procedimiento} onChange={(e) => setForm((f) => ({ ...f, procedimiento: e.target.value }))} />
+                  <Input
+                    value={form.procedimiento}
+                    onChange={(e) => setForm((f) => ({ ...f, procedimiento: e.target.value }))}
+                  />
                 </Field>
                 <Field className="gap-1.5">
                   <FieldLabel>Fecha</FieldLabel>
-                  <Input type="date" value={form.fecha} onChange={(e) => setForm((f) => ({ ...f, fecha: e.target.value }))} />
+                  <Input
+                    type="date"
+                    value={form.fecha}
+                    onChange={(e) => setForm((f) => ({ ...f, fecha: e.target.value }))}
+                  />
                 </Field>
                 <Field className="gap-1.5">
                   <FieldLabel>Centro Médico</FieldLabel>
-                  <Input value={form.centro_medico} onChange={(e) => setForm((f) => ({ ...f, centro_medico: e.target.value }))} />
+                  <Input
+                    value={form.centro_medico}
+                    onChange={(e) => setForm((f) => ({ ...f, centro_medico: e.target.value }))}
+                  />
                 </Field>
                 <Field className="gap-1.5">
                   <FieldLabel>Observaciones</FieldLabel>
-                  <Input value={form.observaciones} onChange={(e) => setForm((f) => ({ ...f, observaciones: e.target.value }))} />
+                  <Input
+                    value={form.observaciones}
+                    onChange={(e) => setForm((f) => ({ ...f, observaciones: e.target.value }))}
+                  />
                 </Field>
                 <Button onClick={handleAdd}>Guardar</Button>
               </div>
@@ -168,12 +173,12 @@ function AnteQuirurgicosSection({ fichaId }: { fichaId: number }) {
       </CardHeader>
       <CardContent>
         {loading ? (
-          <div className="flex flex-col items-center justify-center gap-2 py-4 text-sm text-muted-foreground">
+          <div className="flex flex-col items-center justify-center gap-2 py-4 text-muted-foreground text-sm">
             <Spinner className="size-4" />
             <span>Cargando antecedentes quirúrgicos...</span>
           </div>
         ) : data.length === 0 ? (
-          <p className="text-sm text-muted-foreground">Sin antecedentes quirúrgicos</p>
+          <p className="text-muted-foreground text-sm">Sin antecedentes quirúrgicos</p>
         ) : (
           <Table>
             <TableHeader>
@@ -242,15 +247,25 @@ function AnteFamiliaresSection({ fichaId }: { fichaId: number }) {
               <div className="space-y-4">
                 <Field className="gap-1.5">
                   <FieldLabel>Parentesco</FieldLabel>
-                  <Input value={form.parentesco} onChange={(e) => setForm((f) => ({ ...f, parentesco: e.target.value }))} />
+                  <Input
+                    value={form.parentesco}
+                    onChange={(e) => setForm((f) => ({ ...f, parentesco: e.target.value }))}
+                  />
                 </Field>
                 <Field className="gap-1.5">
                   <FieldLabel>Enfermedad</FieldLabel>
-                  <Input value={form.enfermedad} onChange={(e) => setForm((f) => ({ ...f, enfermedad: e.target.value }))} />
+                  <Input
+                    value={form.enfermedad}
+                    onChange={(e) => setForm((f) => ({ ...f, enfermedad: e.target.value }))}
+                  />
                 </Field>
                 <Field className="gap-1.5">
                   <FieldLabel>Edad Diagnóstico</FieldLabel>
-                  <Input type="number" value={form.edad_diagnostico} onChange={(e) => setForm((f) => ({ ...f, edad_diagnostico: e.target.value }))} />
+                  <Input
+                    type="number"
+                    value={form.edad_diagnostico}
+                    onChange={(e) => setForm((f) => ({ ...f, edad_diagnostico: e.target.value }))}
+                  />
                 </Field>
                 <Button onClick={handleAdd}>Guardar</Button>
               </div>
@@ -260,12 +275,12 @@ function AnteFamiliaresSection({ fichaId }: { fichaId: number }) {
       </CardHeader>
       <CardContent>
         {loading ? (
-          <div className="flex flex-col items-center justify-center gap-2 py-4 text-sm text-muted-foreground">
+          <div className="flex flex-col items-center justify-center gap-2 py-4 text-muted-foreground text-sm">
             <Spinner className="size-4" />
             <span>Cargando antecedentes familiares...</span>
           </div>
         ) : data.length === 0 ? (
-          <p className="text-sm text-muted-foreground">Sin antecedentes familiares</p>
+          <p className="text-muted-foreground text-sm">Sin antecedentes familiares</p>
         ) : (
           <Table>
             <TableHeader>
@@ -319,10 +334,14 @@ function AlergiasSection({ fichaId }: { fichaId: number }) {
 
   const severityColor = (s: string | null) => {
     switch (s) {
-      case "Leve": return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
-      case "Moderada": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400";
-      case "Severa": return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400";
-      default: return "";
+      case "Leve":
+        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
+      case "Moderada":
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400";
+      case "Severa":
+        return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400";
+      default:
+        return "";
     }
   };
 
@@ -345,11 +364,18 @@ function AlergiasSection({ fichaId }: { fichaId: number }) {
               <div className="space-y-4">
                 <Field className="gap-1.5">
                   <FieldLabel>Tipo</FieldLabel>
-                  <Input value={form.tipo} onChange={(e) => setForm((f) => ({ ...f, tipo: e.target.value }))} placeholder="Ej: Medicamentosa, Alimentaria" />
+                  <Input
+                    value={form.tipo}
+                    onChange={(e) => setForm((f) => ({ ...f, tipo: e.target.value }))}
+                    placeholder="Ej: Medicamentosa, Alimentaria"
+                  />
                 </Field>
                 <Field className="gap-1.5">
                   <FieldLabel>Descripción</FieldLabel>
-                  <Input value={form.descripcion} onChange={(e) => setForm((f) => ({ ...f, descripcion: e.target.value }))} />
+                  <Input
+                    value={form.descripcion}
+                    onChange={(e) => setForm((f) => ({ ...f, descripcion: e.target.value }))}
+                  />
                 </Field>
                 <Field className="gap-1.5">
                   <FieldLabel>Severidad</FieldLabel>
@@ -376,12 +402,12 @@ function AlergiasSection({ fichaId }: { fichaId: number }) {
       </CardHeader>
       <CardContent>
         {loading ? (
-          <div className="flex flex-col items-center justify-center gap-2 py-4 text-sm text-muted-foreground">
+          <div className="flex flex-col items-center justify-center gap-2 py-4 text-muted-foreground text-sm">
             <Spinner className="size-4" />
             <span>Cargando alergias...</span>
           </div>
         ) : data.length === 0 ? (
-          <p className="text-sm text-muted-foreground">Sin alergias registradas</p>
+          <p className="text-muted-foreground text-sm">Sin alergias registradas</p>
         ) : (
           <Table>
             <TableHeader>
@@ -461,7 +487,10 @@ function MedicacionSection({ fichaId }: { fichaId: number }) {
               <div className="space-y-4">
                 <Field className="gap-1.5">
                   <FieldLabel>Medicamento</FieldLabel>
-                  <Input value={form.medicamento} onChange={(e) => setForm((f) => ({ ...f, medicamento: e.target.value }))} />
+                  <Input
+                    value={form.medicamento}
+                    onChange={(e) => setForm((f) => ({ ...f, medicamento: e.target.value }))}
+                  />
                 </Field>
                 <Field className="gap-1.5">
                   <FieldLabel>Dosis</FieldLabel>
@@ -469,7 +498,10 @@ function MedicacionSection({ fichaId }: { fichaId: number }) {
                 </Field>
                 <Field className="gap-1.5">
                   <FieldLabel>Frecuencia</FieldLabel>
-                  <Input value={form.frecuencia} onChange={(e) => setForm((f) => ({ ...f, frecuencia: e.target.value }))} />
+                  <Input
+                    value={form.frecuencia}
+                    onChange={(e) => setForm((f) => ({ ...f, frecuencia: e.target.value }))}
+                  />
                 </Field>
                 <Field className="gap-1.5">
                   <FieldLabel>Vía</FieldLabel>
@@ -477,7 +509,10 @@ function MedicacionSection({ fichaId }: { fichaId: number }) {
                 </Field>
                 <Field className="gap-1.5">
                   <FieldLabel>Indicación</FieldLabel>
-                  <Input value={form.indicacion} onChange={(e) => setForm((f) => ({ ...f, indicacion: e.target.value }))} />
+                  <Input
+                    value={form.indicacion}
+                    onChange={(e) => setForm((f) => ({ ...f, indicacion: e.target.value }))}
+                  />
                 </Field>
                 <Button onClick={handleAdd}>Guardar</Button>
               </div>
@@ -487,12 +522,12 @@ function MedicacionSection({ fichaId }: { fichaId: number }) {
       </CardHeader>
       <CardContent>
         {loading ? (
-          <div className="flex flex-col items-center justify-center gap-2 py-4 text-sm text-muted-foreground">
+          <div className="flex flex-col items-center justify-center gap-2 py-4 text-muted-foreground text-sm">
             <Spinner className="size-4" />
             <span>Cargando medicación crónica...</span>
           </div>
         ) : data.length === 0 ? (
-          <p className="text-sm text-muted-foreground">Sin medicación crónica</p>
+          <p className="text-muted-foreground text-sm">Sin medicación crónica</p>
         ) : (
           <Table>
             <TableHeader>
@@ -564,11 +599,17 @@ function ProblemasActivosSection({ fichaId }: { fichaId: number }) {
               <div className="space-y-4">
                 <Field className="gap-1.5">
                   <FieldLabel>Diagnóstico</FieldLabel>
-                  <Input value={form.diagnostico} onChange={(e) => setForm((f) => ({ ...f, diagnostico: e.target.value }))} />
+                  <Input
+                    value={form.diagnostico}
+                    onChange={(e) => setForm((f) => ({ ...f, diagnostico: e.target.value }))}
+                  />
                 </Field>
                 <Field className="gap-1.5">
                   <FieldLabel>Código CIE-10</FieldLabel>
-                  <Input value={form.codigo_cie10} onChange={(e) => setForm((f) => ({ ...f, codigo_cie10: e.target.value }))} />
+                  <Input
+                    value={form.codigo_cie10}
+                    onChange={(e) => setForm((f) => ({ ...f, codigo_cie10: e.target.value }))}
+                  />
                 </Field>
                 <Field className="gap-1.5">
                   <FieldLabel>Estado</FieldLabel>
@@ -585,7 +626,10 @@ function ProblemasActivosSection({ fichaId }: { fichaId: number }) {
                 </Field>
                 <Field className="gap-1.5">
                   <FieldLabel>Observaciones</FieldLabel>
-                  <Input value={form.observaciones} onChange={(e) => setForm((f) => ({ ...f, observaciones: e.target.value }))} />
+                  <Input
+                    value={form.observaciones}
+                    onChange={(e) => setForm((f) => ({ ...f, observaciones: e.target.value }))}
+                  />
                 </Field>
                 <Button onClick={handleAdd}>Guardar</Button>
               </div>
@@ -595,12 +639,12 @@ function ProblemasActivosSection({ fichaId }: { fichaId: number }) {
       </CardHeader>
       <CardContent>
         {loading ? (
-          <div className="flex flex-col items-center justify-center gap-2 py-4 text-sm text-muted-foreground">
+          <div className="flex flex-col items-center justify-center gap-2 py-4 text-muted-foreground text-sm">
             <Spinner className="size-4" />
             <span>Cargando problemas activos...</span>
           </div>
         ) : data.length === 0 ? (
-          <p className="text-sm text-muted-foreground">Sin problemas activos</p>
+          <p className="text-muted-foreground text-sm">Sin problemas activos</p>
         ) : (
           <Table>
             <TableHeader>
@@ -616,9 +660,7 @@ function ProblemasActivosSection({ fichaId }: { fichaId: number }) {
                 <TableRow key={p.id}>
                   <TableCell className="font-medium">{p.diagnostico}</TableCell>
                   <TableCell>{p.codigo_cie10 ?? "-"}</TableCell>
-                  <TableCell>
-                    {p.estado && <Badge variant="secondary">{p.estado}</Badge>}
-                  </TableCell>
+                  <TableCell>{p.estado && <Badge variant="secondary">{p.estado}</Badge>}</TableCell>
                   <TableCell>
                     <button onClick={() => eliminar(p.id)} className="text-muted-foreground hover:text-destructive">
                       <Trash2 className="size-4" />
@@ -654,12 +696,13 @@ function HabitosSection({ fichaId }: { fichaId: number }) {
     actualizar({ [field]: value });
   }
 
-  if (loading) return (
-    <div className="flex flex-col items-center justify-center gap-2 py-4 text-sm text-muted-foreground">
-      <Spinner className="size-4" />
-      <span>Cargando hábitos...</span>
-    </div>
-  );
+  if (loading)
+    return (
+      <div className="flex flex-col items-center justify-center gap-2 py-4 text-muted-foreground text-sm">
+        <Spinner className="size-4" />
+        <span>Cargando hábitos...</span>
+      </div>
+    );
 
   return (
     <Card>
@@ -674,7 +717,9 @@ function HabitosSection({ fichaId }: { fichaId: number }) {
               checked={h.tabaquismo ?? false}
               onCheckedChange={(c) => handleChange("tabaquismo", c)}
             />
-            <label htmlFor="tabaquismo" className="text-sm cursor-pointer">Tabaquismo</label>
+            <label htmlFor="tabaquismo" className="cursor-pointer text-sm">
+              Tabaquismo
+            </label>
           </div>
           {h.tabaquismo && (
             <Field className="gap-1.5">
@@ -688,12 +733,10 @@ function HabitosSection({ fichaId }: { fichaId: number }) {
           )}
 
           <div className="flex items-center gap-2">
-            <Checkbox
-              id="alcohol"
-              checked={h.alcohol ?? false}
-              onCheckedChange={(c) => handleChange("alcohol", c)}
-            />
-            <label htmlFor="alcohol" className="text-sm cursor-pointer">Alcohol</label>
+            <Checkbox id="alcohol" checked={h.alcohol ?? false} onCheckedChange={(c) => handleChange("alcohol", c)} />
+            <label htmlFor="alcohol" className="cursor-pointer text-sm">
+              Alcohol
+            </label>
           </div>
           {h.alcohol && (
             <Field className="gap-1.5">
@@ -707,12 +750,10 @@ function HabitosSection({ fichaId }: { fichaId: number }) {
           )}
 
           <div className="flex items-center gap-2">
-            <Checkbox
-              id="drogas"
-              checked={h.drogas ?? false}
-              onCheckedChange={(c) => handleChange("drogas", c)}
-            />
-            <label htmlFor="drogas" className="text-sm cursor-pointer">Drogas</label>
+            <Checkbox id="drogas" checked={h.drogas ?? false} onCheckedChange={(c) => handleChange("drogas", c)} />
+            <label htmlFor="drogas" className="cursor-pointer text-sm">
+              Drogas
+            </label>
           </div>
 
           <div className="flex items-center gap-2">
@@ -721,7 +762,9 @@ function HabitosSection({ fichaId }: { fichaId: number }) {
               checked={h.actividad_fisica ?? false}
               onCheckedChange={(c) => handleChange("actividad_fisica", c)}
             />
-            <label htmlFor="actividad_fisica" className="text-sm cursor-pointer">Actividad Física</label>
+            <label htmlFor="actividad_fisica" className="cursor-pointer text-sm">
+              Actividad Física
+            </label>
           </div>
 
           <Field className="gap-1.5">

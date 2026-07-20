@@ -1,6 +1,7 @@
-import type { ActualizarEmpresaData, EmpresaFormData } from "../domain/empresa.schema";
-import type { Empresa } from "../domain/empresa.entity";
 import { apiFetch } from "@/lib/api-fetch";
+
+import type { Empresa } from "../domain/empresa.entity";
+import type { ActualizarEmpresaData, EmpresaFormData } from "../domain/empresa.schema";
 
 export async function fetchEmpresas(): Promise<Empresa[]> {
   const res = await apiFetch("/api/empresas");

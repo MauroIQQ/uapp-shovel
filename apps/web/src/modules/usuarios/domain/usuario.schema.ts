@@ -1,6 +1,5 @@
-import { z } from "zod";
-
 import { Perfil, validarRut } from "@uapp/shared";
+import { z } from "zod";
 
 export const baseUsuarioSchema = z.object({
   rut: z.string().min(1, "RUT es requerido"),

@@ -18,7 +18,7 @@ export function useBuscarPermisos(rut_empresa: string): UseBuscarPermisosReturn 
   const [permisos, setPermisos] = React.useState<Permiso[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
-  const [refetchKey, setRefetchKey] = React.useState(0);
+  const [_refetchKey, setRefetchKey] = React.useState(0);
 
   const refresh = React.useCallback(() => setRefetchKey((k) => k + 1), []);
 
@@ -46,7 +46,7 @@ export function useBuscarPermisos(rut_empresa: string): UseBuscarPermisosReturn 
     return () => {
       cancelled = true;
     };
-  }, [rut_empresa, refetchKey]);
+  }, [rut_empresa]);
 
   const getPermisosState = React.useCallback(
     (perfil: number): PermisoState[] => {

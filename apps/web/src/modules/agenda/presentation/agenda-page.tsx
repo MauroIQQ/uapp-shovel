@@ -2,18 +2,20 @@
 
 import * as React from "react";
 
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useAgenda } from "../application/use-agenda";
 
+import { useAgenda } from "../application/use-agenda";
 import type { AgendaCita, HorarioSlot, ResumenMes, TipoHora } from "../domain/agenda.entity";
 import { deleteCita, fetchResumenMes } from "../infrastructure/agenda.service";
 import { CalendarioMensual } from "./calendario-mensual";
@@ -41,9 +43,7 @@ export function AgendaPage({
 
   const { citas, loading, error, refresh } = useAgenda(currentFecha);
   const [filtroEstado, setFiltroEstado] = React.useState<"todos" | "confirmados" | "atendidos">("todos");
-  const [filtroTurno, setFiltroTurno] = React.useState<"am" | "pm">(() =>
-    new Date().getHours() < 12 ? "am" : "pm",
-  );
+  const [filtroTurno, setFiltroTurno] = React.useState<"am" | "pm">(() => (new Date().getHours() < 12 ? "am" : "pm"));
 
   const citasFiltradas = React.useMemo(() => {
     let result = citas;
@@ -130,7 +130,7 @@ export function AgendaPage({
   return (
     <div className="flex flex-col gap-4 lg:flex-row">
       {/* Left: Calendar */}
-      <div className="flex-1 min-w-0">
+      <div className="min-w-0 flex-1">
         <div className="mb-2 flex items-center gap-2">
           <Select
             value={filtroEstado}
@@ -148,8 +148,12 @@ export function AgendaPage({
           </Select>
           <Tabs value={filtroTurno} onValueChange={(v) => setFiltroTurno(v as "am" | "pm")}>
             <TabsList>
-              <TabsTrigger value="am" className="px-3">AM</TabsTrigger>
-              <TabsTrigger value="pm" className="px-3">PM</TabsTrigger>
+              <TabsTrigger value="am" className="px-3">
+                AM
+              </TabsTrigger>
+              <TabsTrigger value="pm" className="px-3">
+                PM
+              </TabsTrigger>
             </TabsList>
           </Tabs>
         </div>
@@ -165,7 +169,7 @@ export function AgendaPage({
       </div>
 
       {/* Right: Day list */}
-      <div className="flex-1 min-w-0">
+      <div className="min-w-0 flex-1">
         <div className="h-full rounded-lg border bg-card p-4">
           <ListaCitas
             citas={citasFiltradas}
@@ -195,8 +199,8 @@ export function AgendaPage({
           <AlertDialogHeader>
             <AlertDialogTitle>¿Eliminar cita?</AlertDialogTitle>
             <AlertDialogDescription>
-              Esta acción no se puede deshacer. Se eliminará la cita de{" "}
-              <strong>{deleteTarget?.paciente_nombre}</strong>.
+              Esta acción no se puede deshacer. Se eliminará la cita de <strong>{deleteTarget?.paciente_nombre}</strong>
+              .
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -224,9 +228,7 @@ export function AgendaPage({
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => setBloqueadoDialog(null)}>
-              Cerrar
-            </AlertDialogCancel>
+            <AlertDialogCancel onClick={() => setBloqueadoDialog(null)}>Cerrar</AlertDialogCancel>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

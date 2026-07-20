@@ -1,25 +1,19 @@
 "use client";
 
 import * as React from "react";
+
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
 import { Loader2, Save } from "lucide-react";
+import { Controller, useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 
-import { crearEmpresaSchema, type EmpresaFormData } from "../domain/empresa.schema";
 import type { Empresa } from "../domain/empresa.entity";
+import { crearEmpresaSchema, type EmpresaFormData } from "../domain/empresa.schema";
 import { createEmpresa, updateEmpresa } from "../infrastructure/empresas.service";
 
 interface EmpresaFormSheetProps {
@@ -89,7 +83,7 @@ export function EmpresaFormSheet({ open, onOpenChange, empresa, onSuccess }: Emp
     setSaving(true);
     try {
       if (isEditing) {
-        await updateEmpresa(empresa!.rut_empresa, data);
+        await updateEmpresa(empresa?.rut_empresa, data);
       } else {
         await createEmpresa(data);
       }
@@ -108,9 +102,7 @@ export function EmpresaFormSheet({ open, onOpenChange, empresa, onSuccess }: Emp
         <SheetHeader>
           <SheetTitle>{isEditing ? "Editar Empresa" : "Nueva Empresa"}</SheetTitle>
           <SheetDescription>
-            {isEditing
-              ? "Modifica los datos de la empresa"
-              : "Ingresa los datos de la nueva empresa"}
+            {isEditing ? "Modifica los datos de la empresa" : "Ingresa los datos de la nueva empresa"}
           </SheetDescription>
         </SheetHeader>
 
@@ -145,12 +137,7 @@ export function EmpresaFormSheet({ open, onOpenChange, empresa, onSuccess }: Emp
             render={({ field }) => (
               <Field className="gap-1.5">
                 <FieldLabel htmlFor="empresa-giro">Giro</FieldLabel>
-                <Input
-                  {...field}
-                  id="empresa-giro"
-                  placeholder="Giro de la empresa"
-                  value={field.value ?? ""}
-                />
+                <Input {...field} id="empresa-giro" placeholder="Giro de la empresa" value={field.value ?? ""} />
               </Field>
             )}
           />
@@ -161,12 +148,7 @@ export function EmpresaFormSheet({ open, onOpenChange, empresa, onSuccess }: Emp
             render={({ field }) => (
               <Field className="gap-1.5">
                 <FieldLabel htmlFor="empresa-direccion">Dirección</FieldLabel>
-                <Input
-                  {...field}
-                  id="empresa-direccion"
-                  placeholder="Dirección"
-                  value={field.value ?? ""}
-                />
+                <Input {...field} id="empresa-direccion" placeholder="Dirección" value={field.value ?? ""} />
               </Field>
             )}
           />
@@ -196,12 +178,7 @@ export function EmpresaFormSheet({ open, onOpenChange, empresa, onSuccess }: Emp
             render={({ field }) => (
               <Field className="gap-1.5">
                 <FieldLabel htmlFor="empresa-comuna">Comuna</FieldLabel>
-                <Input
-                  {...field}
-                  id="empresa-comuna"
-                  placeholder="Comuna"
-                  value={field.value ?? ""}
-                />
+                <Input {...field} id="empresa-comuna" placeholder="Comuna" value={field.value ?? ""} />
               </Field>
             )}
           />
@@ -212,12 +189,7 @@ export function EmpresaFormSheet({ open, onOpenChange, empresa, onSuccess }: Emp
             render={({ field }) => (
               <Field className="gap-1.5">
                 <FieldLabel htmlFor="empresa-ciudad">Ciudad</FieldLabel>
-                <Input
-                  {...field}
-                  id="empresa-ciudad"
-                  placeholder="Ciudad"
-                  value={field.value ?? ""}
-                />
+                <Input {...field} id="empresa-ciudad" placeholder="Ciudad" value={field.value ?? ""} />
               </Field>
             )}
           />
@@ -228,12 +200,7 @@ export function EmpresaFormSheet({ open, onOpenChange, empresa, onSuccess }: Emp
             render={({ field }) => (
               <Field className="gap-1.5">
                 <FieldLabel htmlFor="empresa-telefono">Teléfono</FieldLabel>
-                <Input
-                  {...field}
-                  id="empresa-telefono"
-                  placeholder="+56 2 1234 5678"
-                  value={field.value ?? ""}
-                />
+                <Input {...field} id="empresa-telefono" placeholder="+56 2 1234 5678" value={field.value ?? ""} />
               </Field>
             )}
           />
@@ -244,12 +211,7 @@ export function EmpresaFormSheet({ open, onOpenChange, empresa, onSuccess }: Emp
             render={({ field }) => (
               <Field className="gap-1.5">
                 <FieldLabel htmlFor="empresa-celular">Celular</FieldLabel>
-                <Input
-                  {...field}
-                  id="empresa-celular"
-                  placeholder="+56 9 1234 5678"
-                  value={field.value ?? ""}
-                />
+                <Input {...field} id="empresa-celular" placeholder="+56 9 1234 5678" value={field.value ?? ""} />
               </Field>
             )}
           />
@@ -292,10 +254,7 @@ export function EmpresaFormSheet({ open, onOpenChange, empresa, onSuccess }: Emp
             render={({ field }) => (
               <Field className="gap-1.5">
                 <FieldLabel htmlFor="empresa-estado">Estado</FieldLabel>
-                <Select
-                  value={field.value ?? "activo"}
-                  onValueChange={(v) => field.onChange(v)}
-                >
+                <Select value={field.value ?? "activo"} onValueChange={(v) => field.onChange(v)}>
                   <SelectTrigger id="empresa-estado" className="w-full">
                     <SelectValue />
                   </SelectTrigger>

@@ -1,5 +1,6 @@
-import { prisma } from "@uapp/database";
 import { NextResponse } from "next/server";
+
+import { prisma } from "@uapp/database";
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

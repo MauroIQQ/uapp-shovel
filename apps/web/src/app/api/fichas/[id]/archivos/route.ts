@@ -1,6 +1,8 @@
-import { prisma } from "@uapp/database";
 import { NextResponse } from "next/server";
-import { uploadToR2, getPresignedUrl } from "@/lib/r2";
+
+import { prisma } from "@uapp/database";
+
+import { getPresignedUrl, uploadToR2 } from "@/lib/r2";
 
 const ALLOWED_MIMES = [
   "application/pdf",
@@ -18,7 +20,7 @@ const ALLOWED_MIMES = [
 
 const MAX_SIZE = 25 * 1024 * 1024;
 
-export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const files = await prisma.uapp_archivos_generales.findMany({
     where: { id_ficha: Number(id) },
@@ -55,7 +57,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
           }
         : null,
       url_descarga: f.ruta ? await getPresignedUrl(f.ruta) : null,
-    }))
+    })),
   );
   return NextResponse.json({ data });
 }
@@ -74,7 +76,10 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   }
 
   if (!ALLOWED_MIMES.includes(file.type)) {
-    return NextResponse.json({ error: "Tipo de archivo no permitido. Solo PDF, documentos Office e imágenes." }, { status: 400 });
+    return NextResponse.json(
+      { error: "Tipo de archivo no permitido. Solo PDF, documentos Office e imágenes." },
+      { status: 400 },
+    );
   }
 
   if (file.size > MAX_SIZE) {
@@ -99,8 +104,5 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     },
   });
 
-  return NextResponse.json(
-    { data: { ...data, url_descarga: await getPresignedUrl(key) } },
-    { status: 201 }
-  );
+  return NextResponse.json({ data: { ...data, url_descarga: await getPresignedUrl(key) } }, { status: 201 });
 }

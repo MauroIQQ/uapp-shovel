@@ -1,6 +1,7 @@
-import type { ActualizarUsuarioData, UsuarioFormData } from "../domain/usuario.schema";
-import type { Usuario } from "../domain/usuario.entity";
 import { apiFetch } from "@/lib/api-fetch";
+
+import type { Usuario } from "../domain/usuario.entity";
+import type { ActualizarUsuarioData, UsuarioFormData } from "../domain/usuario.schema";
 
 export async function fetchUsuarios(): Promise<Usuario[]> {
   const res = await apiFetch("/api/usuarios");

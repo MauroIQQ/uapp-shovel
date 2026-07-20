@@ -145,19 +145,24 @@ export const crearRecetaSchema = z.object({
   validez: z.string().optional().nullable(),
   estado: z.string().optional().nullable(),
   observaciones: z.string().optional().nullable(),
-  detalle: z.array(z.object({
-    medicamento: z.string().min(1, "Medicamento es requerido"),
-    concentracion: z.string().optional().nullable(),
-    forma_farmaceutica: z.string().optional().nullable(),
-    presentacion: z.string().optional().nullable(),
-    dosis: z.string().optional().nullable(),
-    frecuencia: z.string().optional().nullable(),
-    duracion: z.string().optional().nullable(),
-    cantidad: z.coerce.number().int().optional().nullable(),
-    via_administracion: z.string().optional().nullable(),
-    indicaciones: z.string().optional().nullable(),
-    observaciones: z.string().optional().nullable(),
-  })).optional().default([]),
+  detalle: z
+    .array(
+      z.object({
+        medicamento: z.string().min(1, "Medicamento es requerido"),
+        concentracion: z.string().optional().nullable(),
+        forma_farmaceutica: z.string().optional().nullable(),
+        presentacion: z.string().optional().nullable(),
+        dosis: z.string().optional().nullable(),
+        frecuencia: z.string().optional().nullable(),
+        duracion: z.string().optional().nullable(),
+        cantidad: z.coerce.number().int().optional().nullable(),
+        via_administracion: z.string().optional().nullable(),
+        indicaciones: z.string().optional().nullable(),
+        observaciones: z.string().optional().nullable(),
+      }),
+    )
+    .optional()
+    .default([]),
 });
 export type CrearRecetaData = z.infer<typeof crearRecetaSchema>;
 

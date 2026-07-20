@@ -2,14 +2,23 @@
 
 import * as React from "react";
 
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { ServerDataTable } from "@/app/(main)/dashboard/componentes/datatable/_components/server-data-table";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 import { useBuscarHorarios } from "../application/buscar-horarios.use-case";
 import type { Horario } from "../domain/horario.entity";
 import { deleteHorario } from "../infrastructure/horarios.service";
-import { useHorariosColumns } from "./horarios-columns";
 import { HorarioFormSheet } from "./horario-form-sheet";
+import { useHorariosColumns } from "./horarios-columns";
 
 export function HorariosPage() {
   const { data, loading, error, refresh } = useBuscarHorarios();
@@ -19,14 +28,25 @@ export function HorariosPage() {
   const [sheetOpen, setSheetOpen] = React.useState(false);
 
   const columns = useHorariosColumns({
-    onEdit: (item) => { setEditing(item); setSheetOpen(true); },
+    onEdit: (item) => {
+      setEditing(item);
+      setSheetOpen(true);
+    },
     onDelete: (item) => setDeleteTarget(item),
   });
 
   async function handleDelete() {
     if (!deleteTarget) return;
     setDeleting(true);
-    try { await deleteHorario(deleteTarget.id); setDeleteTarget(null); refresh(); } catch { /* silent */ } finally { setDeleting(false); }
+    try {
+      await deleteHorario(deleteTarget.id);
+      setDeleteTarget(null);
+      refresh();
+    } catch {
+      /* silent */
+    } finally {
+      setDeleting(false);
+    }
   }
 
   return (
@@ -42,8 +62,11 @@ export function HorariosPage() {
         filterBar={
           <div className="flex items-center gap-2">
             <button
-              className="rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary/90"
-              onClick={() => { setEditing(null); setSheetOpen(true); }}
+              className="rounded-md bg-primary px-3 py-1.5 font-medium text-primary-foreground text-xs hover:bg-primary/90"
+              onClick={() => {
+                setEditing(null);
+                setSheetOpen(true);
+              }}
             >
               + Nuevo horario
             </button>
@@ -52,12 +75,7 @@ export function HorariosPage() {
         hideColumnsButton
       />
 
-      <HorarioFormSheet
-        open={sheetOpen}
-        onOpenChange={setSheetOpen}
-        horario={editing}
-        onSuccess={refresh}
-      />
+      <HorarioFormSheet open={sheetOpen} onOpenChange={setSheetOpen} horario={editing} onSuccess={refresh} />
 
       <AlertDialog open={!!deleteTarget} onOpenChange={(o) => !o && setDeleteTarget(null)}>
         <AlertDialogContent>

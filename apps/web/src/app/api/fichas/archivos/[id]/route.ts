@@ -1,8 +1,10 @@
-import { prisma } from "@uapp/database";
 import { NextResponse } from "next/server";
+
+import { prisma } from "@uapp/database";
+
 import { deleteFromR2 } from "@/lib/r2";
 
-export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const archivo = await prisma.uapp_archivos_generales.findUnique({ where: { id: Number(id) } });
   if (!archivo) {

@@ -1,5 +1,7 @@
-import { prisma } from "@uapp/database";
 import { NextResponse } from "next/server";
+
+import { prisma } from "@uapp/database";
+
 import { verifyAuth } from "@/lib/verify-auth";
 
 function mapCita(c: Record<string, unknown> & { estado: boolean }) {
@@ -41,15 +43,9 @@ export async function GET(req: Request) {
       },
     });
 
-    const bloqueadosMap = new Map(bloqueados.map((b) => [
-      b.fecha.toISOString().slice(0, 10),
-      b.motivo,
-    ]));
+    const bloqueadosMap = new Map(bloqueados.map((b) => [b.fecha.toISOString().slice(0, 10), b.motivo]));
 
-    const allDates = new Set<string>([
-      ...counts.keys(),
-      ...bloqueadosMap.keys(),
-    ]);
+    const allDates = new Set<string>([...counts.keys(), ...bloqueadosMap.keys()]);
 
     const resumen = Array.from(allDates).map((fecha) => ({
       fecha,
@@ -122,7 +118,7 @@ export async function PATCH(req: Request) {
     where: { id },
     data: {
       ...rest,
-      ...(estado !== undefined ? { estado: estado === "activo" ? true : false } : {}),
+      ...(estado !== undefined ? { estado: estado === "activo" } : {}),
       updated: new Date(),
     },
   });

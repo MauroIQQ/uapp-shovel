@@ -1,30 +1,21 @@
 "use client";
 
 import * as React from "react";
+
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
 import { format } from "date-fns";
 import { es } from "date-fns/locale/es";
 import { CalendarDays, Loader2, Save } from "lucide-react";
+import { Controller, useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
 
-import {
-  type DiaBloqueadoFormData,
-  crearDiaBloqueadoSchema,
-} from "../domain/dia-bloqueado.schema";
+import { crearDiaBloqueadoSchema, type DiaBloqueadoFormData } from "../domain/dia-bloqueado.schema";
 import { createDiaBloqueado } from "../infrastructure/dias-bloqueados.service";
 
 interface DiaBloqueadoFormSheetProps {
@@ -33,11 +24,7 @@ interface DiaBloqueadoFormSheetProps {
   onSuccess: () => void;
 }
 
-export function DiaBloqueadoFormSheet({
-  open,
-  onOpenChange,
-  onSuccess,
-}: DiaBloqueadoFormSheetProps) {
+export function DiaBloqueadoFormSheet({ open, onOpenChange, onSuccess }: DiaBloqueadoFormSheetProps) {
   const [saving, setSaving] = React.useState(false);
 
   const form = useForm<DiaBloqueadoFormData>({
@@ -67,12 +54,15 @@ export function DiaBloqueadoFormSheet({
       <SheetContent className="sm:max-w-lg">
         <SheetHeader>
           <SheetTitle>Nuevo día bloqueado</SheetTitle>
-          <SheetDescription>
-            Selecciona la fecha y opcionalmente agrega un motivo.
-          </SheetDescription>
+          <SheetDescription>Selecciona la fecha y opcionalmente agrega un motivo.</SheetDescription>
         </SheetHeader>
 
-        <form id="db-form" noValidate onSubmit={form.handleSubmit(onSubmit)} className="flex flex-1 flex-col gap-4 overflow-y-auto px-4">
+        <form
+          id="db-form"
+          noValidate
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-1 flex-col gap-4 overflow-y-auto px-4"
+        >
           <Controller
             control={form.control}
             name="fecha"
@@ -88,7 +78,7 @@ export function DiaBloqueadoFormSheet({
                     >
                       <CalendarDays className="mr-2 size-4 shrink-0" />
                       {field.value ? (
-                        format(new Date(field.value + "T12:00:00"), "PPP", { locale: es })
+                        format(new Date(`${field.value}T12:00:00`), "PPP", { locale: es })
                       ) : (
                         <span className="text-muted-foreground">Seleccionar fecha</span>
                       )}
@@ -97,7 +87,7 @@ export function DiaBloqueadoFormSheet({
                   <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
                       mode="single"
-                      selected={field.value ? new Date(field.value + "T12:00:00") : undefined}
+                      selected={field.value ? new Date(`${field.value}T12:00:00`) : undefined}
                       onSelect={(date) => field.onChange(date ? date.toISOString().slice(0, 10) : "")}
                     />
                   </PopoverContent>
@@ -113,7 +103,13 @@ export function DiaBloqueadoFormSheet({
             render={({ field, fieldState }) => (
               <Field className="gap-1.5" data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="db-motivo">Motivo (opcional)</FieldLabel>
-                <Textarea id="db-motivo" value={field.value ?? ""} onChange={field.onChange} rows={3} aria-invalid={fieldState.invalid} />
+                <Textarea
+                  id="db-motivo"
+                  value={field.value ?? ""}
+                  onChange={field.onChange}
+                  rows={3}
+                  aria-invalid={fieldState.invalid}
+                />
                 {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
               </Field>
             )}

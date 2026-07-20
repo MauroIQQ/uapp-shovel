@@ -1,16 +1,11 @@
 "use client";
 
 import * as React from "react";
+
 import { Loader2, Lock } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 
@@ -66,21 +61,24 @@ export function VerificarClaveDialog({ open, onOpenChange, onVerified }: Verific
             <Lock className="size-4" />
             Verificar identidad
           </DialogTitle>
-          <DialogDescription>
-            Ingresa tu RUT y contraseña para confirmar la eliminación del archivo.
-          </DialogDescription>
+          <DialogDescription>Ingresa tu RUT y contraseña para confirmar la eliminación del archivo.</DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
-            <div className="rounded-md border border-destructive/20 bg-destructive/10 p-3 text-sm text-destructive">
+            <div className="rounded-md border border-destructive/20 bg-destructive/10 p-3 text-destructive text-sm">
               {error}
             </div>
           )}
 
           <Field className="gap-1.5">
             <FieldLabel>RUT</FieldLabel>
-            <Input value={rut} onChange={(e) => setRut(e.target.value)} placeholder="Ej: 12345678-9" disabled={loading} />
+            <Input
+              value={rut}
+              onChange={(e) => setRut(e.target.value)}
+              placeholder="Ej: 12345678-9"
+              disabled={loading}
+            />
           </Field>
 
           <Field className="gap-1.5">

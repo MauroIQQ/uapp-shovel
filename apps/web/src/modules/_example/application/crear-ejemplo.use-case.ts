@@ -8,9 +8,7 @@ export interface CrearEjemploInput {
   email: string;
 }
 
-export async function crearEjemplo(
-  input: CrearEjemploInput,
-): Promise<ExampleEntity> {
+export async function crearEjemplo(input: CrearEjemploInput): Promise<ExampleEntity> {
   const res = await fetch("/api/ejemplos", {
     method: "POST",
     headers: { "Content-Type": "application/json" },

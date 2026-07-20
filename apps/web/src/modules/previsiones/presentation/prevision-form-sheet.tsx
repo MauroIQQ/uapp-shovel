@@ -1,34 +1,19 @@
 "use client";
 
 import * as React from "react";
+
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
 import { Loader2, Save } from "lucide-react";
+import { Controller, useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 
 import type { Prevision } from "../domain/prevision.entity";
-import {
-  type PrevisionFormData,
-  crearPrevisionSchema,
-} from "../domain/prevision.schema";
+import { crearPrevisionSchema, type PrevisionFormData } from "../domain/prevision.schema";
 import { createPrevision, updatePrevision } from "../infrastructure/previsiones.service";
 
 interface PrevisionFormSheetProps {
@@ -38,12 +23,7 @@ interface PrevisionFormSheetProps {
   onSuccess: () => void;
 }
 
-export function PrevisionFormSheet({
-  open,
-  onOpenChange,
-  prevision,
-  onSuccess,
-}: PrevisionFormSheetProps) {
+export function PrevisionFormSheet({ open, onOpenChange, prevision, onSuccess }: PrevisionFormSheetProps) {
   const [saving, setSaving] = React.useState(false);
   const isEditing = !!prevision;
 
@@ -74,7 +54,7 @@ export function PrevisionFormSheet({
     setSaving(true);
     try {
       if (isEditing) {
-        await updatePrevision(prevision!.id, data);
+        await updatePrevision(prevision?.id, data);
       } else {
         await createPrevision(data);
       }
@@ -97,14 +77,24 @@ export function PrevisionFormSheet({
           </SheetDescription>
         </SheetHeader>
 
-        <form id="prevision-form" noValidate onSubmit={form.handleSubmit(onSubmit)} className="flex flex-1 flex-col gap-4 overflow-y-auto px-4">
+        <form
+          id="prevision-form"
+          noValidate
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-1 flex-col gap-4 overflow-y-auto px-4"
+        >
           <Controller
             control={form.control}
             name="nombre"
             render={({ field, fieldState }) => (
               <Field className="gap-1.5" data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="prevision-nombre">Nombre</FieldLabel>
-                <Input id="prevision-nombre" value={field.value} onChange={field.onChange} aria-invalid={fieldState.invalid} />
+                <Input
+                  id="prevision-nombre"
+                  value={field.value}
+                  onChange={field.onChange}
+                  aria-invalid={fieldState.invalid}
+                />
                 {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
               </Field>
             )}
@@ -116,7 +106,14 @@ export function PrevisionFormSheet({
             render={({ field, fieldState }) => (
               <Field className="gap-1.5" data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="prevision-valor">Valor</FieldLabel>
-                <Input id="prevision-valor" type="number" min={0} value={field.value} onChange={field.onChange} aria-invalid={fieldState.invalid} />
+                <Input
+                  id="prevision-valor"
+                  type="number"
+                  min={0}
+                  value={field.value}
+                  onChange={field.onChange}
+                  aria-invalid={fieldState.invalid}
+                />
                 {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
               </Field>
             )}

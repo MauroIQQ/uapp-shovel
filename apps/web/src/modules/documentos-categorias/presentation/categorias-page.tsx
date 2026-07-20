@@ -1,20 +1,14 @@
 "use client";
 
 import * as React from "react";
-import { ChevronDown, ChevronRight, FolderTree, Plus, Trash2, Pencil } from "lucide-react";
+
+import { ChevronDown, ChevronRight, FolderTree, Pencil, Plus, Trash2 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 import { useCategorias } from "../application/use-documentos-categorias";
 import { CategoriaFormSheet } from "./categoria-form-sheet";
@@ -35,7 +29,12 @@ export function CategoriasPage() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle>Categorías de Documentos</CardTitle>
-            <Button onClick={() => { setEditingCat(undefined); setCatSheetOpen(true); }}>
+            <Button
+              onClick={() => {
+                setEditingCat(undefined);
+                setCatSheetOpen(true);
+              }}
+            >
               <Plus className="size-4" />
               Nueva Categoría
             </Button>
@@ -43,14 +42,14 @@ export function CategoriasPage() {
         </CardHeader>
         <CardContent>
           {loading ? (
-            <div className="flex flex-col items-center justify-center gap-2 py-8 text-sm text-muted-foreground">
+            <div className="flex flex-col items-center justify-center gap-2 py-8 text-muted-foreground text-sm">
               <Spinner className="size-5" />
               <span>Cargando categorías...</span>
             </div>
           ) : data.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-8 text-center">
               <FolderTree className="mb-2 size-8 text-muted-foreground" />
-              <p className="text-sm text-muted-foreground">No hay categorías registradas</p>
+              <p className="text-muted-foreground text-sm">No hay categorías registradas</p>
             </div>
           ) : (
             <Table>
@@ -82,7 +81,7 @@ export function CategoriasPage() {
                         </TableCell>
                         <TableCell className="font-mono text-xs">{cat.codigo}</TableCell>
                         <TableCell className="font-medium">{cat.nombre}</TableCell>
-                        <TableCell className="text-sm text-muted-foreground">{cat.descripcion ?? "-"}</TableCell>
+                        <TableCell className="text-muted-foreground text-sm">{cat.descripcion ?? "-"}</TableCell>
                         <TableCell>
                           <Badge variant="secondary">{cat.subcategorias.length}</Badge>
                         </TableCell>
@@ -92,7 +91,11 @@ export function CategoriasPage() {
                               variant="ghost"
                               size="icon"
                               className="size-7"
-                              onClick={() => { setSubForCat(cat.id); setEditingSub(undefined); setSubDialogOpen(true); }}
+                              onClick={() => {
+                                setSubForCat(cat.id);
+                                setEditingSub(undefined);
+                                setSubDialogOpen(true);
+                              }}
                             >
                               <Plus className="size-3" />
                             </Button>
@@ -100,7 +103,10 @@ export function CategoriasPage() {
                               variant="ghost"
                               size="icon"
                               className="size-7"
-                              onClick={() => { setEditingCat(cat.id); setCatSheetOpen(true); }}
+                              onClick={() => {
+                                setEditingCat(cat.id);
+                                setCatSheetOpen(true);
+                              }}
                             >
                               <Pencil className="size-3" />
                             </Button>
@@ -108,45 +114,53 @@ export function CategoriasPage() {
                               variant="ghost"
                               size="icon"
                               className="size-7 text-destructive"
-                              onClick={() => { if (confirm("¿Eliminar categoría?")) eliminar(cat.id); }}
+                              onClick={() => {
+                                if (confirm("¿Eliminar categoría?")) eliminar(cat.id);
+                              }}
                             >
                               <Trash2 className="size-3" />
                             </Button>
                           </div>
                         </TableCell>
                       </TableRow>
-                      {isExpanded && cat.subcategorias.map((sub) => (
-                        <TableRow key={sub.id} className="bg-muted/20">
-                          <TableCell />
-                          <TableCell className="font-mono text-xs text-muted-foreground">{sub.codigo}</TableCell>
-                          <TableCell>
-                            <span className="text-sm text-muted-foreground">└── </span>
-                            {sub.nombre}
-                          </TableCell>
-                          <TableCell className="text-sm text-muted-foreground">{sub.descripcion ?? "-"}</TableCell>
-                          <TableCell />
-                          <TableCell>
-                            <div className="flex items-center gap-1">
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="size-7"
-                                onClick={() => { setEditingSub({ id: sub.id, idCat: cat.id }); setSubDialogOpen(true); }}
-                              >
-                                <Pencil className="size-3" />
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="size-7 text-destructive"
-                                onClick={() => { if (confirm("¿Eliminar subcategoría?")) eliminarSub(sub.id); }}
-                              >
-                                <Trash2 className="size-3" />
-                              </Button>
-                            </div>
-                          </TableCell>
-                        </TableRow>
-                      ))}
+                      {isExpanded &&
+                        cat.subcategorias.map((sub) => (
+                          <TableRow key={sub.id} className="bg-muted/20">
+                            <TableCell />
+                            <TableCell className="font-mono text-muted-foreground text-xs">{sub.codigo}</TableCell>
+                            <TableCell>
+                              <span className="text-muted-foreground text-sm">└── </span>
+                              {sub.nombre}
+                            </TableCell>
+                            <TableCell className="text-muted-foreground text-sm">{sub.descripcion ?? "-"}</TableCell>
+                            <TableCell />
+                            <TableCell>
+                              <div className="flex items-center gap-1">
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="size-7"
+                                  onClick={() => {
+                                    setEditingSub({ id: sub.id, idCat: cat.id });
+                                    setSubDialogOpen(true);
+                                  }}
+                                >
+                                  <Pencil className="size-3" />
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="size-7 text-destructive"
+                                  onClick={() => {
+                                    if (confirm("¿Eliminar subcategoría?")) eliminarSub(sub.id);
+                                  }}
+                                >
+                                  <Trash2 className="size-3" />
+                                </Button>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))}
                     </React.Fragment>
                   );
                 })}

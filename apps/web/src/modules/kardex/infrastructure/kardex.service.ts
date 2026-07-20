@@ -1,6 +1,7 @@
-import type { ActualizarArticuloData, KardexFormData } from "../domain/kardex.schema";
-import type { KardexArticulo } from "../domain/kardex.entity";
 import { apiFetch } from "@/lib/api-fetch";
+
+import type { KardexArticulo } from "../domain/kardex.entity";
+import type { ActualizarArticuloData, KardexFormData } from "../domain/kardex.schema";
 
 export async function fetchArticulos(): Promise<KardexArticulo[]> {
   const res = await apiFetch("/api/kardex");

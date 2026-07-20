@@ -2,14 +2,23 @@
 
 import * as React from "react";
 
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { ServerDataTable } from "@/app/(main)/dashboard/componentes/datatable/_components/server-data-table";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 import { useBuscarDiasBloqueados } from "../application/buscar-dias-bloqueados.use-case";
 import type { DiaBloqueado } from "../domain/dia-bloqueado.entity";
 import { deleteDiaBloqueado } from "../infrastructure/dias-bloqueados.service";
-import { useDiasBloqueadosColumns } from "./dias-bloqueados-columns";
 import { DiaBloqueadoFormSheet } from "./dia-bloqueado-form-sheet";
+import { useDiasBloqueadosColumns } from "./dias-bloqueados-columns";
 
 export function DiasBloqueadosPage() {
   const { data, loading, error, refresh } = useBuscarDiasBloqueados();
@@ -24,7 +33,15 @@ export function DiasBloqueadosPage() {
   async function handleDelete() {
     if (!deleteTarget) return;
     setDeleting(true);
-    try { await deleteDiaBloqueado(deleteTarget.fecha); setDeleteTarget(null); refresh(); } catch { /* silent */ } finally { setDeleting(false); }
+    try {
+      await deleteDiaBloqueado(deleteTarget.fecha);
+      setDeleteTarget(null);
+      refresh();
+    } catch {
+      /* silent */
+    } finally {
+      setDeleting(false);
+    }
   }
 
   return (
@@ -40,7 +57,7 @@ export function DiasBloqueadosPage() {
         filterBar={
           <div className="flex items-center gap-2">
             <button
-              className="rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary/90"
+              className="rounded-md bg-primary px-3 py-1.5 font-medium text-primary-foreground text-xs hover:bg-primary/90"
               onClick={() => setSheetOpen(true)}
             >
               + Bloquear día
@@ -50,19 +67,14 @@ export function DiasBloqueadosPage() {
         hideColumnsButton
       />
 
-      <DiaBloqueadoFormSheet
-        open={sheetOpen}
-        onOpenChange={setSheetOpen}
-        onSuccess={refresh}
-      />
+      <DiaBloqueadoFormSheet open={sheetOpen} onOpenChange={setSheetOpen} onSuccess={refresh} />
 
       <AlertDialog open={!!deleteTarget} onOpenChange={(o) => !o && setDeleteTarget(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>¿Desbloquear día?</AlertDialogTitle>
             <AlertDialogDescription>
-              Se eliminará el bloqueo del día{" "}
-              <strong>{deleteTarget?.fecha}</strong>
+              Se eliminará el bloqueo del día <strong>{deleteTarget?.fecha}</strong>
               {deleteTarget?.motivo && ` (${deleteTarget.motivo})`}.
             </AlertDialogDescription>
           </AlertDialogHeader>

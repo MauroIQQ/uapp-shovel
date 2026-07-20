@@ -1,4 +1,4 @@
-import { S3Client, PutObjectCommand, DeleteObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
+import { DeleteObjectCommand, GetObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 function getR2() {
@@ -9,7 +9,7 @@ function getR2() {
 
   if (!accountId || !accessKeyId || !secretAccessKey || !bucket) {
     throw new Error(
-      "Faltan variables de entorno R2 (R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET_NAME)"
+      "Faltan variables de entorno R2 (R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET_NAME)",
     );
   }
 
@@ -29,7 +29,7 @@ function getR2() {
       }
       return next(args);
     },
-    { step: "build", priority: "high" }
+    { step: "build", priority: "high" },
   );
 
   return { client, bucketName: bucket };

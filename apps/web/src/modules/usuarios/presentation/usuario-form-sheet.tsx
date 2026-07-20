@@ -1,27 +1,20 @@
 "use client";
 
 import * as React from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
-import { Building2, Loader2, Save } from "lucide-react";
 
-import { Perfil, PERFIL_NOMBRES } from "@uapp/shared";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { PERFIL_NOMBRES, Perfil } from "@uapp/shared";
+import { Building2, Loader2, Save } from "lucide-react";
+import { Controller, useForm } from "react-hook-form";
+
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 
-import { actualizarUsuarioSchema, crearUsuarioSchema, type UsuarioFormData } from "../domain/usuario.schema";
 import type { Usuario } from "../domain/usuario.entity";
+import { actualizarUsuarioSchema, crearUsuarioSchema, type UsuarioFormData } from "../domain/usuario.schema";
 import { createUsuario, updateUsuario } from "../infrastructure/usuarios.service";
 
 interface EmpresaOption {
@@ -90,7 +83,7 @@ export function UsuarioFormSheet({ open, onOpenChange, usuario, onSuccess }: Usu
     try {
       if (isEditing) {
         const { password, ...rest } = data;
-        await updateUsuario(usuario!.rut, password ? { ...rest, password } : rest);
+        await updateUsuario(usuario?.rut, password ? { ...rest, password } : rest);
       } else {
         await createUsuario(data);
       }
@@ -109,9 +102,7 @@ export function UsuarioFormSheet({ open, onOpenChange, usuario, onSuccess }: Usu
         <SheetHeader>
           <SheetTitle>{isEditing ? "Editar Usuario" : "Nuevo Usuario"}</SheetTitle>
           <SheetDescription>
-            {isEditing
-              ? "Modifica los datos del usuario"
-              : "Ingresa los datos del nuevo usuario"}
+            {isEditing ? "Modifica los datos del usuario" : "Ingresa los datos del nuevo usuario"}
           </SheetDescription>
         </SheetHeader>
 
@@ -198,10 +189,7 @@ export function UsuarioFormSheet({ open, onOpenChange, usuario, onSuccess }: Usu
             render={({ field }) => (
               <Field className="gap-1.5">
                 <FieldLabel htmlFor="usuario-perfil">Perfil</FieldLabel>
-                <Select
-                  value={String(field.value)}
-                  onValueChange={(v) => field.onChange(Number(v))}
-                >
+                <Select value={String(field.value)} onValueChange={(v) => field.onChange(Number(v))}>
                   <SelectTrigger id="usuario-perfil" className="w-full">
                     <SelectValue placeholder="Seleccionar..." />
                   </SelectTrigger>
@@ -223,10 +211,7 @@ export function UsuarioFormSheet({ open, onOpenChange, usuario, onSuccess }: Usu
             render={({ field }) => (
               <Field className="gap-1.5">
                 <FieldLabel htmlFor="usuario-empresa">Empresa</FieldLabel>
-                <Select
-                  value={field.value ?? ""}
-                  onValueChange={(v) => field.onChange(v || null)}
-                >
+                <Select value={field.value ?? ""} onValueChange={(v) => field.onChange(v || null)}>
                   <SelectTrigger id="usuario-empresa" className="w-full">
                     <SelectValue placeholder="Seleccionar empresa" />
                   </SelectTrigger>

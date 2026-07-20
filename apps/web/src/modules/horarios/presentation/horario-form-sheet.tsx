@@ -1,34 +1,19 @@
 "use client";
 
 import * as React from "react";
+
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
 import { Loader2, Save } from "lucide-react";
+import { Controller, useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 
 import type { Horario } from "../domain/horario.entity";
-import {
-  type HorarioFormData,
-  crearHorarioSchema,
-} from "../domain/horario.schema";
+import { crearHorarioSchema, type HorarioFormData } from "../domain/horario.schema";
 import { createHorario, updateHorario } from "../infrastructure/horarios.service";
 
 interface HorarioFormSheetProps {
@@ -38,12 +23,7 @@ interface HorarioFormSheetProps {
   onSuccess: () => void;
 }
 
-export function HorarioFormSheet({
-  open,
-  onOpenChange,
-  horario,
-  onSuccess,
-}: HorarioFormSheetProps) {
+export function HorarioFormSheet({ open, onOpenChange, horario, onSuccess }: HorarioFormSheetProps) {
   const [saving, setSaving] = React.useState(false);
   const isEditing = !!horario;
 
@@ -72,7 +52,7 @@ export function HorarioFormSheet({
     setSaving(true);
     try {
       if (isEditing) {
-        await updateHorario(horario!.id, data);
+        await updateHorario(horario?.id, data);
       } else {
         await createHorario(data);
       }
@@ -95,14 +75,25 @@ export function HorarioFormSheet({
           </SheetDescription>
         </SheetHeader>
 
-        <form id="horario-form" noValidate onSubmit={form.handleSubmit(onSubmit)} className="flex flex-1 flex-col gap-4 overflow-y-auto px-4">
+        <form
+          id="horario-form"
+          noValidate
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-1 flex-col gap-4 overflow-y-auto px-4"
+        >
           <Controller
             control={form.control}
             name="hora"
             render={({ field, fieldState }) => (
               <Field className="gap-1.5" data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="horario-hora">Hora</FieldLabel>
-                <Input id="horario-hora" type="time" value={field.value} onChange={field.onChange} aria-invalid={fieldState.invalid} />
+                <Input
+                  id="horario-hora"
+                  type="time"
+                  value={field.value}
+                  onChange={field.onChange}
+                  aria-invalid={fieldState.invalid}
+                />
                 {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
               </Field>
             )}

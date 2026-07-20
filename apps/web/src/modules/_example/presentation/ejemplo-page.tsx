@@ -13,10 +13,9 @@ export function EjemploPage() {
 
   return (
     <div className="p-6">
-      <h1 className="mb-4 text-2xl font-semibold">Modulo Example</h1>
-      <p className="mb-6 text-sm text-muted-foreground">
-        Template DDD: usa ServerDataTable + hook useBuscarEjemplos.
-        Reemplazar con datos reales del dominio.
+      <h1 className="mb-4 font-semibold text-2xl">Modulo Example</h1>
+      <p className="mb-6 text-muted-foreground text-sm">
+        Template DDD: usa ServerDataTable + hook useBuscarEjemplos. Reemplazar con datos reales del dominio.
       </p>
 
       <ServerDataTable

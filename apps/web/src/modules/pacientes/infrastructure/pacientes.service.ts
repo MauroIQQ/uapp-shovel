@@ -1,6 +1,7 @@
-import type { ActualizarPacienteData, PacienteFormData } from "../domain/paciente.schema";
-import type { Paciente } from "../domain/paciente.entity";
 import { apiFetch } from "@/lib/api-fetch";
+
+import type { Paciente } from "../domain/paciente.entity";
+import type { ActualizarPacienteData, PacienteFormData } from "../domain/paciente.schema";
 
 export async function fetchPacientes(): Promise<Paciente[]> {
   const res = await apiFetch("/api/pacientes");

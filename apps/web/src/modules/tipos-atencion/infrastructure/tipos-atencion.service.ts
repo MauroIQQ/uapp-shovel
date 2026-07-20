@@ -1,6 +1,7 @@
-import type { ActualizarTipoAtencionData, TipoAtencionFormData } from "../domain/tipo-atencion.schema";
-import type { TipoAtencion } from "../domain/tipo-atencion.entity";
 import { apiFetch } from "@/lib/api-fetch";
+
+import type { TipoAtencion } from "../domain/tipo-atencion.entity";
+import type { ActualizarTipoAtencionData, TipoAtencionFormData } from "../domain/tipo-atencion.schema";
 
 export async function fetchTiposAtencion(): Promise<TipoAtencion[]> {
   const res = await apiFetch("/api/tipos-horas");

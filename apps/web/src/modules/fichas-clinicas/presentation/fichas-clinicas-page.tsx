@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+
 import { format } from "date-fns";
 import { CalendarDays } from "lucide-react";
 
@@ -9,8 +10,8 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Spinner } from "@/components/ui/spinner";
 
-import { ListaPacientesFicha } from "./lista-pacientes-ficha";
 import type { PacienteDia } from "./lista-pacientes-ficha";
+import { ListaPacientesFicha } from "./lista-pacientes-ficha";
 
 export function FichasClinicasPage() {
   const [fecha, setFecha] = React.useState<Date>(new Date());
@@ -47,7 +48,7 @@ export function FichasClinicasPage() {
 
   React.useEffect(() => {
     void load(fecha);
-  }, [fecha]);
+  }, [fecha, load]);
 
   return (
     <div className="space-y-4">
@@ -60,15 +61,11 @@ export function FichasClinicasPage() {
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">
-            <Calendar
-              mode="single"
-              selected={fecha}
-              onSelect={(d) => d && setFecha(d)}
-            />
+            <Calendar mode="single" selected={fecha} onSelect={(d) => d && setFecha(d)} />
           </PopoverContent>
         </Popover>
         {loading && (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <div className="flex items-center gap-2 text-muted-foreground text-sm">
             <Spinner className="size-4" />
             <span>Cargando pacientes...</span>
           </div>

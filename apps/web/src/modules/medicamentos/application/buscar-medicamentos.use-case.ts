@@ -18,7 +18,7 @@ export function useBuscarMedicamentos(): UseBuscarMedicamentosReturn {
   const [data, setData] = React.useState<Medicamento[]>(cachedData ?? []);
   const [loading, setLoading] = React.useState(!cachedData);
   const [error, setError] = React.useState<string | null>(null);
-  const [refetchKey, setRefetchKey] = React.useState(0);
+  const [_refetchKey, setRefetchKey] = React.useState(0);
 
   const refresh = React.useCallback(() => {
     cachedData = null;
@@ -53,7 +53,7 @@ export function useBuscarMedicamentos(): UseBuscarMedicamentosReturn {
     return () => {
       cancelled = true;
     };
-  }, [refetchKey]);
+  }, []);
 
   return { data, loading, error, refresh };
 }

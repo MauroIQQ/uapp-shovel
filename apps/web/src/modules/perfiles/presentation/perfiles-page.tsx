@@ -1,11 +1,11 @@
 "use client";
 
 import * as React from "react";
+
+import { PERFIL_NOMBRES, PERFIL_ORDEN, Perfil } from "@uapp/shared";
 import { Lock, ShieldCheck, ShieldHalf, ShieldX } from "lucide-react";
 
-import { Perfil, PERFIL_NOMBRES, PERFIL_ORDEN } from "@uapp/shared";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-
 import type { Empresa } from "@/modules/empresas/domain/empresa.entity";
 import { fetchEmpresas } from "@/modules/empresas/infrastructure/empresas.service";
 
@@ -46,13 +46,11 @@ export function PerfilesPage() {
         }
       })
       .catch(() => {});
-  }, []);
+  }, [rutEmpresa]);
 
   const { getPermisosState, loading, refresh } = useBuscarPermisos(rutEmpresa);
 
-  const empSelect = rutEmpresa
-    ? empresas.find((e) => e.rut_empresa === rutEmpresa)
-    : null;
+  const _empSelect = rutEmpresa ? empresas.find((e) => e.rut_empresa === rutEmpresa) : null;
 
   function handleEdit(perfil: number) {
     setEditPerfil(perfil);
@@ -65,17 +63,13 @@ export function PerfilesPage() {
     <div className="p-6">
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Perfiles de Acceso</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Gestión de permisos por perfil y empresa
-          </p>
+          <h1 className="font-bold text-2xl tracking-tight">Perfiles de Acceso</h1>
+          <p className="mt-1 text-muted-foreground text-sm">Gestión de permisos por perfil y empresa</p>
         </div>
       </div>
 
       <div className="mb-6 max-w-xs">
-        <label className="mb-1.5 block text-sm font-medium text-muted-foreground">
-          Empresa
-        </label>
+        <label className="mb-1.5 block font-medium text-muted-foreground text-sm">Empresa</label>
         <Select value={rutEmpresa} onValueChange={setRutEmpresa}>
           <SelectTrigger>
             <SelectValue placeholder="Seleccionar empresa..." />
@@ -94,7 +88,7 @@ export function PerfilesPage() {
 
       {loading ? (
         <div className="flex items-center justify-center py-16">
-          <p className="text-sm text-muted-foreground">Cargando permisos...</p>
+          <p className="text-muted-foreground text-sm">Cargando permisos...</p>
         </div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -114,11 +108,9 @@ export function PerfilesPage() {
                     <Icon className="size-5 text-muted-foreground" />
                   </span>
                   <div>
-                    <h3 className="text-base font-semibold">
-                      {PERFIL_NOMBRES[perfil as Perfil]}
-                    </h3>
+                    <h3 className="font-semibold text-base">{PERFIL_NOMBRES[perfil as Perfil]}</h3>
                     <span
-                      className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${PERFIL_BADGE_COLORS[perfil] ?? ""}`}
+                      className={`inline-block rounded-full px-2 py-0.5 font-medium text-xs ${PERFIL_BADGE_COLORS[perfil] ?? ""}`}
                     >
                       {enabledCount}/{totalCount} módulos
                     </span>
@@ -132,27 +124,23 @@ export function PerfilesPage() {
                     .map((s) => (
                       <span
                         key={s.id_item}
-                        className="inline-block mr-1 mb-1 rounded bg-background/80 px-2 py-0.5 text-xs text-muted-foreground border"
+                        className="mr-1 mb-1 inline-block rounded border bg-background/80 px-2 py-0.5 text-muted-foreground text-xs"
                       >
                         {s.nombre}
                       </span>
                     ))}
                   {enabledCount > 4 && (
-                    <span className="inline-block text-xs text-muted-foreground">
-                      +{enabledCount - 4} más
-                    </span>
+                    <span className="inline-block text-muted-foreground text-xs">+{enabledCount - 4} más</span>
                   )}
                   {enabledCount === 0 && (
-                    <span className="text-xs text-muted-foreground italic">
-                      Sin permisos asignados
-                    </span>
+                    <span className="text-muted-foreground text-xs italic">Sin permisos asignados</span>
                   )}
                 </div>
 
                 <button
                   type="button"
                   onClick={() => handleEdit(perfil)}
-                  className="w-full rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors"
+                  className="w-full rounded-md border border-input bg-background px-4 py-2 font-medium text-sm transition-colors hover:bg-accent hover:text-accent-foreground"
                 >
                   Editar permisos
                 </button>
@@ -167,9 +155,7 @@ export function PerfilesPage() {
         onOpenChange={setSheetOpen}
         rut_empresa={rutEmpresa}
         perfil={editPerfil ?? 0}
-        perfilNombre={
-          editPerfil !== null ? PERFIL_NOMBRES[editPerfil as Perfil] ?? "" : ""
-        }
+        perfilNombre={editPerfil !== null ? (PERFIL_NOMBRES[editPerfil as Perfil] ?? "") : ""}
         initialItems={currentItems}
         onSuccess={refresh}
       />

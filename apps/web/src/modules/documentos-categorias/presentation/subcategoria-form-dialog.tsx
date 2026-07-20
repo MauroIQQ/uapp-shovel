@@ -1,20 +1,15 @@
 "use client";
 
 import * as React from "react";
+
 import { Controller, useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
 
 import type { CrearSubcategoriaData } from "../domain/documento-categoria.schema";
 
@@ -26,10 +21,21 @@ interface SubcategoriaFormDialogProps {
   onSave: (data: CrearSubcategoriaData, idCategoria: number | undefined, subId: number | undefined) => Promise<void>;
 }
 
-export function SubcategoriaFormDialog({ open, onOpenChange, idCategoria, editingSub, onSave }: SubcategoriaFormDialogProps) {
+export function SubcategoriaFormDialog({
+  open,
+  onOpenChange,
+  idCategoria,
+  editingSub,
+  onSave,
+}: SubcategoriaFormDialogProps) {
   const [saving, setSaving] = React.useState(false);
 
-  const { control, handleSubmit, reset, formState: { errors } } = useForm<CrearSubcategoriaData>({
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<CrearSubcategoriaData>({
     defaultValues: { codigo: "", nombre: "", descripcion: "", orden: 0, activo: true },
   });
 
@@ -115,7 +121,9 @@ export function SubcategoriaFormDialog({ open, onOpenChange, idCategoria, editin
             )}
           />
           <div className="flex justify-end gap-2 pt-2">
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>Cancelar</Button>
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+              Cancelar
+            </Button>
             <Button type="submit" disabled={saving}>
               {saving ? "Guardando..." : "Guardar"}
             </Button>

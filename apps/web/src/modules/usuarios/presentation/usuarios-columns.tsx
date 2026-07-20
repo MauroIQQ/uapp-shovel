@@ -1,7 +1,7 @@
 import type { ColumnDef } from "@tanstack/react-table";
+import { PERFIL_NOMBRES, type Perfil } from "@uapp/shared";
 import { MoreHorizontal, Pencil, Trash2, UserRound } from "lucide-react";
 
-import { PERFIL_NOMBRES, type Perfil } from "@uapp/shared";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -23,9 +23,7 @@ export function useUsuariosColumns({ onEdit, onDelete }: UsuariosColumnsOptions)
     {
       accessorKey: "rut",
       header: "RUT",
-      cell: ({ row }) => (
-        <span className="font-medium tabular-nums">{row.getValue<string>("rut")}</span>
-      ),
+      cell: ({ row }) => <span className="font-medium tabular-nums">{row.getValue<string>("rut")}</span>,
     },
     {
       id: "nombre_completo",
@@ -47,7 +45,7 @@ export function useUsuariosColumns({ onEdit, onDelete }: UsuariosColumnsOptions)
         const perfil = row.getValue<number>("perfil");
         const nombre = PERFIL_NOMBRES[perfil as Perfil] ?? "Desconocido";
         return (
-          <span className="inline-block rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
+          <span className="inline-block rounded-full bg-blue-100 px-2 py-0.5 font-medium text-blue-700 text-xs dark:bg-blue-900/30 dark:text-blue-400">
             {nombre}
           </span>
         );
@@ -57,7 +55,7 @@ export function useUsuariosColumns({ onEdit, onDelete }: UsuariosColumnsOptions)
       accessorKey: "correo",
       header: "Correo",
       cell: ({ row }) => (
-        <span className="text-xs text-muted-foreground line-clamp-1">
+        <span className="line-clamp-1 text-muted-foreground text-xs">
           {row.getValue<string | null>("correo") ?? "-"}
         </span>
       ),

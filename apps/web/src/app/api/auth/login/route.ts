@@ -1,6 +1,8 @@
+import { NextResponse } from "next/server";
+
 import { prisma } from "@uapp/database";
 import bcrypt from "bcryptjs";
-import { NextResponse } from "next/server";
+
 import { createToken } from "@/lib/verify-auth";
 
 export async function POST(req: Request) {

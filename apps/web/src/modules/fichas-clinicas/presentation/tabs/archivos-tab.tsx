@@ -1,21 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { FileIcon, FolderTree, Trash2, Upload, XCircle, CheckCircle2, Clock } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Spinner } from "@/components/ui/spinner";
+import { CheckCircle2, Clock, FileIcon, FolderTree, Trash2, Upload, XCircle } from "lucide-react";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -26,14 +14,14 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Spinner } from "@/components/ui/spinner";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 import type { ArchivoGeneral } from "../../domain/ficha.entity";
 import { eliminarArchivoGeneral, fetchArchivosGenerales } from "../../infrastructure/fichas.service";
@@ -62,7 +50,7 @@ function uploadFileXhr(
   item: UploadItem,
   fichaId: number,
   idSubcategoria: string,
-  onProgress: (id: string, pct: number) => void
+  onProgress: (id: string, pct: number) => void,
 ): Promise<void> {
   return new Promise((resolve, reject) => {
     const formData = new FormData();
@@ -128,11 +116,11 @@ export function ArchivosTab({ fichaId }: ArchivosTabProps) {
 
   React.useEffect(() => {
     if (fichaId) load();
-  }, [fichaId]);
+  }, [fichaId, load]);
 
   React.useEffect(() => {
     setSubcatId("");
-  }, [catId]);
+  }, []);
 
   function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
     const selected = Array.from(e.target.files ?? []);
@@ -177,8 +165,8 @@ export function ArchivosTab({ fichaId }: ArchivosTabProps) {
       if (item.file.size > 25 * 1024 * 1024) {
         setUploadQueue((prev) =>
           prev.map((u) =>
-            u.id === item.id ? { ...u, status: "error", error: "El archivo supera el límite de 25 MB" } : u
-          )
+            u.id === item.id ? { ...u, status: "error", error: "El archivo supera el límite de 25 MB" } : u,
+          ),
         );
         continue;
       }
@@ -191,8 +179,8 @@ export function ArchivosTab({ fichaId }: ArchivosTabProps) {
       } catch (err) {
         setUploadQueue((prev) =>
           prev.map((u) =>
-            u.id === item.id ? { ...u, status: "error", error: err instanceof Error ? err.message : "Error" } : u
-          )
+            u.id === item.id ? { ...u, status: "error", error: err instanceof Error ? err.message : "Error" } : u,
+          ),
         );
       }
     }
@@ -262,7 +250,7 @@ export function ArchivosTab({ fichaId }: ArchivosTabProps) {
           </CardHeader>
           <CardContent className="space-y-4">
             {error && (
-              <div className="rounded-md border border-destructive/20 bg-destructive/10 p-3 text-sm text-destructive">
+              <div className="rounded-md border border-destructive/20 bg-destructive/10 p-3 text-destructive text-sm">
                 {error}
               </div>
             )}
@@ -280,7 +268,7 @@ export function ArchivosTab({ fichaId }: ArchivosTabProps) {
             </div>
 
             {selectedFiles.length > 0 && (
-              <div className="rounded-md border bg-muted/20 p-2 text-sm text-muted-foreground">
+              <div className="rounded-md border bg-muted/20 p-2 text-muted-foreground text-sm">
                 {selectedFiles.length} archivo{selectedFiles.length !== 1 ? "s" : ""} seleccionado
                 {selectedFiles.length !== 1 ? "s" : ""}
               </div>
@@ -313,7 +301,9 @@ export function ArchivosTab({ fichaId }: ArchivosTabProps) {
                   </SelectTrigger>
                   <SelectContent className="w-full">
                     {subcategorias.map((s) => (
-                      <SelectItem key={s.id} value={String(s.id)}>{s.nombre}</SelectItem>
+                      <SelectItem key={s.id} value={String(s.id)}>
+                        {s.nombre}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -322,7 +312,14 @@ export function ArchivosTab({ fichaId }: ArchivosTabProps) {
 
             <div className="flex justify-end gap-2">
               {selectedFiles.length > 0 && (
-                <Button variant="outline" size="sm" onClick={() => { setSelectedFiles([]); setUploadQueue([]); }}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setSelectedFiles([]);
+                    setUploadQueue([]);
+                  }}
+                >
                   Limpiar
                 </Button>
               )}
@@ -349,7 +346,7 @@ export function ArchivosTab({ fichaId }: ArchivosTabProps) {
             {uploadQueue.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-8 text-center">
                 <Upload className="mb-2 size-8 text-muted-foreground" />
-                <p className="text-sm text-muted-foreground">Selecciona archivos para subir</p>
+                <p className="text-muted-foreground text-sm">Selecciona archivos para subir</p>
               </div>
             ) : (
               <div className="space-y-3">
@@ -361,12 +358,15 @@ export function ArchivosTab({ fichaId }: ArchivosTabProps) {
                         {item.status === "uploading" && <Spinner className="size-3.5 shrink-0" />}
                         {item.status === "done" && <CheckCircle2 className="size-3.5 shrink-0 text-green-600" />}
                         {item.status === "error" && <XCircle className="size-3.5 shrink-0 text-destructive" />}
-                        <span className="truncate text-sm font-medium">{item.file.name}</span>
+                        <span className="truncate font-medium text-sm">{item.file.name}</span>
                       </div>
                       <div className="flex shrink-0 items-center gap-2">
-                        <span className="text-xs text-muted-foreground">{formatSize(item.file.size)}</span>
+                        <span className="text-muted-foreground text-xs">{formatSize(item.file.size)}</span>
                         {item.status === "pending" && (
-                          <button onClick={() => removeFromQueue(item.id)} className="text-muted-foreground hover:text-destructive">
+                          <button
+                            onClick={() => removeFromQueue(item.id)}
+                            className="text-muted-foreground hover:text-destructive"
+                          >
                             <XCircle className="size-3.5" />
                           </button>
                         )}
@@ -389,7 +389,7 @@ export function ArchivosTab({ fichaId }: ArchivosTabProps) {
                       </span>
                       <span>{item.progress}%</span>
                     </div>
-                    {item.error && <p className="mt-1 text-xs text-destructive">{item.error}</p>}
+                    {item.error && <p className="mt-1 text-destructive text-xs">{item.error}</p>}
                   </div>
                 ))}
               </div>
@@ -404,14 +404,14 @@ export function ArchivosTab({ fichaId }: ArchivosTabProps) {
         </CardHeader>
         <CardContent>
           {loading ? (
-            <div className="flex flex-col items-center justify-center gap-2 py-8 text-sm text-muted-foreground">
+            <div className="flex flex-col items-center justify-center gap-2 py-8 text-muted-foreground text-sm">
               <Spinner className="size-5" />
               <span>Cargando archivos...</span>
             </div>
           ) : files.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-8 text-center">
               <FileIcon className="mb-2 size-8 text-muted-foreground" />
-              <p className="text-sm text-muted-foreground">No hay archivos subidos</p>
+              <p className="text-muted-foreground text-sm">No hay archivos subidos</p>
             </div>
           ) : (
             <Table>
@@ -444,7 +444,9 @@ export function ArchivosTab({ fichaId }: ArchivosTabProps) {
                           {f.subcategoria.categoria.nombre} → {f.subcategoria.nombre}
                         </Badge>
                       ) : f.categoria ? (
-                        <Badge variant="secondary" className="text-xs">{f.categoria}</Badge>
+                        <Badge variant="secondary" className="text-xs">
+                          {f.categoria}
+                        </Badge>
                       ) : (
                         "-"
                       )}
@@ -477,7 +479,10 @@ export function ArchivosTab({ fichaId }: ArchivosTabProps) {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeleteConfirm} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+            <AlertDialogAction
+              onClick={handleDeleteConfirm}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
               Eliminar
             </AlertDialogAction>
           </AlertDialogFooter>
@@ -486,7 +491,10 @@ export function ArchivosTab({ fichaId }: ArchivosTabProps) {
 
       <VerificarClaveDialog
         open={verificarOpen}
-        onOpenChange={(open) => { setVerificarOpen(open); if (!open) setArchivoAEliminar(null); }}
+        onOpenChange={(open) => {
+          setVerificarOpen(open);
+          if (!open) setArchivoAEliminar(null);
+        }}
         onVerified={handleDeleteConfirmado}
       />
     </div>

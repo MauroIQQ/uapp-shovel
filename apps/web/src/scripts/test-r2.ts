@@ -1,7 +1,9 @@
 import "dotenv/config";
+
 import { Sha256 } from "@aws-crypto/sha256-js";
-import { SignatureV4 } from "@aws-sdk/signature-v4";
 import { HttpRequest } from "@aws-sdk/protocol-http";
+import { SignatureV4 } from "@aws-sdk/signature-v4";
+
 import { createHash, createHmac } from "node:crypto";
 
 const accountId = process.env.R2_ACCOUNT_ID!;
@@ -20,17 +22,17 @@ async function main() {
 
   // Compute signing key
   const ymd = "20260720";
-  const kSecret = "AWS4" + secretAccessKey;
+  const kSecret = `AWS4${secretAccessKey}`;
   const kDate = createHmac("sha256", kSecret).update(ymd).digest();
   const kRegion = createHmac("sha256", kDate).update(region).digest();
   const kService = createHmac("sha256", kRegion).update("s3").digest();
   const signingKey = createHmac("sha256", kService).update("aws4_request").digest();
-  
+
   console.log("signingKey (hex):", signingKey.toString("hex"));
 
   // Use SDK to sign the request
   console.log("\n=== SDK SignatureV4 ===\n");
-  
+
   const signer = new SignatureV4({
     region,
     service: "s3",
@@ -51,7 +53,7 @@ async function main() {
   });
 
   const signed = await signer.sign(req);
-  console.log("Auth:", signed.headers["authorization"]);
+  console.log("Auth:", signed.headers.authorization);
 
   const res = await fetch(`https://${host}${path}`, {
     method: "PUT",

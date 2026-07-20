@@ -1,8 +1,10 @@
 "use client";
 
 import * as React from "react";
+
 import { Pill, Plus } from "lucide-react";
 
+import { ServerDataTable } from "@/app/(main)/dashboard/componentes/datatable/_components/server-data-table";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,13 +22,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ServerDataTable } from "@/app/(main)/dashboard/componentes/datatable/_components/server-data-table";
 
 import { useBuscarMedicamentos } from "../application/buscar-medicamentos.use-case";
-import { useMedicamentosColumns } from "./medicamentos-columns";
-import { MedicamentoFormSheet } from "./medicamento-form-sheet";
-import { deleteMedicamento, fetchCategorias } from "../infrastructure/medicamentos.service";
 import type { CategoriaMedicamento, Medicamento } from "../domain/medicamento.entity";
+import { deleteMedicamento, fetchCategorias } from "../infrastructure/medicamentos.service";
+import { MedicamentoFormSheet } from "./medicamento-form-sheet";
+import { useMedicamentosColumns } from "./medicamentos-columns";
 
 export function MedicamentosPage() {
   const { data, loading, error, refresh } = useBuscarMedicamentos();
@@ -38,7 +39,9 @@ export function MedicamentosPage() {
   const [filtroCategoria, setFiltroCategoria] = React.useState<string>("");
 
   React.useEffect(() => {
-    fetchCategorias().then(setCategorias).catch(() => {});
+    fetchCategorias()
+      .then(setCategorias)
+      .catch(() => {});
   }, []);
 
   const filteredData = React.useMemo(() => {
@@ -59,15 +62,11 @@ export function MedicamentosPage() {
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="sm">
           <Pill />
-          {filtroCategoria
-            ? categorias.find((c) => c.id === Number(filtroCategoria))?.nombre
-            : "Categoría"}
+          {filtroCategoria ? categorias.find((c) => c.id === Number(filtroCategoria))?.nombre : "Categoría"}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="min-w-48">
-        <DropdownMenuItem onClick={() => setFiltroCategoria("")}>
-          Todas
-        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setFiltroCategoria("")}>Todas</DropdownMenuItem>
         {categorias.map((cat) => (
           <DropdownMenuItem key={cat.id} onClick={() => setFiltroCategoria(String(cat.id))}>
             {cat.nombre}
@@ -98,10 +97,8 @@ export function MedicamentosPage() {
     <div className="p-6">
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Medicamentos</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Catálogo de medicamentos del centro médico
-          </p>
+          <h1 className="font-bold text-2xl tracking-tight">Medicamentos</h1>
+          <p className="mt-1 text-muted-foreground text-sm">Catálogo de medicamentos del centro médico</p>
         </div>
         <Button onClick={handleCreate}>
           <Plus /> Nuevo Medicamento
@@ -129,7 +126,9 @@ export function MedicamentosPage() {
 
       <AlertDialog
         open={!!deleteData}
-        onOpenChange={(open) => { if (!open) setDeleteData(null); }}
+        onOpenChange={(open) => {
+          if (!open) setDeleteData(null);
+        }}
       >
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -140,7 +139,10 @@ export function MedicamentosPage() {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeleteConfirm} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+            <AlertDialogAction
+              onClick={handleDeleteConfirm}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
               Eliminar
             </AlertDialogAction>
           </AlertDialogFooter>

@@ -207,5 +207,10 @@ export interface ArchivoGeneral {
   observacion: string | null;
   usuario: string | null;
   created: string;
-  subcategoria?: { id: number; nombre: string; codigo: string; categoria: { id: number; nombre: string; codigo: string } } | null;
+  subcategoria?: {
+    id: number;
+    nombre: string;
+    codigo: string;
+    categoria: { id: number; nombre: string; codigo: string };
+  } | null;
 }

@@ -18,13 +18,11 @@ interface UseBuscarEjemplosReturn {
   refresh: () => void;
 }
 
-export function useBuscarEjemplos({
-  pageSize = 20,
-}: UseBuscarEjemplosProps = {}): UseBuscarEjemplosReturn {
+export function useBuscarEjemplos({ pageSize = 20 }: UseBuscarEjemplosProps = {}): UseBuscarEjemplosReturn {
   const [data, setData] = React.useState<ExampleEntity[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
-  const [refetchKey, setRefetchKey] = React.useState(0);
+  const [_refetchKey, setRefetchKey] = React.useState(0);
 
   const refresh = React.useCallback(() => setRefetchKey((k) => k + 1), []);
 
@@ -36,9 +34,7 @@ export function useBuscarEjemplos({
       setError(null);
 
       try {
-        const res = await fetch(
-          `https://jsonplaceholder.typicode.com/comments?_page=1&_limit=${pageSize}`,
-        );
+        const res = await fetch(`https://jsonplaceholder.typicode.com/comments?_page=1&_limit=${pageSize}`);
         if (!res.ok) throw new Error(`Error ${res.status}: ${res.statusText}`);
 
         // Mapea la respuesta al schema de ExampleEntity
@@ -61,9 +57,7 @@ export function useBuscarEjemplos({
         }
       } catch (err) {
         if (!cancelled) {
-          setError(
-            err instanceof Error ? err.message : "Error al cargar datos",
-          );
+          setError(err instanceof Error ? err.message : "Error al cargar datos");
         }
       } finally {
         if (!cancelled) setLoading(false);
@@ -74,7 +68,7 @@ export function useBuscarEjemplos({
     return () => {
       cancelled = true;
     };
-  }, [pageSize, refetchKey]);
+  }, [pageSize]);
 
   return { data, loading, error, refresh };
 }

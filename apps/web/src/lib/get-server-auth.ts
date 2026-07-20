@@ -1,9 +1,8 @@
-import { jwtVerify } from "jose";
 import { cookies } from "next/headers";
 
-const SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || "uapp-dev-secret-key-change-in-production"
-);
+import { jwtVerify } from "jose";
+
+const SECRET = new TextEncoder().encode(process.env.JWT_SECRET || "uapp-dev-secret-key-change-in-production");
 
 export interface ServerAuthPayload {
   rut: string;

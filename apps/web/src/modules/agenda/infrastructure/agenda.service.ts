@@ -1,6 +1,7 @@
-import type { ActualizarCitaData, CrearCitaFormData } from "../domain/agenda.schema";
-import type { AgendaCita, HorarioSlot, ResumenMes, TipoHora } from "../domain/agenda.entity";
 import { apiFetch } from "@/lib/api-fetch";
+
+import type { AgendaCita, HorarioSlot, ResumenMes, TipoHora } from "../domain/agenda.entity";
+import type { ActualizarCitaData, CrearCitaFormData } from "../domain/agenda.schema";
 
 export async function fetchCitasDelDia(fecha: string): Promise<AgendaCita[]> {
   const res = await apiFetch(`/api/agenda?fecha=${encodeURIComponent(fecha)}`);
@@ -84,9 +85,7 @@ export async function buscarPaciente(rut: string): Promise<Record<string, unknow
   return result.data ?? null;
 }
 
-export async function crearPacienteInline(
-  datos: Record<string, unknown>
-): Promise<Record<string, unknown>> {
+export async function crearPacienteInline(datos: Record<string, unknown>): Promise<Record<string, unknown>> {
   const res = await apiFetch("/api/pacientes", {
     method: "POST",
     headers: { "Content-Type": "application/json" },

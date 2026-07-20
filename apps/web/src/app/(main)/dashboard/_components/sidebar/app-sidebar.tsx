@@ -1,18 +1,13 @@
 "use client";
 
-import { CircleHelp, ClipboardList, Database, File, Search, Settings } from "lucide-react";
 import * as React from "react";
+
+import { PERFIL_NOMBRES, type Perfil } from "@uapp/shared";
 import { useShallow } from "zustand/react/shallow";
 
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarHeader,
-} from "@/components/ui/sidebar";
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader } from "@/components/ui/sidebar";
 import { useAuth } from "@/lib/auth-context";
-import { Perfil, PERFIL_NOMBRES } from "@uapp/shared";
-import { sidebarItems, type NavMainItem, type NavSubItem } from "@/navigation/sidebar/sidebar-items";
+import { type NavMainItem, sidebarItems } from "@/navigation/sidebar/sidebar-items";
 import { usePreferencesStore } from "@/stores/preferences/preferences-provider";
 
 import { NavMain } from "./nav-main";
@@ -85,7 +80,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   const itemsFiltrados = React.useMemo(
     () => sidebarItems.map((g) => ({ ...g, items: filtrarItems(g.items) })).filter((g) => g.items.length > 0),
-    [sidebarItems, permisos, user],
+    [filtrarItems],
   );
 
   return (

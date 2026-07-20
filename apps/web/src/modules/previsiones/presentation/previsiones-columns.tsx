@@ -1,6 +1,7 @@
 "use client";
 
-import { Coins } from "lucide-react";
+import type { ColumnDef } from "@tanstack/react-table";
+import { Coins, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -11,8 +12,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 
 import type { Prevision } from "../domain/prevision.entity";
 
@@ -39,7 +38,7 @@ export function usePrevisionesColumns({ onEdit, onDelete }: PrevisionesColumnsOp
       accessorKey: "valor",
       header: "Valor",
       cell: ({ row }) => (
-        <span className="tabular-nums text-muted-foreground">
+        <span className="text-muted-foreground tabular-nums">
           ${row.getValue<number>("valor")?.toLocaleString("es-CL") ?? 0}
         </span>
       ),

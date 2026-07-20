@@ -1,15 +1,16 @@
 "use client";
 
 import * as React from "react";
+
 import type { CategoriaConSubcategorias, SubcategoriaDocumento } from "../domain/documento-categoria.entity";
 import {
-  fetchCategorias,
-  crearCategoria,
   actualizarCategoria,
-  eliminarCategoria,
-  crearSubcategoria,
   actualizarSubcategoria,
+  crearCategoria,
+  crearSubcategoria,
+  eliminarCategoria,
   eliminarSubcategoria,
+  fetchCategorias,
 } from "../infrastructure/documentos-categorias.service";
 
 export function useCategorias() {
@@ -27,17 +28,22 @@ export function useCategorias() {
     }
   }
 
-  React.useEffect(() => { void load(); }, []);
+  React.useEffect(() => {
+    void load();
+  }, [load]);
 
   return {
     data,
     loading,
     refresh: load,
     crear: (d: Parameters<typeof crearCategoria>[0]) => crearCategoria(d).then(() => load()),
-    actualizar: (id: number, d: Parameters<typeof actualizarCategoria>[1]) => actualizarCategoria(id, d).then(() => load()),
+    actualizar: (id: number, d: Parameters<typeof actualizarCategoria>[1]) =>
+      actualizarCategoria(id, d).then(() => load()),
     eliminar: (id: number) => eliminarCategoria(id).then(() => load()),
-    crearSub: (idCat: number, d: Parameters<typeof crearSubcategoria>[1]) => crearSubcategoria(idCat, d).then(() => load()),
-    actualizarSub: (id: number, d: Parameters<typeof actualizarSubcategoria>[1]) => actualizarSubcategoria(id, d).then(() => load()),
+    crearSub: (idCat: number, d: Parameters<typeof crearSubcategoria>[1]) =>
+      crearSubcategoria(idCat, d).then(() => load()),
+    actualizarSub: (id: number, d: Parameters<typeof actualizarSubcategoria>[1]) =>
+      actualizarSubcategoria(id, d).then(() => load()),
     eliminarSub: (id: number) => eliminarSubcategoria(id).then(() => load()),
   };
 }
@@ -58,12 +64,14 @@ export function useCategoriasDropdown() {
     }
   }
 
-  React.useEffect(() => { void load(); }, []);
+  React.useEffect(() => {
+    void load();
+  }, [load]);
 
   return { data, loading };
 
   // Use this function to get subcategories for a given category
-  function getSubcategorias(categoriaId: number | null): SubcategoriaDocumento[] {
+  function _getSubcategorias(categoriaId: number | null): SubcategoriaDocumento[] {
     if (!categoriaId) return [];
     const cat = data.find((c) => c.id === categoriaId);
     return cat?.subcategorias ?? [];

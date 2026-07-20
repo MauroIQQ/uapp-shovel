@@ -1,28 +1,19 @@
 "use client";
 
 import * as React from "react";
+
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
 import { Loader2, Save } from "lucide-react";
+import { Controller, useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 
-import {
-  type KardexFormData,
-  crearArticuloSchema,
-} from "../domain/kardex.schema";
-import { createArticulo, updateArticulo } from "../infrastructure/kardex.service";
 import type { KardexArticulo } from "../domain/kardex.entity";
+import { crearArticuloSchema, type KardexFormData } from "../domain/kardex.schema";
+import { createArticulo, updateArticulo } from "../infrastructure/kardex.service";
 
 interface KardexFormSheetProps {
   open: boolean;
@@ -31,12 +22,7 @@ interface KardexFormSheetProps {
   editItem?: KardexArticulo | null;
 }
 
-export function KardexFormSheet({
-  open,
-  onOpenChange,
-  onSuccess,
-  editItem,
-}: KardexFormSheetProps) {
+export function KardexFormSheet({ open, onOpenChange, onSuccess, editItem }: KardexFormSheetProps) {
   const [saving, setSaving] = React.useState(false);
 
   const form = useForm<KardexFormData>({
@@ -104,7 +90,14 @@ export function KardexFormSheet({
             render={({ field, fieldState }) => (
               <Field className="gap-1.5" data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="k-stock">Stock actual</FieldLabel>
-                <Input id="k-stock" type="number" min={0} value={field.value} onChange={field.onChange} aria-invalid={fieldState.invalid} />
+                <Input
+                  id="k-stock"
+                  type="number"
+                  min={0}
+                  value={field.value}
+                  onChange={field.onChange}
+                  aria-invalid={fieldState.invalid}
+                />
                 {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
               </Field>
             )}

@@ -1,8 +1,11 @@
+import { NextResponse } from "next/server";
+
 import { prisma } from "@uapp/database";
 import { PERFIL_NOMBRES, type Perfil } from "@uapp/shared";
 import bcrypt from "bcryptjs";
-import { NextResponse } from "next/server";
+
 import { requireRoot, verifyAuth } from "@/lib/verify-auth";
+
 const SALT_ROUNDS = 10;
 
 function mapUsuario(u: Record<string, unknown> & { perfil: number }) {

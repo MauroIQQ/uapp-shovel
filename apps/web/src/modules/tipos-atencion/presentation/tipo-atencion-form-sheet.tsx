@@ -1,34 +1,19 @@
 "use client";
 
 import * as React from "react";
+
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
 import { Loader2, Save } from "lucide-react";
+import { Controller, useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 
 import type { TipoAtencion } from "../domain/tipo-atencion.entity";
-import {
-  type TipoAtencionFormData,
-  crearTipoAtencionSchema,
-} from "../domain/tipo-atencion.schema";
+import { crearTipoAtencionSchema, type TipoAtencionFormData } from "../domain/tipo-atencion.schema";
 import { createTipoAtencion, updateTipoAtencion } from "../infrastructure/tipos-atencion.service";
 
 interface TipoAtencionFormSheetProps {
@@ -38,12 +23,7 @@ interface TipoAtencionFormSheetProps {
   onSuccess: () => void;
 }
 
-export function TipoAtencionFormSheet({
-  open,
-  onOpenChange,
-  tipoAtencion,
-  onSuccess,
-}: TipoAtencionFormSheetProps) {
+export function TipoAtencionFormSheet({ open, onOpenChange, tipoAtencion, onSuccess }: TipoAtencionFormSheetProps) {
   const [saving, setSaving] = React.useState(false);
   const isEditing = !!tipoAtencion;
 
@@ -72,7 +52,7 @@ export function TipoAtencionFormSheet({
     setSaving(true);
     try {
       if (isEditing) {
-        await updateTipoAtencion(tipoAtencion!.id, data);
+        await updateTipoAtencion(tipoAtencion?.id, data);
       } else {
         await createTipoAtencion(data);
       }
@@ -95,14 +75,24 @@ export function TipoAtencionFormSheet({
           </SheetDescription>
         </SheetHeader>
 
-        <form id="tipo-atencion-form" noValidate onSubmit={form.handleSubmit(onSubmit)} className="flex flex-1 flex-col gap-4 overflow-y-auto px-4">
+        <form
+          id="tipo-atencion-form"
+          noValidate
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-1 flex-col gap-4 overflow-y-auto px-4"
+        >
           <Controller
             control={form.control}
             name="descripcion"
             render={({ field, fieldState }) => (
               <Field className="gap-1.5" data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="ta-descripcion">Descripción</FieldLabel>
-                <Input id="ta-descripcion" value={field.value} onChange={field.onChange} aria-invalid={fieldState.invalid} />
+                <Input
+                  id="ta-descripcion"
+                  value={field.value}
+                  onChange={field.onChange}
+                  aria-invalid={fieldState.invalid}
+                />
                 {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
               </Field>
             )}

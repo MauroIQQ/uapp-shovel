@@ -1,6 +1,7 @@
-import type { ActualizarHorarioData, HorarioFormData } from "../domain/horario.schema";
-import type { Horario } from "../domain/horario.entity";
 import { apiFetch } from "@/lib/api-fetch";
+
+import type { Horario } from "../domain/horario.entity";
+import type { ActualizarHorarioData, HorarioFormData } from "../domain/horario.schema";
 
 export async function fetchHorarios(): Promise<Horario[]> {
   const res = await apiFetch("/api/horarios");

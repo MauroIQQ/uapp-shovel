@@ -2,14 +2,23 @@
 
 import * as React from "react";
 
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { ServerDataTable } from "@/app/(main)/dashboard/componentes/datatable/_components/server-data-table";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 import { useBuscarTiposAtencion } from "../application/buscar-tipos-atencion.use-case";
 import type { TipoAtencion } from "../domain/tipo-atencion.entity";
 import { deleteTipoAtencion } from "../infrastructure/tipos-atencion.service";
-import { useTiposAtencionColumns } from "./tipos-atencion-columns";
 import { TipoAtencionFormSheet } from "./tipo-atencion-form-sheet";
+import { useTiposAtencionColumns } from "./tipos-atencion-columns";
 
 export function TiposAtencionPage() {
   const { data, loading, error, refresh } = useBuscarTiposAtencion();
@@ -19,14 +28,25 @@ export function TiposAtencionPage() {
   const [sheetOpen, setSheetOpen] = React.useState(false);
 
   const columns = useTiposAtencionColumns({
-    onEdit: (item) => { setEditing(item); setSheetOpen(true); },
+    onEdit: (item) => {
+      setEditing(item);
+      setSheetOpen(true);
+    },
     onDelete: (item) => setDeleteTarget(item),
   });
 
   async function handleDelete() {
     if (!deleteTarget) return;
     setDeleting(true);
-    try { await deleteTipoAtencion(deleteTarget.id); setDeleteTarget(null); refresh(); } catch { /* silent */ } finally { setDeleting(false); }
+    try {
+      await deleteTipoAtencion(deleteTarget.id);
+      setDeleteTarget(null);
+      refresh();
+    } catch {
+      /* silent */
+    } finally {
+      setDeleting(false);
+    }
   }
 
   return (
@@ -42,8 +62,11 @@ export function TiposAtencionPage() {
         filterBar={
           <div className="flex items-center gap-2">
             <button
-              className="rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary/90"
-              onClick={() => { setEditing(null); setSheetOpen(true); }}
+              className="rounded-md bg-primary px-3 py-1.5 font-medium text-primary-foreground text-xs hover:bg-primary/90"
+              onClick={() => {
+                setEditing(null);
+                setSheetOpen(true);
+              }}
             >
               + Nuevo tipo
             </button>
@@ -52,12 +75,7 @@ export function TiposAtencionPage() {
         hideColumnsButton
       />
 
-      <TipoAtencionFormSheet
-        open={sheetOpen}
-        onOpenChange={setSheetOpen}
-        tipoAtencion={editing}
-        onSuccess={refresh}
-      />
+      <TipoAtencionFormSheet open={sheetOpen} onOpenChange={setSheetOpen} tipoAtencion={editing} onSuccess={refresh} />
 
       <AlertDialog open={!!deleteTarget} onOpenChange={(o) => !o && setDeleteTarget(null)}>
         <AlertDialogContent>

@@ -16,7 +16,7 @@ export function useBuscarUsuarios(): UseBuscarUsuariosReturn {
   const [data, setData] = React.useState<Usuario[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
-  const [refetchKey, setRefetchKey] = React.useState(0);
+  const [_refetchKey, setRefetchKey] = React.useState(0);
 
   const refresh = React.useCallback(() => setRefetchKey((k) => k + 1), []);
 
@@ -43,7 +43,7 @@ export function useBuscarUsuarios(): UseBuscarUsuariosReturn {
     return () => {
       cancelled = true;
     };
-  }, [refetchKey]);
+  }, []);
 
   return { data, loading, error, refresh };
 }

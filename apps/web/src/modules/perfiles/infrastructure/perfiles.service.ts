@@ -1,4 +1,5 @@
 import { apiFetch } from "@/lib/api-fetch";
+
 import type { Permiso } from "../domain/perfil.entity";
 
 export async function fetchPermisos(rut_empresa: string): Promise<Permiso[]> {

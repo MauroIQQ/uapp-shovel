@@ -1,45 +1,29 @@
 "use client";
 
 import * as React from "react";
+
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
+import { validarRut } from "@uapp/shared";
 import { format } from "date-fns";
 import { CalendarDays, Loader2, Save, Search, UserPlus } from "lucide-react";
+import { Controller, useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 
-import { validarRut } from "@uapp/shared";
-
 import type { AgendaCita, HorarioSlot, TipoHora } from "../domain/agenda.entity";
-import {
-  type CrearCitaFormData,
-  crearCitaSchema,
-} from "../domain/agenda.schema";
+import { type CrearCitaFormData, crearCitaSchema } from "../domain/agenda.schema";
 import {
   buscarPaciente,
-  createCita,
   crearPacienteInline,
+  createCita,
   fetchPrevisiones,
   updateCita,
 } from "../infrastructure/agenda.service";
@@ -54,15 +38,7 @@ interface CitaFormSheetProps {
   onSuccess: () => void;
 }
 
-export function CitaFormSheet({
-  open,
-  onOpenChange,
-  cita,
-  fecha,
-  tipos,
-  horarios,
-  onSuccess,
-}: CitaFormSheetProps) {
+export function CitaFormSheet({ open, onOpenChange, cita, fecha, tipos, horarios, onSuccess }: CitaFormSheetProps) {
   const [saving, setSaving] = React.useState(false);
   const [submitError, setSubmitError] = React.useState<string | null>(null);
   const [previsiones, setPrevisiones] = React.useState<{ id: number; nombre: string }[]>([]);
@@ -71,7 +47,9 @@ export function CitaFormSheet({
   const [rutBusqueda, setRutBusqueda] = React.useState("");
   const [rutError, setRutError] = React.useState<string | null>(null);
   const [buscando, setBuscando] = React.useState(false);
-  const [pacienteEncontrado, setPacienteEncontrado] = React.useState<Record<string, unknown> | null | undefined>(undefined);
+  const [pacienteEncontrado, setPacienteEncontrado] = React.useState<Record<string, unknown> | null | undefined>(
+    undefined,
+  );
   const [nuevoPaciente, setNuevoPaciente] = React.useState({
     nombre_completo: "",
     telefono: "",
@@ -97,7 +75,9 @@ export function CitaFormSheet({
 
   React.useEffect(() => {
     if (open) {
-      fetchPrevisiones().then(setPrevisiones).catch(() => {});
+      fetchPrevisiones()
+        .then(setPrevisiones)
+        .catch(() => {});
       if (cita) {
         const d = new Date(cita.fecha_hora);
         const dateStr = d.toISOString().slice(0, 10);
@@ -109,7 +89,7 @@ export function CitaFormSheet({
           fecha: dateStr,
           hora: timeStr,
           id_tipo_consulta: cita.id_tipo_consulta,
-          id_prevision: cita.id_prevision ?? undefined as unknown as number,
+          id_prevision: cita.id_prevision ?? (undefined as unknown as number),
           observacion: cita.observacion ?? "",
           confirmada: cita.confirmada ?? "false",
           sobrecupo: cita.sobrecupo,
@@ -199,7 +179,7 @@ export function CitaFormSheet({
     setSaving(true);
     try {
       if (isEditing) {
-        await updateCita(cita!.id, data);
+        await updateCita(cita?.id, data);
       } else {
         if (!pacienteEncontrado) {
           await crearPacienteInline({
@@ -235,7 +215,7 @@ export function CitaFormSheet({
         </SheetHeader>
 
         {submitError && (
-          <div className="mx-4 rounded-md border border-destructive/20 bg-destructive/10 p-3 text-sm text-destructive">
+          <div className="mx-4 rounded-md border border-destructive/20 bg-destructive/10 p-3 text-destructive text-sm">
             {submitError}
           </div>
         )}
@@ -249,7 +229,7 @@ export function CitaFormSheet({
           {/* Búsqueda de paciente (solo en creación) */}
           {!isEditing && (
             <div className="rounded-lg border bg-muted/20 p-4">
-              <h4 className="mb-3 text-sm font-semibold">Datos del Paciente</h4>
+              <h4 className="mb-3 font-semibold text-sm">Datos del Paciente</h4>
 
               <Field className="gap-1.5">
                 <FieldLabel htmlFor="rut-busqueda">RUT del paciente</FieldLabel>
@@ -259,7 +239,10 @@ export function CitaFormSheet({
                     placeholder="Ej: 12345678-9"
                     className="flex-1"
                     value={rutBusqueda}
-                    onChange={(e) => { setRutBusqueda(e.target.value); setRutError(null); }}
+                    onChange={(e) => {
+                      setRutBusqueda(e.target.value);
+                      setRutError(null);
+                    }}
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
                         e.preventDefault();
@@ -274,29 +257,23 @@ export function CitaFormSheet({
                     disabled={buscando || !rutBusqueda.trim()}
                     onClick={handleBuscar}
                   >
-                    {buscando ? (
-                      <Loader2 className="size-4 animate-spin" />
-                    ) : (
-                      <Search className="size-4" />
-                    )}
+                    {buscando ? <Loader2 className="size-4 animate-spin" /> : <Search className="size-4" />}
                   </Button>
-                  <div className="flex items-center gap-1.5 shrink-0">
+                  <div className="flex shrink-0 items-center gap-1.5">
                     <Switch
                       id="cita-extranjero"
                       checked={nuevoPaciente.extranjero}
-                      onCheckedChange={(checked) =>
-                        setNuevoPaciente((p) => ({ ...p, extranjero: checked }))
-                      }
+                      onCheckedChange={(checked) => setNuevoPaciente((p) => ({ ...p, extranjero: checked }))}
                     />
                     <label
                       htmlFor="cita-extranjero"
-                      className="text-sm cursor-pointer select-none text-muted-foreground whitespace-nowrap"
+                      className="cursor-pointer select-none whitespace-nowrap text-muted-foreground text-sm"
                     >
                       Extranjero
                     </label>
                   </div>
                 </div>
-                {rutError && <p className="text-xs text-destructive">{rutError}</p>}
+                {rutError && <p className="text-destructive text-xs">{rutError}</p>}
               </Field>
 
               {pacienteVisible && pacienteExiste && (
@@ -306,15 +283,21 @@ export function CitaFormSheet({
                     <span className="font-medium">Paciente encontrado</span>
                   </div>
                   <div className="mt-2 space-y-1 text-muted-foreground">
-                    <p><span className="font-medium text-foreground">Nombre:</span> {(pacienteEncontrado as Record<string, unknown>).nombre_completo as string}</p>
-                    <p><span className="font-medium text-foreground">RUT:</span> {(pacienteEncontrado as Record<string, unknown>).rut as string}</p>
+                    <p>
+                      <span className="font-medium text-foreground">Nombre:</span>{" "}
+                      {(pacienteEncontrado as Record<string, unknown>).nombre_completo as string}
+                    </p>
+                    <p>
+                      <span className="font-medium text-foreground">RUT:</span>{" "}
+                      {(pacienteEncontrado as Record<string, unknown>).rut as string}
+                    </p>
                   </div>
                 </div>
               )}
 
               {pacienteVisible && !pacienteExiste && (
                 <div className="mt-3 space-y-3">
-                  <div className="rounded-md border bg-amber-50 p-3 text-sm text-amber-700 dark:bg-amber-950/20 dark:text-amber-400">
+                  <div className="rounded-md border bg-amber-50 p-3 text-amber-700 text-sm dark:bg-amber-950/20 dark:text-amber-400">
                     Paciente no encontrado. Completa los datos para crearlo.
                   </div>
                   <Field className="gap-1.5">
@@ -323,21 +306,17 @@ export function CitaFormSheet({
                       id="np-nombre"
                       placeholder="Nombre del paciente"
                       value={nuevoPaciente.nombre_completo}
-                      onChange={(e) =>
-                        setNuevoPaciente((p) => ({ ...p, nombre_completo: e.target.value }))
-                      }
+                      onChange={(e) => setNuevoPaciente((p) => ({ ...p, nombre_completo: e.target.value }))}
                     />
                   </Field>
-<div className="grid grid-cols-[1fr_auto] gap-3">
+                  <div className="grid grid-cols-[1fr_auto] gap-3">
                     <Field className="gap-1.5">
                       <FieldLabel htmlFor="np-telefono">Teléfono</FieldLabel>
                       <Input
                         id="np-telefono"
                         placeholder="Teléfono"
                         value={nuevoPaciente.telefono}
-                        onChange={(e) =>
-                          setNuevoPaciente((p) => ({ ...p, telefono: e.target.value }))
-                        }
+                        onChange={(e) => setNuevoPaciente((p) => ({ ...p, telefono: e.target.value }))}
                       />
                     </Field>
                     <Field className="gap-1.5">
@@ -346,9 +325,7 @@ export function CitaFormSheet({
                         id="np-celular"
                         placeholder="Celular"
                         value={nuevoPaciente.celular}
-                        onChange={(e) =>
-                          setNuevoPaciente((p) => ({ ...p, celular: e.target.value }))
-                        }
+                        onChange={(e) => setNuevoPaciente((p) => ({ ...p, celular: e.target.value }))}
                       />
                     </Field>
                   </div>
@@ -359,9 +336,7 @@ export function CitaFormSheet({
                       type="email"
                       placeholder="correo@ejemplo.cl"
                       value={nuevoPaciente.correo}
-                      onChange={(e) =>
-                        setNuevoPaciente((p) => ({ ...p, correo: e.target.value }))
-                      }
+                      onChange={(e) => setNuevoPaciente((p) => ({ ...p, correo: e.target.value }))}
                     />
                   </Field>
                 </div>
@@ -372,17 +347,17 @@ export function CitaFormSheet({
           {/* Edición: RUT del paciente en readonly */}
           {isEditing && (
             <div className="rounded-lg border bg-muted/20 p-4">
-              <h4 className="mb-3 text-sm font-semibold">Datos del Paciente</h4>
+              <h4 className="mb-3 font-semibold text-sm">Datos del Paciente</h4>
               <Field className="gap-1.5">
                 <FieldLabel>RUT del paciente</FieldLabel>
-                <Input value={cita!.rut_paciente} disabled />
+                <Input value={cita?.rut_paciente} disabled />
               </Field>
             </div>
           )}
 
           {/* Datos de la Cita */}
           <div className="rounded-lg border bg-muted/20 p-4">
-            <h4 className="mb-3 text-sm font-semibold">Datos de la Cita</h4>
+            <h4 className="mb-3 font-semibold text-sm">Datos de la Cita</h4>
 
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
@@ -401,7 +376,7 @@ export function CitaFormSheet({
                           >
                             <CalendarDays className="mr-2 size-4 shrink-0" />
                             {field.value ? (
-                              format(new Date(field.value + "T12:00:00"), "dd/MM/yy")
+                              format(new Date(`${field.value}T12:00:00`), "dd/MM/yy")
                             ) : (
                               <span className="text-muted-foreground">Seleccionar fecha</span>
                             )}
@@ -410,7 +385,7 @@ export function CitaFormSheet({
                         <PopoverContent className="w-auto p-0" align="start">
                           <Calendar
                             mode="single"
-                            selected={field.value ? new Date(field.value + "T12:00:00") : undefined}
+                            selected={field.value ? new Date(`${field.value}T12:00:00`) : undefined}
                             onSelect={(date) => field.onChange(date ? date.toISOString().slice(0, 10) : "")}
                           />
                         </PopoverContent>
@@ -426,10 +401,7 @@ export function CitaFormSheet({
                   render={({ field, fieldState }) => (
                     <Field className="gap-1.5" data-invalid={fieldState.invalid}>
                       <FieldLabel htmlFor="cita-hora">Hora</FieldLabel>
-                      <Select
-                        value={field.value}
-                        onValueChange={field.onChange}
-                      >
+                      <Select value={field.value} onValueChange={field.onChange}>
                         <SelectTrigger id="cita-hora" className="w-full" aria-invalid={fieldState.invalid}>
                           <SelectValue placeholder="Seleccionar hora..." />
                         </SelectTrigger>
@@ -481,9 +453,7 @@ export function CitaFormSheet({
                     <FieldLabel htmlFor="cita-prevision">Previsión</FieldLabel>
                     <Select
                       value={field.value ? String(field.value) : ""}
-                      onValueChange={(v) =>
-                        field.onChange(v ? Number(v) : (undefined as unknown as number))
-                      }
+                      onValueChange={(v) => field.onChange(v ? Number(v) : (undefined as unknown as number))}
                     >
                       <SelectTrigger id="cita-prevision" className="w-full">
                         <SelectValue placeholder="Sin previsión" />
@@ -531,9 +501,7 @@ export function CitaFormSheet({
                         type="number"
                         {...field}
                         value={field.value ?? ""}
-                        onChange={(e) =>
-                          field.onChange(e.target.value ? Number(e.target.value) : undefined)
-                        }
+                        onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : undefined)}
                         placeholder="0"
                       />
                     </Field>
@@ -544,11 +512,7 @@ export function CitaFormSheet({
                   name="sobrecupo"
                   render={({ field }) => (
                     <Field orientation="horizontal" className="gap-2 self-end pb-1.5">
-                      <Switch
-                        id="cita-sobrecupo"
-                        checked={field.value ?? false}
-                        onCheckedChange={field.onChange}
-                      />
+                      <Switch id="cita-sobrecupo" checked={field.value ?? false} onCheckedChange={field.onChange} />
                       <FieldLabel htmlFor="cita-sobrecupo">Sobrecupo</FieldLabel>
                     </Field>
                   )}

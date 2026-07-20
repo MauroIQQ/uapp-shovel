@@ -1,8 +1,10 @@
-import { prisma } from "@uapp/database";
 import { NextResponse } from "next/server";
+
+import { prisma } from "@uapp/database";
+
 import { requireRoot, verifyAuth } from "@/lib/verify-auth";
 
-export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const data = await prisma.uapp_document_subcategories.findMany({
     where: { id_categoria: Number(id) },

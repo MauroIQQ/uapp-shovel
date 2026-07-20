@@ -35,7 +35,7 @@ export function useMedicamentosColumns({ onEdit, onDelete }: MedicamentosColumns
       accessorKey: "categoria_nombre",
       header: "Categoría",
       cell: ({ row }) => (
-        <span className="inline-block rounded-full bg-violet-100 px-2 py-0.5 text-xs font-medium text-violet-700 dark:bg-violet-900/30 dark:text-violet-400">
+        <span className="inline-block rounded-full bg-violet-100 px-2 py-0.5 font-medium text-violet-700 text-xs dark:bg-violet-900/30 dark:text-violet-400">
           {row.getValue<string>("categoria_nombre")}
         </span>
       ),

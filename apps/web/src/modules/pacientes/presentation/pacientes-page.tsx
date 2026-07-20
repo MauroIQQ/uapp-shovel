@@ -1,8 +1,10 @@
 "use client";
 
 import * as React from "react";
+
 import { ArrowUpDown, Globe, ListFilter, Plus } from "lucide-react";
 
+import { ServerDataTable } from "@/app/(main)/dashboard/componentes/datatable/_components/server-data-table";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,13 +22,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ServerDataTable } from "@/app/(main)/dashboard/componentes/datatable/_components/server-data-table";
 
 import { useBuscarPacientes } from "../application/buscar-pacientes.use-case";
-import { usePacientesColumns } from "./pacientes-columns";
-import { PacienteFormSheet } from "./paciente-form-sheet";
-import { deletePaciente, fetchPrevisiones } from "../infrastructure/pacientes.service";
 import { calcularEdad, type Paciente } from "../domain/paciente.entity";
+import { deletePaciente, fetchPrevisiones } from "../infrastructure/pacientes.service";
+import { PacienteFormSheet } from "./paciente-form-sheet";
+import { usePacientesColumns } from "./pacientes-columns";
 
 export function PacientesPage() {
   const { data, loading, error, refresh } = useBuscarPacientes();
@@ -41,7 +42,9 @@ export function PacientesPage() {
   const [ordenar, setOrdenar] = React.useState("nombre");
 
   React.useEffect(() => {
-    fetchPrevisiones().then(setPrevisiones).catch(() => {});
+    fetchPrevisiones()
+      .then(setPrevisiones)
+      .catch(() => {});
   }, []);
 
   const filteredData = React.useMemo(() => {
@@ -81,15 +84,11 @@ export function PacientesPage() {
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="sm">
             <ListFilter />
-            {filtroPrevision
-              ? previsiones.find((p) => p.id === Number(filtroPrevision))?.nombre
-              : "Previsión"}
+            {filtroPrevision ? previsiones.find((p) => p.id === Number(filtroPrevision))?.nombre : "Previsión"}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="min-w-56">
-          <DropdownMenuItem onClick={() => setFiltroPrevision("")}>
-            Todas
-          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setFiltroPrevision("")}>Todas</DropdownMenuItem>
           {previsiones.map((p) => (
             <DropdownMenuItem key={p.id} onClick={() => setFiltroPrevision(String(p.id))}>
               {p.nombre}
@@ -152,10 +151,8 @@ export function PacientesPage() {
     <div className="p-6">
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Pacientes</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Gestión de pacientes del centro médico
-          </p>
+          <h1 className="font-bold text-2xl tracking-tight">Pacientes</h1>
+          <p className="mt-1 text-muted-foreground text-sm">Gestión de pacientes del centro médico</p>
         </div>
         <Button onClick={handleCreate}>
           <Plus /> Nuevo Paciente
@@ -174,28 +171,28 @@ export function PacientesPage() {
         hideColumnsButton
       />
 
-      <PacienteFormSheet
-        open={sheetOpen}
-        onOpenChange={setSheetOpen}
-        paciente={editPaciente}
-        onSuccess={refresh}
-      />
+      <PacienteFormSheet open={sheetOpen} onOpenChange={setSheetOpen} paciente={editPaciente} onSuccess={refresh} />
 
       <AlertDialog
         open={!!deletePacienteData}
-        onOpenChange={(open) => { if (!open) setDeletePacienteData(null); }}
+        onOpenChange={(open) => {
+          if (!open) setDeletePacienteData(null);
+        }}
       >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>¿Eliminar paciente?</AlertDialogTitle>
             <AlertDialogDescription>
-              Esta acción no se puede deshacer. Se eliminará a{" "}
-              <strong>{deletePacienteData?.nombre_completo}</strong> ({deletePacienteData?.rut}).
+              Esta acción no se puede deshacer. Se eliminará a <strong>{deletePacienteData?.nombre_completo}</strong> (
+              {deletePacienteData?.rut}).
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeleteConfirm} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+            <AlertDialogAction
+              onClick={handleDeleteConfirm}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
               Eliminar
             </AlertDialogAction>
           </AlertDialogFooter>

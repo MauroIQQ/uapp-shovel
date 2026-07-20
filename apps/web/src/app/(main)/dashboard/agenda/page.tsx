@@ -1,7 +1,7 @@
 import { prisma } from "@uapp/database";
 
-import { AgendaPage } from "@/modules/agenda/presentation/agenda-page";
 import { getServerAuth } from "@/lib/get-server-auth";
+import { AgendaPage } from "@/modules/agenda/presentation/agenda-page";
 
 export const dynamic = "force-dynamic";
 

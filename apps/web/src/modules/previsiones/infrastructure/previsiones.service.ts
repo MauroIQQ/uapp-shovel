@@ -1,6 +1,7 @@
-import type { ActualizarPrevisionData, PrevisionFormData } from "../domain/prevision.schema";
-import type { Prevision } from "../domain/prevision.entity";
 import { apiFetch } from "@/lib/api-fetch";
+
+import type { Prevision } from "../domain/prevision.entity";
+import type { ActualizarPrevisionData, PrevisionFormData } from "../domain/prevision.schema";
 
 export async function fetchPrevisiones(): Promise<Prevision[]> {
   const res = await apiFetch("/api/previsiones");

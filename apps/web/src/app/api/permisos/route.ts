@@ -1,5 +1,7 @@
-import { prisma } from "@uapp/database";
 import { NextResponse } from "next/server";
+
+import { prisma } from "@uapp/database";
+
 import { requireRoot, verifyAuth } from "@/lib/verify-auth";
 
 export async function GET(req: Request) {
@@ -24,10 +26,7 @@ export async function PUT(req: Request) {
   const { rut_empresa, perfil, items } = await req.json();
 
   if (!rut_empresa || perfil === undefined || !Array.isArray(items)) {
-    return NextResponse.json(
-      { error: "rut_empresa, perfil e items son requeridos" },
-      { status: 400 },
-    );
+    return NextResponse.json({ error: "rut_empresa, perfil e items son requeridos" }, { status: 400 });
   }
 
   await prisma.uapp_permisos.deleteMany({

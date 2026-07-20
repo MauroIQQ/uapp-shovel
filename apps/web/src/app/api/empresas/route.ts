@@ -1,5 +1,7 @@
-import { prisma } from "@uapp/database";
 import { NextResponse } from "next/server";
+
+import { prisma } from "@uapp/database";
+
 import { requireRoot, verifyAuth } from "@/lib/verify-auth";
 
 function mapEmpresa(e: Record<string, unknown> & { estado: boolean }) {
@@ -23,7 +25,7 @@ export async function POST(req: Request) {
   if (!requireRoot(auth).ok) return NextResponse.json({ error: "No autorizado" }, { status: 403 });
   const { created, updated, estado, ...body } = await req.json();
   const data = await prisma.uapp_empresas.create({
-    data: { ...body, estado: estado === "activo" ? true : false, updated: new Date() },
+    data: { ...body, estado: estado === "activo", updated: new Date() },
   });
   return NextResponse.json({ data: mapEmpresa(data) }, { status: 201 });
 }
@@ -35,7 +37,11 @@ export async function PATCH(req: Request) {
   if (!rut_empresa) return NextResponse.json({ error: "rut_empresa es requerido" }, { status: 400 });
   const data = await prisma.uapp_empresas.update({
     where: { rut_empresa },
-    data: { ...rest, ...(estado !== undefined ? { estado: estado === "activo" ? true : false } : {}), updated: new Date() },
+    data: {
+      ...rest,
+      ...(estado !== undefined ? { estado: estado === "activo" } : {}),
+      updated: new Date(),
+    },
   });
   return NextResponse.json({ data: mapEmpresa(data) });
 }

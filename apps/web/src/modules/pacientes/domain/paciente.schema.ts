@@ -1,6 +1,5 @@
-import { z } from "zod";
-
 import { validarRut } from "@uapp/shared";
+import { z } from "zod";
 
 const basePacienteSchema = z.object({
   rut: z.string().min(1, "RUT es requerido"),

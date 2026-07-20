@@ -1,6 +1,7 @@
 "use client";
 
-import { Clock } from "lucide-react";
+import type { ColumnDef } from "@tanstack/react-table";
+import { Clock, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -11,8 +12,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 
 import type { Horario } from "../domain/horario.entity";
 

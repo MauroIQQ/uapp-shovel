@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -131,9 +132,7 @@ export function NavMain({ items }: NavMainProps) {
       <SidebarSeparator className="hidden group-data-[collapsible=icon]:block" />
       {items.map((group, index) => (
         <React.Fragment key={group.id}>
-          {index > 0 && (
-            <SidebarSeparator className="hidden group-data-[collapsible=icon]:block" />
-          )}
+          {index > 0 && <SidebarSeparator className="hidden group-data-[collapsible=icon]:block" />}
           <SidebarGroup>
             {group.label && (
               <SidebarGroupLabel className="group-data-[collapsible=icon]:pointer-events-none">

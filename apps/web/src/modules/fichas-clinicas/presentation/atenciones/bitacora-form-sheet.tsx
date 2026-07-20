@@ -1,50 +1,37 @@
 "use client";
 
 import * as React from "react";
-import { Controller, useFieldArray, useForm } from "react-hook-form";
+
 import { format } from "date-fns";
 import { CalendarDays, CheckIcon, Loader2, Plus, Save, Trash2 } from "lucide-react";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
+import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverAnchor, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Spinner } from "@/components/ui/spinner";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-
 import { useBuscarMedicamentos } from "@/modules/medicamentos/application/buscar-medicamentos.use-case";
 import type { Medicamento } from "@/modules/medicamentos/domain/medicamento.entity";
 
-import {
-  crearBitacora,
-  actualizarBitacora,
-  crearDiagnostico,
-  actualizarDiagnostico,
-  eliminarDiagnostico,
-  fetchDiagnosticos,
-  crearReceta,
-  eliminarReceta,
-  fetchRecetas,
-  fetchBitacoraCompleta,
-} from "../../infrastructure/fichas.service";
 import type { CrearBitacoraData } from "../../domain/ficha.schema";
+import {
+  actualizarBitacora,
+  actualizarDiagnostico,
+  crearBitacora,
+  crearDiagnostico,
+  crearReceta,
+  eliminarDiagnostico,
+  eliminarReceta,
+  fetchBitacoraCompleta,
+  fetchDiagnosticos,
+  fetchRecetas,
+} from "../../infrastructure/fichas.service";
 
 interface BitacoraFormSheetProps {
   open: boolean;
@@ -155,9 +142,7 @@ function DiagnosticoItem({
   return (
     <div className="rounded-lg border p-3">
       <div className="mb-2 flex items-center justify-between">
-        <span className="text-xs font-semibold text-muted-foreground">
-          Diagnóstico #{index + 1}
-        </span>
+        <span className="font-semibold text-muted-foreground text-xs">Diagnóstico #{index + 1}</span>
         <Button type="button" variant="ghost" size="icon" onClick={remove}>
           <Trash2 className="size-3 text-destructive" />
         </Button>
@@ -190,11 +175,7 @@ function DiagnosticoItem({
         name={`diagnosticos.${index}.principal`}
         render={({ field }) => (
           <Field orientation="horizontal" className="mt-2 gap-2">
-            <Switch
-              id={`dx-principal-${index}`}
-              checked={field.value}
-              onCheckedChange={field.onChange}
-            />
+            <Switch id={`dx-principal-${index}`} checked={field.value} onCheckedChange={field.onChange} />
             <FieldLabel htmlFor={`dx-principal-${index}`}>Principal</FieldLabel>
           </Field>
         )}
@@ -220,18 +201,14 @@ function RecetaDetalleItem({
   const [searchText, setSearchText] = React.useState("");
   const debouncedSearch = useDebouncedValue(searchText, 150);
   const filteredMedicamentos = React.useMemo(
-    () => medicamentos
-      .filter((m) => m.nombre.toLowerCase().includes(debouncedSearch.toLowerCase()))
-      .slice(0, 20),
+    () => medicamentos.filter((m) => m.nombre.toLowerCase().includes(debouncedSearch.toLowerCase())).slice(0, 20),
     [medicamentos, debouncedSearch],
   );
 
   return (
     <div className="rounded-md border bg-muted/10 p-3">
       <div className="mb-2 flex items-center justify-between">
-        <span className="text-xs font-medium text-muted-foreground">
-          Detalle #{index + 1}
-        </span>
+        <span className="font-medium text-muted-foreground text-xs">Detalle #{index + 1}</span>
         <Button type="button" variant="ghost" size="icon" onClick={remove}>
           <Trash2 className="size-3 text-destructive" />
         </Button>
@@ -375,9 +352,7 @@ function RecetaItem({
   return (
     <div className="rounded-lg border p-3">
       <div className="mb-3 flex items-center justify-between">
-        <span className="text-xs font-semibold text-muted-foreground">
-          Receta #{recetaIndex + 1}
-        </span>
+        <span className="font-semibold text-muted-foreground text-xs">Receta #{recetaIndex + 1}</span>
         <Button type="button" variant="ghost" size="icon" onClick={remove}>
           <Trash2 className="size-3 text-destructive" />
         </Button>
@@ -389,11 +364,7 @@ function RecetaItem({
           render={({ field }) => (
             <Field className="gap-1.5">
               <FieldLabel>Validez</FieldLabel>
-              <Input
-                {...field}
-                value={field.value ?? ""}
-                placeholder="Ej: 30 días"
-              />
+              <Input {...field} value={field.value ?? ""} placeholder="Ej: 30 días" />
             </Field>
           )}
         />
@@ -440,13 +411,7 @@ function RecetaItem({
   );
 }
 
-export function BitacoraFormSheet({
-  open,
-  onOpenChange,
-  fichaId,
-  onSuccess,
-  bitacoraId,
-}: BitacoraFormSheetProps) {
+export function BitacoraFormSheet({ open, onOpenChange, fichaId, onSuccess, bitacoraId }: BitacoraFormSheetProps) {
   const [saving, setSaving] = React.useState(false);
   const [loadingEdit, setLoadingEdit] = React.useState(false);
   const [submitError, setSubmitError] = React.useState<string | null>(null);
@@ -534,9 +499,7 @@ export function BitacoraFormSheet({
     if (bitacoraId) {
       const existing = await fetchDiagnosticos(bitacoraIdInterno);
       const idsEnForm = new Set(diagnosticos.map((d) => d.id).filter(Boolean));
-      await Promise.all(
-        existing.filter((d) => !idsEnForm.has(d.id)).map((d) => eliminarDiagnostico(d.id)),
-      );
+      await Promise.all(existing.filter((d) => !idsEnForm.has(d.id)).map((d) => eliminarDiagnostico(d.id)));
     }
     for (const d of diagnosticos) {
       if (!d.diagnostico?.trim()) continue;
@@ -562,9 +525,7 @@ export function BitacoraFormSheet({
     if (bitacoraId) {
       const existing = await fetchRecetas(bitacoraIdInterno);
       const idsEnForm = new Set(recetas.map((r) => r.id).filter(Boolean));
-      await Promise.all(
-        existing.filter((r) => !idsEnForm.has(r.id)).map((r) => eliminarReceta(r.id)),
-      );
+      await Promise.all(existing.filter((r) => !idsEnForm.has(r.id)).map((r) => eliminarReceta(r.id)));
     }
     for (const r of recetas) {
       if (!r.detalle.some((d) => d.medicamento?.trim())) continue;
@@ -593,7 +554,11 @@ export function BitacoraFormSheet({
   }
 
   async function onSubmit(data: BitacoraFormValues) {
-    console.log("[BitacoraFormSheet] onSubmit iniciado", { motivo: data.motivo_consulta?.slice(0, 30), recetas: data.recetas?.length, diagnosticos: data.diagnosticos?.length });
+    console.log("[BitacoraFormSheet] onSubmit iniciado", {
+      motivo: data.motivo_consulta?.slice(0, 30),
+      recetas: data.recetas?.length,
+      diagnosticos: data.diagnosticos?.length,
+    });
 
     if (!data.motivo_consulta.trim()) {
       setSubmitError("El motivo de consulta es requerido");
@@ -665,19 +630,21 @@ export function BitacoraFormSheet({
         <SheetHeader>
           <SheetTitle>{bitacoraId ? "Editar Atención" : "Nueva Atención"}</SheetTitle>
           <SheetDescription>
-            {bitacoraId ? "Modifica los datos de la atención registrada" : "Registra una nueva atención o bitácora clínica"}
+            {bitacoraId
+              ? "Modifica los datos de la atención registrada"
+              : "Registra una nueva atención o bitácora clínica"}
           </SheetDescription>
         </SheetHeader>
 
         {submitError && (
-          <div className="mx-4 rounded-md border border-destructive/20 bg-destructive/10 p-3 text-sm text-destructive">
+          <div className="mx-4 rounded-md border border-destructive/20 bg-destructive/10 p-3 text-destructive text-sm">
             {submitError}
           </div>
         )}
 
         {loadingEdit && (
           <div className="mx-4">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <div className="flex items-center gap-2 text-muted-foreground text-sm">
               <Spinner className="size-4" />
               <span>Cargando datos de la atención...</span>
             </div>
@@ -692,7 +659,7 @@ export function BitacoraFormSheet({
         >
           {/* Motivo + Enfermedad actual */}
           <div className="rounded-lg border bg-muted/20 p-4">
-            <h4 className="mb-3 text-sm font-semibold">Motivo de Consulta</h4>
+            <h4 className="mb-3 font-semibold text-sm">Motivo de Consulta</h4>
             <div className="space-y-3">
               <Controller
                 control={form.control}
@@ -700,12 +667,7 @@ export function BitacoraFormSheet({
                 render={({ field, fieldState }) => (
                   <Field className="gap-1.5" data-invalid={fieldState.invalid}>
                     <FieldLabel htmlFor="mc-motivo">Motivo de consulta</FieldLabel>
-                    <Textarea
-                      id="mc-motivo"
-                      {...field}
-                      rows={2}
-                      aria-invalid={fieldState.invalid}
-                    />
+                    <Textarea id="mc-motivo" {...field} rows={2} aria-invalid={fieldState.invalid} />
                     {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                   </Field>
                 )}
@@ -716,12 +678,7 @@ export function BitacoraFormSheet({
                 render={({ field }) => (
                   <Field className="gap-1.5">
                     <FieldLabel htmlFor="mc-enf-actual">Enfermedad actual</FieldLabel>
-                    <Textarea
-                      id="mc-enf-actual"
-                      {...field}
-                      value={field.value ?? ""}
-                      rows={3}
-                    />
+                    <Textarea id="mc-enf-actual" {...field} value={field.value ?? ""} rows={3} />
                   </Field>
                 )}
               />
@@ -730,7 +687,7 @@ export function BitacoraFormSheet({
 
           {/* Signos vitales */}
           <div className="rounded-lg border bg-muted/20 p-4">
-            <h4 className="mb-3 text-sm font-semibold">Signos Vitales</h4>
+            <h4 className="mb-3 font-semibold text-sm">Signos Vitales</h4>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
               <Controller
                 control={form.control}
@@ -847,7 +804,7 @@ export function BitacoraFormSheet({
 
           {/* Examen físico + Anamnesis */}
           <div className="rounded-lg border bg-muted/20 p-4">
-            <h4 className="mb-3 text-sm font-semibold">Evaluación</h4>
+            <h4 className="mb-3 font-semibold text-sm">Evaluación</h4>
             <div className="space-y-3">
               <Controller
                 control={form.control}
@@ -855,12 +812,7 @@ export function BitacoraFormSheet({
                 render={({ field }) => (
                   <Field className="gap-1.5">
                     <FieldLabel htmlFor="ef-examen">Examen físico</FieldLabel>
-                    <Textarea
-                      id="ef-examen"
-                      {...field}
-                      value={field.value ?? ""}
-                      rows={3}
-                    />
+                    <Textarea id="ef-examen" {...field} value={field.value ?? ""} rows={3} />
                   </Field>
                 )}
               />
@@ -870,12 +822,7 @@ export function BitacoraFormSheet({
                 render={({ field }) => (
                   <Field className="gap-1.5">
                     <FieldLabel htmlFor="ef-anamnesis">Anamnesis</FieldLabel>
-                    <Textarea
-                      id="ef-anamnesis"
-                      {...field}
-                      value={field.value ?? ""}
-                      rows={3}
-                    />
+                    <Textarea id="ef-anamnesis" {...field} value={field.value ?? ""} rows={3} />
                   </Field>
                 )}
               />
@@ -885,14 +832,12 @@ export function BitacoraFormSheet({
           {/* Diagnósticos */}
           <div className="rounded-lg border bg-muted/20 p-4">
             <div className="mb-3 flex items-center justify-between">
-              <h4 className="text-sm font-semibold">Diagnósticos</h4>
+              <h4 className="font-semibold text-sm">Diagnósticos</h4>
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
-                onClick={() =>
-                  appendDx({ codigo_cie10: "", diagnostico: "", principal: false })
-                }
+                onClick={() => appendDx({ codigo_cie10: "", diagnostico: "", principal: false })}
               >
                 <Plus className="size-3" />
                 Agregar
@@ -900,24 +845,17 @@ export function BitacoraFormSheet({
             </div>
             <div className="space-y-3">
               {dxFields.map((field, index) => (
-                <DiagnosticoItem
-                  key={field.id}
-                  index={index}
-                  control={form.control}
-                  remove={() => removeDx(index)}
-                />
+                <DiagnosticoItem key={field.id} index={index} control={form.control} remove={() => removeDx(index)} />
               ))}
               {dxFields.length === 0 && (
-                <p className="text-sm text-muted-foreground">
-                  No hay diagnósticos registrados
-                </p>
+                <p className="text-muted-foreground text-sm">No hay diagnósticos registrados</p>
               )}
             </div>
           </div>
 
           {/* Plan terapéutico + Indicaciones */}
           <div className="rounded-lg border bg-muted/20 p-4">
-            <h4 className="mb-3 text-sm font-semibold">Plan e Indicaciones</h4>
+            <h4 className="mb-3 font-semibold text-sm">Plan e Indicaciones</h4>
             <div className="space-y-3">
               <Controller
                 control={form.control}
@@ -925,12 +863,7 @@ export function BitacoraFormSheet({
                 render={({ field }) => (
                   <Field className="gap-1.5">
                     <FieldLabel htmlFor="plan-tx">Plan terapéutico</FieldLabel>
-                    <Textarea
-                      id="plan-tx"
-                      {...field}
-                      value={field.value ?? ""}
-                      rows={3}
-                    />
+                    <Textarea id="plan-tx" {...field} value={field.value ?? ""} rows={3} />
                   </Field>
                 )}
               />
@@ -940,12 +873,7 @@ export function BitacoraFormSheet({
                 render={({ field }) => (
                   <Field className="gap-1.5">
                     <FieldLabel htmlFor="plan-indicaciones">Indicaciones</FieldLabel>
-                    <Textarea
-                      id="plan-indicaciones"
-                      {...field}
-                      value={field.value ?? ""}
-                      rows={3}
-                    />
+                    <Textarea id="plan-indicaciones" {...field} value={field.value ?? ""} rows={3} />
                   </Field>
                 )}
               />
@@ -955,7 +883,7 @@ export function BitacoraFormSheet({
           {/* Recetas */}
           <div className="rounded-lg border bg-muted/20 p-4">
             <div className="mb-3 flex items-center justify-between">
-              <h4 className="text-sm font-semibold">Recetas</h4>
+              <h4 className="font-semibold text-sm">Recetas</h4>
               <Button
                 type="button"
                 variant="outline"
@@ -997,17 +925,13 @@ export function BitacoraFormSheet({
                   medicamentos={medicamentos}
                 />
               ))}
-              {recetaFields.length === 0 && (
-                <p className="text-sm text-muted-foreground">
-                  No hay recetas registradas
-                </p>
-              )}
+              {recetaFields.length === 0 && <p className="text-muted-foreground text-sm">No hay recetas registradas</p>}
             </div>
           </div>
 
           {/* Próximo control */}
           <div className="rounded-lg border bg-muted/20 p-4">
-            <h4 className="mb-3 text-sm font-semibold">Próximo Control</h4>
+            <h4 className="mb-3 font-semibold text-sm">Próximo Control</h4>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-5">
               <Controller
                 control={form.control}
@@ -1017,13 +941,10 @@ export function BitacoraFormSheet({
                     <FieldLabel>Fecha</FieldLabel>
                     <Popover>
                       <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          className="w-full justify-start text-left font-normal"
-                        >
+                        <Button variant="outline" className="w-full justify-start text-left font-normal">
                           <CalendarDays className="mr-2 size-4 shrink-0" />
                           {field.value ? (
-                            format(new Date(field.value + "T12:00:00"), "dd/MM/yy")
+                            format(new Date(`${field.value}T12:00:00`), "dd/MM/yy")
                           ) : (
                             <span className="text-muted-foreground">Seleccionar fecha</span>
                           )}
@@ -1032,10 +953,8 @@ export function BitacoraFormSheet({
                       <PopoverContent className="w-auto p-0" align="start">
                         <Calendar
                           mode="single"
-                          selected={field.value ? new Date(field.value + "T12:00:00") : undefined}
-                          onSelect={(date) =>
-                            field.onChange(date ? date.toISOString().slice(0, 10) : "")
-                          }
+                          selected={field.value ? new Date(`${field.value}T12:00:00`) : undefined}
+                          onSelect={(date) => field.onChange(date ? date.toISOString().slice(0, 10) : "")}
                         />
                       </PopoverContent>
                     </Popover>

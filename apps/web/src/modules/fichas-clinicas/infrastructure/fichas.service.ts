@@ -1,25 +1,5 @@
-import type {
-  ActualizarFichaData,
-  CrearAlergiaData,
-  ActualizarAlergiaData,
-  CrearAntePersonalData,
-  CrearAnteQuirurgicoData,
-  ActualizarAnteQuirurgicoData,
-  CrearAnteFamiliarData,
-  ActualizarAnteFamiliarData,
-  CrearMedicacionData,
-  ActualizarMedicacionData,
-  CrearProblemaActivoData,
-  ActualizarProblemaActivoData,
-  ActualizarHabitosData,
-  CrearBitacoraData,
-  ActualizarBitacoraData,
-  CrearDiagnosticoData,
-  ActualizarDiagnosticoData,
-  CrearRecetaData,
-  CrearOrdenMedicaData,
-  CrearProcedimientoData,
-} from "../domain/ficha.schema";
+import { apiFetch } from "@/lib/api-fetch";
+
 import type {
   Adjunto,
   Alergia,
@@ -39,7 +19,28 @@ import type {
   Receta,
   RecetaDetalle,
 } from "../domain/ficha.entity";
-import { apiFetch } from "@/lib/api-fetch";
+import type {
+  ActualizarAlergiaData,
+  ActualizarAnteFamiliarData,
+  ActualizarAnteQuirurgicoData,
+  ActualizarBitacoraData,
+  ActualizarDiagnosticoData,
+  ActualizarFichaData,
+  ActualizarHabitosData,
+  ActualizarMedicacionData,
+  ActualizarProblemaActivoData,
+  CrearAlergiaData,
+  CrearAnteFamiliarData,
+  CrearAntePersonalData,
+  CrearAnteQuirurgicoData,
+  CrearBitacoraData,
+  CrearDiagnosticoData,
+  CrearMedicacionData,
+  CrearOrdenMedicaData,
+  CrearProblemaActivoData,
+  CrearProcedimientoData,
+  CrearRecetaData,
+} from "../domain/ficha.schema";
 
 const BASE = "/api/fichas";
 
@@ -209,7 +210,10 @@ export async function crearMedicacionCronica(fichaId: number, dto: CrearMedicaci
   return (await res.json()).data;
 }
 
-export async function actualizarMedicacionCronica(id: number, dto: ActualizarMedicacionData): Promise<MedicacionCronica> {
+export async function actualizarMedicacionCronica(
+  id: number,
+  dto: ActualizarMedicacionData,
+): Promise<MedicacionCronica> {
   const res = await apiFetch(`${BASE}/medicacion-cronica/${id}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },

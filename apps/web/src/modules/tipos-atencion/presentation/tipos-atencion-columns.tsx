@@ -1,6 +1,7 @@
 "use client";
 
-import { FileText } from "lucide-react";
+import type { ColumnDef } from "@tanstack/react-table";
+import { FileText, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -11,8 +12,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 
 import type { TipoAtencion } from "../domain/tipo-atencion.entity";
 

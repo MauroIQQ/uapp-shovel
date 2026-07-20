@@ -1,24 +1,19 @@
 "use client";
 
 import * as React from "react";
+
 import { Save } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 
-import { actualizarFicha } from "../../infrastructure/fichas.service";
 import type { FichaClinica } from "../../domain/ficha.entity";
+import { actualizarFicha } from "../../infrastructure/fichas.service";
 
 interface DatosGeneralesTabProps {
   ficha: FichaClinica;
@@ -63,7 +58,7 @@ export function DatosGeneralesTab({ ficha, onUpdate }: DatosGeneralesTabProps) {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold">Datos Generales</h2>
+        <h2 className="font-semibold text-lg">Datos Generales</h2>
         <Button onClick={handleSubmit} disabled={saving}>
           <Save />
           {saving ? "Guardando..." : "Guardar cambios"}
@@ -78,16 +73,15 @@ export function DatosGeneralesTab({ ficha, onUpdate }: DatosGeneralesTabProps) {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <Field className="gap-1.5">
               <FieldLabel>Grupo Sanguíneo</FieldLabel>
-              <Select
-                value={form.grupo_sanguineo}
-                onValueChange={(v) => set("grupo_sanguineo", v)}
-              >
+              <Select value={form.grupo_sanguineo} onValueChange={(v) => set("grupo_sanguineo", v)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Seleccionar..." />
                 </SelectTrigger>
                 <SelectContent>
                   {GRUPOS_SANGUINEOS.map((g) => (
-                    <SelectItem key={g} value={g}>{g}</SelectItem>
+                    <SelectItem key={g} value={g}>
+                      {g}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -95,16 +89,15 @@ export function DatosGeneralesTab({ ficha, onUpdate }: DatosGeneralesTabProps) {
 
             <Field className="gap-1.5">
               <FieldLabel>Factor RH</FieldLabel>
-              <Select
-                value={form.factor_rh}
-                onValueChange={(v) => set("factor_rh", v)}
-              >
+              <Select value={form.factor_rh} onValueChange={(v) => set("factor_rh", v)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Seleccionar..." />
                 </SelectTrigger>
                 <SelectContent>
                   {FACTORES_RH.map((f) => (
-                    <SelectItem key={f} value={f}>{f}</SelectItem>
+                    <SelectItem key={f} value={f}>
+                      {f}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -113,28 +106,22 @@ export function DatosGeneralesTab({ ficha, onUpdate }: DatosGeneralesTabProps) {
             <Field className="gap-1.5">
               <FieldLabel>Donante de Órganos</FieldLabel>
               <div className="flex items-center gap-2 pt-1.5">
-                <Switch
-                  checked={form.donante_organos}
-                  onCheckedChange={(c) => set("donante_organos", c)}
-                />
-                <span className="text-sm text-muted-foreground">
-                  {form.donante_organos ? "Sí" : "No"}
-                </span>
+                <Switch checked={form.donante_organos} onCheckedChange={(c) => set("donante_organos", c)} />
+                <span className="text-muted-foreground text-sm">{form.donante_organos ? "Sí" : "No"}</span>
               </div>
             </Field>
 
             <Field className="gap-1.5">
               <FieldLabel>Género</FieldLabel>
-              <Select
-                value={form.genero}
-                onValueChange={(v) => set("genero", v)}
-              >
+              <Select value={form.genero} onValueChange={(v) => set("genero", v)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Seleccionar..." />
                 </SelectTrigger>
                 <SelectContent>
                   {GENEROS.map((g) => (
-                    <SelectItem key={g} value={g}>{g}</SelectItem>
+                    <SelectItem key={g} value={g}>
+                      {g}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -142,10 +129,7 @@ export function DatosGeneralesTab({ ficha, onUpdate }: DatosGeneralesTabProps) {
 
             <Field className="gap-1.5">
               <FieldLabel>Ocupación</FieldLabel>
-              <Input
-                value={form.ocupacion}
-                onChange={(e) => set("ocupacion", e.target.value)}
-              />
+              <Input value={form.ocupacion} onChange={(e) => set("ocupacion", e.target.value)} />
             </Field>
           </div>
         </CardContent>

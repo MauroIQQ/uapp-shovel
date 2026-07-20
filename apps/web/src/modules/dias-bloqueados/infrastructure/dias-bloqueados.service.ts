@@ -1,6 +1,7 @@
-import type { DiaBloqueadoFormData } from "../domain/dia-bloqueado.schema";
-import type { DiaBloqueado } from "../domain/dia-bloqueado.entity";
 import { apiFetch } from "@/lib/api-fetch";
+
+import type { DiaBloqueado } from "../domain/dia-bloqueado.entity";
+import type { DiaBloqueadoFormData } from "../domain/dia-bloqueado.schema";
 
 export async function fetchDiasBloqueados(): Promise<DiaBloqueado[]> {
   const res = await apiFetch("/api/dias-bloqueados");

@@ -16,7 +16,7 @@ export function useBuscarPrevisiones(): UseBuscarPrevisionesReturn {
   const [data, setData] = React.useState<Prevision[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
-  const [refetchKey, setRefetchKey] = React.useState(0);
+  const [_refetchKey, setRefetchKey] = React.useState(0);
 
   const refresh = React.useCallback(() => setRefetchKey((k) => k + 1), []);
 
@@ -35,8 +35,10 @@ export function useBuscarPrevisiones(): UseBuscarPrevisionesReturn {
       }
     }
     fetchData();
-    return () => { cancelled = true; };
-  }, [refetchKey]);
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return { data, loading, error, refresh };
 }

@@ -9,20 +9,13 @@ export const ejemploColumns: ColumnDef<ExampleEntity>[] = [
   {
     accessorKey: "id",
     header: "ID",
-    cell: ({ row }) => (
-      <span className="tabular-nums text-muted-foreground">
-        {row.getValue<string>("id")}
-      </span>
-    ),
+    cell: ({ row }) => <span className="text-muted-foreground tabular-nums">{row.getValue<string>("id")}</span>,
   },
   {
     accessorKey: "nombre",
     header: "Nombre",
     cell: ({ row }) => (
-      <span
-        className="font-medium line-clamp-1"
-        title={row.getValue<string>("nombre")}
-      >
+      <span className="line-clamp-1 font-medium" title={row.getValue<string>("nombre")}>
         {row.getValue("nombre")}
       </span>
     ),
@@ -33,7 +26,7 @@ export const ejemploColumns: ColumnDef<ExampleEntity>[] = [
     cell: ({ row }) => (
       <a
         href={`mailto:${row.getValue<string>("email")}`}
-        className="text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground"
+        className="text-muted-foreground text-xs underline underline-offset-2 hover:text-foreground"
       >
         {row.getValue("email")}
       </a>
@@ -46,10 +39,8 @@ export const ejemploColumns: ColumnDef<ExampleEntity>[] = [
       const estado = row.getValue<string>("estado");
       return (
         <span
-          className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${
-            estado === "activo"
-              ? "bg-emerald-100 text-emerald-700"
-              : "bg-amber-100 text-amber-700"
+          className={`inline-block rounded-full px-2 py-0.5 font-medium text-xs ${
+            estado === "activo" ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700"
           }`}
         >
           {estado}

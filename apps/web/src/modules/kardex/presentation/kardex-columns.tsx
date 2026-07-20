@@ -1,6 +1,7 @@
 "use client";
 
-import { Package } from "lucide-react";
+import type { ColumnDef } from "@tanstack/react-table";
+import { MoreHorizontal, Package, Pencil, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -10,8 +11,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 
 import type { KardexArticulo } from "../domain/kardex.entity";
 
@@ -39,9 +38,7 @@ export function useKardexColumns({ onEdit, onDelete }: KardexColumnsOptions): Co
       header: "Stock actual",
       cell: ({ row }) => {
         const stock = row.getValue<number>("stock_actual");
-        return (
-          <span className="tabular-nums font-medium">{stock.toLocaleString("es-CL")}</span>
-        );
+        return <span className="font-medium tabular-nums">{stock.toLocaleString("es-CL")}</span>;
       },
     },
     {

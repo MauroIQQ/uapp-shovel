@@ -1,17 +1,15 @@
 "use client";
 
-import { CalendarX } from "lucide-react";
+import type { ColumnDef } from "@tanstack/react-table";
+import { CalendarX, MoreHorizontal, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal, Trash2 } from "lucide-react";
 
 import type { DiaBloqueado } from "../domain/dia-bloqueado.entity";
 
@@ -26,7 +24,7 @@ export function useDiasBloqueadosColumns({ onDelete }: DiasBloqueadosColumnsOpti
       header: "Fecha",
       cell: ({ row }) => {
         const fecha = row.getValue<string>("fecha");
-        const d = new Date(fecha + "T12:00:00");
+        const d = new Date(`${fecha}T12:00:00`);
 
         return (
           <div className="flex items-center gap-2">
@@ -49,11 +47,7 @@ export function useDiasBloqueadosColumns({ onDelete }: DiasBloqueadosColumnsOpti
       header: "Motivo",
       cell: ({ row }) => {
         const motivo = row.getValue<string | null>("motivo");
-        return (
-          <span className="text-muted-foreground">
-            {motivo ?? "—"}
-          </span>
-        );
+        return <span className="text-muted-foreground">{motivo ?? "—"}</span>;
       },
     },
     {

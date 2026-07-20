@@ -1,18 +1,12 @@
 "use client";
 
 import * as React from "react";
+
 import { Loader2, Save } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Switch } from "@/components/ui/switch";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
 
 import type { PermisoState } from "../domain/perfil.entity";
 import { SISTEMA_GRUPOS, SISTEMA_MODULOS } from "../domain/perfil.entity";
@@ -50,11 +44,7 @@ export function PerfilPermisosSheet({
   const someChecked = items.some((i) => i.checked);
 
   function handleToggle(id_item: string) {
-    setItems((prev) =>
-      prev.map((item) =>
-        item.id_item === id_item ? { ...item, checked: !item.checked } : item,
-      ),
-    );
+    setItems((prev) => prev.map((item) => (item.id_item === id_item ? { ...item, checked: !item.checked } : item)));
   }
 
   function handleSelectAll() {
@@ -64,9 +54,7 @@ export function PerfilPermisosSheet({
   async function handleSave() {
     setSaving(true);
     try {
-      const selectedItems = items
-        .filter((i) => i.checked)
-        .map((i) => ({ id_item: i.id_item, nombre: i.nombre }));
+      const selectedItems = items.filter((i) => i.checked).map((i) => ({ id_item: i.id_item, nombre: i.nombre }));
       await updatePermisos(rut_empresa, perfil, selectedItems);
       onSuccess();
       onOpenChange(false);
@@ -87,12 +75,7 @@ export function PerfilPermisosSheet({
 
         <div className="flex flex-1 flex-col gap-1 overflow-y-auto px-4 py-4">
           <div className="mb-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleSelectAll}
-              className="h-8 text-xs"
-            >
+            <Button variant="ghost" size="sm" onClick={handleSelectAll} className="h-8 text-xs">
               {allChecked ? "Deseleccionar todo" : "Seleccionar todo"}
             </Button>
           </div>
@@ -101,9 +84,7 @@ export function PerfilPermisosSheet({
             const groupItems = SISTEMA_MODULOS.filter((m) => m.grupo === grupo);
             return (
               <div key={grupo} className="mb-4">
-                <h3 className="mb-2 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-                  {grupo}
-                </h3>
+                <h3 className="mb-2 font-semibold text-muted-foreground text-sm uppercase tracking-wider">{grupo}</h3>
                 <div className="space-y-1">
                   {groupItems.map((mod) => {
                     const state = items.find((i) => i.id_item === mod.id_item);
@@ -111,13 +92,10 @@ export function PerfilPermisosSheet({
                     return (
                       <label
                         key={mod.id_item}
-                        className="flex items-center justify-between rounded-md px-3 py-2 hover:bg-muted cursor-pointer transition-colors"
+                        className="flex cursor-pointer items-center justify-between rounded-md px-3 py-2 transition-colors hover:bg-muted"
                       >
-                        <span className="text-sm font-medium">{mod.nombre}</span>
-                        <Switch
-                          checked={checked}
-                          onCheckedChange={() => handleToggle(mod.id_item)}
-                        />
+                        <span className="font-medium text-sm">{mod.nombre}</span>
+                        <Switch checked={checked} onCheckedChange={() => handleToggle(mod.id_item)} />
                       </label>
                     );
                   })}
@@ -127,13 +105,13 @@ export function PerfilPermisosSheet({
           })}
 
           {items.length === 0 && (
-            <p className="text-sm text-muted-foreground py-8 text-center">
+            <p className="py-8 text-center text-muted-foreground text-sm">
               No hay módulos disponibles para configurar.
             </p>
           )}
 
           {!someChecked && items.length > 0 && (
-            <p className="text-xs text-muted-foreground text-center">
+            <p className="text-center text-muted-foreground text-xs">
               Sin permisos, este perfil no podrá acceder a ninguna sección.
             </p>
           )}

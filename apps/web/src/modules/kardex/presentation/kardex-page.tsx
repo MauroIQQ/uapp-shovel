@@ -2,8 +2,17 @@
 
 import * as React from "react";
 
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { ServerDataTable } from "@/app/(main)/dashboard/componentes/datatable/_components/server-data-table";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 import { useBuscarArticulos } from "../application/buscar-articulos.use-case";
 import type { KardexArticulo } from "../domain/kardex.entity";
@@ -19,7 +28,10 @@ export function KardexPage() {
   const [deleting, setDeleting] = React.useState(false);
 
   const columns = useKardexColumns({
-    onEdit: (item) => { setEditItem(item); setSheetOpen(true); },
+    onEdit: (item) => {
+      setEditItem(item);
+      setSheetOpen(true);
+    },
     onDelete: (item) => setDeleteTarget(item),
   });
 
@@ -60,7 +72,7 @@ export function KardexPage() {
         filterBar={
           <div className="flex items-center gap-2">
             <button
-              className="rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary/90"
+              className="rounded-md bg-primary px-3 py-1.5 font-medium text-primary-foreground text-xs hover:bg-primary/90"
               onClick={handleOpenNew}
             >
               + Nuevo artículo
@@ -69,12 +81,7 @@ export function KardexPage() {
         }
       />
 
-      <KardexFormSheet
-        open={sheetOpen}
-        onOpenChange={handleSheetOpenChange}
-        onSuccess={refresh}
-        editItem={editItem}
-      />
+      <KardexFormSheet open={sheetOpen} onOpenChange={handleSheetOpenChange} onSuccess={refresh} editItem={editItem} />
 
       <AlertDialog open={!!deleteTarget} onOpenChange={(o) => !o && setDeleteTarget(null)}>
         <AlertDialogContent>

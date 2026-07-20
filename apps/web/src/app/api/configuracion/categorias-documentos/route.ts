@@ -1,5 +1,7 @@
-import { prisma } from "@uapp/database";
 import { NextResponse } from "next/server";
+
+import { prisma } from "@uapp/database";
+
 import { requireRoot, verifyAuth } from "@/lib/verify-auth";
 
 export async function GET() {

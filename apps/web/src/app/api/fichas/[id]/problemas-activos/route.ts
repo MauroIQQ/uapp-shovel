@@ -1,7 +1,8 @@
-import { prisma } from "@uapp/database";
 import { NextResponse } from "next/server";
 
-export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
+import { prisma } from "@uapp/database";
+
+export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const data = await prisma.uapp_problemas_activos.findMany({
     where: { id_ficha: Number(id) },

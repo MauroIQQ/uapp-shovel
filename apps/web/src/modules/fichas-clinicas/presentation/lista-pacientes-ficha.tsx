@@ -1,7 +1,9 @@
 "use client";
 
 import * as React from "react";
+
 import { useRouter } from "next/navigation";
+
 import { CalendarDays, Clock, Earth } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -35,21 +37,25 @@ export function ListaPacientesFicha({ pacientes }: ListaPacientesFichaProps) {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold">Fichas Clínicas</h1>
-          <p className="text-sm text-muted-foreground">
+          <h1 className="font-semibold text-xl">Fichas Clínicas</h1>
+          <p className="text-muted-foreground text-sm">
             Pacientes agendados para hoy — {filtrados.length} paciente{filtrados.length !== 1 ? "s" : ""}
           </p>
         </div>
         <Tabs value={filtro} onValueChange={setFiltro}>
           <TabsList>
-            <TabsTrigger value="todos" className="px-3">Todos</TabsTrigger>
-            <TabsTrigger value="confirmados" className="px-3">Confirmados</TabsTrigger>
+            <TabsTrigger value="todos" className="px-3">
+              Todos
+            </TabsTrigger>
+            <TabsTrigger value="confirmados" className="px-3">
+              Confirmados
+            </TabsTrigger>
           </TabsList>
         </Tabs>
       </div>
 
       {filtrados.length === 0 ? (
-        <div className="flex h-48 items-center justify-center rounded-lg border bg-card text-sm text-muted-foreground">
+        <div className="flex h-48 items-center justify-center rounded-lg border bg-card text-muted-foreground text-sm">
           No hay pacientes agendados para hoy
         </div>
       ) : (
@@ -69,7 +75,7 @@ export function ListaPacientesFicha({ pacientes }: ListaPacientesFichaProps) {
               >
                 <div className="flex min-w-[60px] flex-col items-center">
                   <Clock className="size-4 text-muted-foreground" />
-                  <span className="text-sm font-semibold">{hora}</span>
+                  <span className="font-semibold text-sm">{hora}</span>
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
@@ -89,7 +95,7 @@ export function ListaPacientesFicha({ pacientes }: ListaPacientesFichaProps) {
                       </TooltipProvider>
                     )}
                   </div>
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <div className="flex items-center gap-2 text-muted-foreground text-xs">
                     <span>{p.rut}</span>
                     <span>·</span>
                     <span>{p.tipo_consulta}</span>
@@ -101,10 +107,8 @@ export function ListaPacientesFicha({ pacientes }: ListaPacientesFichaProps) {
                     )}
                   </div>
                 </div>
-                <div className="flex items-center gap-2 shrink-0">
-                  {p.confirmada === "SI" && (
-                    <Badge variant="secondary">Confirmado</Badge>
-                  )}
+                <div className="flex shrink-0 items-center gap-2">
+                  {p.confirmada === "SI" && <Badge variant="secondary">Confirmado</Badge>}
                   <CalendarDays className="size-4 text-muted-foreground" />
                 </div>
               </button>

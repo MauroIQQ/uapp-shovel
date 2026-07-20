@@ -1,8 +1,10 @@
 "use client";
 
 import * as React from "react";
+
 import { Building2, Plus } from "lucide-react";
 
+import { ServerDataTable } from "@/app/(main)/dashboard/componentes/datatable/_components/server-data-table";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,13 +22,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ServerDataTable } from "@/app/(main)/dashboard/componentes/datatable/_components/server-data-table";
 
 import { useBuscarEmpresas } from "../application/buscar-empresas.use-case";
-import { useEmpresasColumns } from "./empresas-columns";
-import { EmpresaFormSheet } from "./empresa-form-sheet";
-import { deleteEmpresa } from "../infrastructure/empresas.service";
 import type { Empresa } from "../domain/empresa.entity";
+import { deleteEmpresa } from "../infrastructure/empresas.service";
+import { EmpresaFormSheet } from "./empresa-form-sheet";
+import { useEmpresasColumns } from "./empresas-columns";
 
 export function EmpresasPage() {
   const { data, loading, error, refresh } = useBuscarEmpresas();
@@ -54,9 +55,7 @@ export function EmpresasPage() {
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="sm">
           <Building2 />
-          {filtroEstado
-            ? filtroEstado === "activo" ? "Activo" : "Inactivo"
-            : "Estado"}
+          {filtroEstado ? (filtroEstado === "activo" ? "Activo" : "Inactivo") : "Estado"}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="min-w-40">
@@ -88,10 +87,8 @@ export function EmpresasPage() {
     <div className="p-6">
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Empresas</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Gestión de empresas del sistema
-          </p>
+          <h1 className="font-bold text-2xl tracking-tight">Empresas</h1>
+          <p className="mt-1 text-muted-foreground text-sm">Gestión de empresas del sistema</p>
         </div>
         <Button onClick={handleCreate}>
           <Plus /> Nueva Empresa
@@ -110,16 +107,13 @@ export function EmpresasPage() {
         hideColumnsButton
       />
 
-      <EmpresaFormSheet
-        open={sheetOpen}
-        onOpenChange={setSheetOpen}
-        empresa={editEmpresa}
-        onSuccess={refresh}
-      />
+      <EmpresaFormSheet open={sheetOpen} onOpenChange={setSheetOpen} empresa={editEmpresa} onSuccess={refresh} />
 
       <AlertDialog
         open={!!deleteEmpresaData}
-        onOpenChange={(open) => { if (!open) setDeleteEmpresaData(null); }}
+        onOpenChange={(open) => {
+          if (!open) setDeleteEmpresaData(null);
+        }}
       >
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -131,7 +125,10 @@ export function EmpresasPage() {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeleteConfirm} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+            <AlertDialogAction
+              onClick={handleDeleteConfirm}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
               Eliminar
             </AlertDialogAction>
           </AlertDialogFooter>

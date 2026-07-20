@@ -1,5 +1,7 @@
-import { prisma } from "@uapp/database";
 import { NextResponse } from "next/server";
+
+import { prisma } from "@uapp/database";
+
 import { verifyAuth } from "@/lib/verify-auth";
 
 function mapPaciente(p: Record<string, unknown> & { estado: boolean }) {
@@ -41,7 +43,7 @@ export async function POST(req: Request) {
     data: {
       ...body,
       ...(fecha_nacimiento ? { fecha_nacimiento: new Date(fecha_nacimiento) } : {}),
-      estado: estado === "activo" ? true : false,
+      estado: estado === "activo",
       rut_empresa,
       updated: new Date(),
     },
@@ -57,10 +59,10 @@ export async function PATCH(req: Request) {
     where: { rut_rut_empresa: { rut, rut_empresa } },
     data: {
       ...rest,
-      ...(estado !== undefined ? { estado: estado === "activo" ? true : false } : {}),
+      ...(estado !== undefined ? { estado: estado === "activo" } : {}),
       ...(fecha_nacimiento !== undefined
         ? { fecha_nacimiento: fecha_nacimiento ? new Date(fecha_nacimiento) : null }
-      : {}),
+        : {}),
       updated: new Date(),
     },
   });

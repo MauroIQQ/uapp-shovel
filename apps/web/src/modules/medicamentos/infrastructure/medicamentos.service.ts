@@ -1,6 +1,7 @@
-import type { ActualizarMedicamentoData, MedicamentoFormData } from "../domain/medicamento.schema";
-import type { CategoriaMedicamento, Medicamento } from "../domain/medicamento.entity";
 import { apiFetch } from "@/lib/api-fetch";
+
+import type { CategoriaMedicamento, Medicamento } from "../domain/medicamento.entity";
+import type { ActualizarMedicamentoData, MedicamentoFormData } from "../domain/medicamento.schema";
 
 export async function fetchMedicamentos(): Promise<Medicamento[]> {
   const res = await apiFetch("/api/medicamentos");

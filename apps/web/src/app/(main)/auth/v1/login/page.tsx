@@ -1,10 +1,10 @@
 "use client";
 
+import { Check, Palette } from "lucide-react";
 import { useShallow } from "zustand/react/shallow";
 
-import { Check, Palette } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
+import { CloudflareIcon } from "@/components/ui/cloudflare-icon";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,8 +14,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { CloudflareIcon } from "@/components/ui/cloudflare-icon";
 import { usePreferencesStore } from "@/stores/preferences/preferences-provider";
+
 import { LoginForm } from "../../_components/login-form";
 
 export default function LoginV1() {
@@ -67,7 +67,7 @@ export default function LoginV1() {
             <DropdownMenuTrigger asChild>
               <Button
                 variant="outline"
-                className="rounded-full bg-black/30 text-white border-white/20 hover:bg-black/50 hover:text-white gap-1.5 px-3"
+                className="gap-1.5 rounded-full border-white/20 bg-black/30 px-3 text-white hover:bg-black/50 hover:text-white"
               >
                 <Palette className="size-4" />
                 {temaLabels[tema]}
@@ -80,7 +80,7 @@ export default function LoginV1() {
                   <DropdownMenuItem key={t} onSelect={() => setTema(t)}>
                     <span className={`size-2 rounded-full ${temaColors[t]} mr-2 shrink-0`} />
                     {temaLabels[t]}
-                    {tema === t && <Check className="size-3.5 ml-auto" />}
+                    {tema === t && <Check className="ml-auto size-3.5" />}
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuGroup>
@@ -91,7 +91,7 @@ export default function LoginV1() {
                   <DropdownMenuItem key={t} onSelect={() => setTema(t)}>
                     <span className={`size-2 rounded-full ${temaColors[t]} mr-2 shrink-0`} />
                     {temaLabels[t]}
-                    {tema === t && <Check className="size-3.5 ml-auto" />}
+                    {tema === t && <Check className="ml-auto size-3.5" />}
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuGroup>
@@ -105,12 +105,8 @@ export default function LoginV1() {
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative z-10 flex h-full flex-col items-center justify-center p-12 text-center">
           <div className="space-y-6">
-            <img
-              src="/logo.png"
-              alt="UAPP"
-              className="mx-auto h-48 w-auto brightness-0 invert"
-            />
-            <p className="text-white text-sm font-light leading-relaxed">
+            <img src="/logo.png" alt="UAPP" className="mx-auto h-48 w-auto brightness-0 invert" />
+            <p className="font-light text-sm text-white leading-relaxed">
               Unidad de Agendamiento y Planificación de Pacientes
             </p>
           </div>
@@ -119,7 +115,7 @@ export default function LoginV1() {
 
       <div className="flex w-full items-center justify-center bg-gradient-to-br from-background to-primary/20 p-8 lg:w-1/2">
         <div className="w-full max-w-md">
-          <div className="rounded-xl border bg-card p-8 shadow-sm space-y-8">
+          <div className="space-y-8 rounded-xl border bg-card p-8 shadow-sm">
             <div className="space-y-4 text-center">
               <div className="font-medium text-2xl tracking-tight">Iniciar Sesión</div>
               <div className="mx-auto max-w-xl text-muted-foreground">

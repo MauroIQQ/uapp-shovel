@@ -1,9 +1,11 @@
 "use client";
 
 import * as React from "react";
-import { Plus, UserCog } from "lucide-react";
 
 import { PERFIL_NOMBRES, type Perfil } from "@uapp/shared";
+import { Plus, UserCog } from "lucide-react";
+
+import { ServerDataTable } from "@/app/(main)/dashboard/componentes/datatable/_components/server-data-table";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,13 +23,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ServerDataTable } from "@/app/(main)/dashboard/componentes/datatable/_components/server-data-table";
 
 import { useBuscarUsuarios } from "../application/buscar-usuarios.use-case";
-import { useUsuariosColumns } from "./usuarios-columns";
-import { UsuarioFormSheet } from "./usuario-form-sheet";
-import { deleteUsuario } from "../infrastructure/usuarios.service";
 import { nombreCompleto, type Usuario } from "../domain/usuario.entity";
+import { deleteUsuario } from "../infrastructure/usuarios.service";
+import { UsuarioFormSheet } from "./usuario-form-sheet";
+import { useUsuariosColumns } from "./usuarios-columns";
 
 export function UsuariosPage() {
   const { data, loading, error, refresh } = useBuscarUsuarios();
@@ -90,10 +91,8 @@ export function UsuariosPage() {
     <div className="p-6">
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Usuarios</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Gestión de usuarios del sistema
-          </p>
+          <h1 className="font-bold text-2xl tracking-tight">Usuarios</h1>
+          <p className="mt-1 text-muted-foreground text-sm">Gestión de usuarios del sistema</p>
         </div>
         <Button onClick={handleCreate}>
           <Plus /> Nuevo Usuario
@@ -112,16 +111,13 @@ export function UsuariosPage() {
         hideColumnsButton
       />
 
-      <UsuarioFormSheet
-        open={sheetOpen}
-        onOpenChange={setSheetOpen}
-        usuario={editUsuario}
-        onSuccess={refresh}
-      />
+      <UsuarioFormSheet open={sheetOpen} onOpenChange={setSheetOpen} usuario={editUsuario} onSuccess={refresh} />
 
       <AlertDialog
         open={!!deleteUsuarioData}
-        onOpenChange={(open) => { if (!open) setDeleteUsuarioData(null); }}
+        onOpenChange={(open) => {
+          if (!open) setDeleteUsuarioData(null);
+        }}
       >
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -133,7 +129,10 @@ export function UsuariosPage() {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeleteConfirm} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+            <AlertDialogAction
+              onClick={handleDeleteConfirm}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
               Eliminar
             </AlertDialogAction>
           </AlertDialogFooter>

@@ -1,5 +1,6 @@
-import { prisma } from "@uapp/database";
 import { NextResponse } from "next/server";
+
+import { prisma } from "@uapp/database";
 
 export async function GET() {
   const data = await prisma.uapp_document_categories.findMany({

@@ -1,21 +1,15 @@
 "use client";
 
 import * as React from "react";
+
 import { Controller, useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
 
 import type { CategoriaConSubcategorias } from "../domain/documento-categoria.entity";
 import type { CrearCategoriaData } from "../domain/documento-categoria.schema";
@@ -33,14 +27,25 @@ export function CategoriaFormSheet({ open, onOpenChange, categoriaId, categorias
 
   const editCat = categoriaId ? categorias.find((c) => c.id === categoriaId) : undefined;
 
-  const { control, handleSubmit, reset, formState: { errors } } = useForm<CrearCategoriaData>({
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<CrearCategoriaData>({
     defaultValues: { codigo: "", nombre: "", descripcion: "", orden: 0, activo: true },
   });
 
   React.useEffect(() => {
     if (open) {
       if (editCat) {
-        reset({ codigo: editCat.codigo, nombre: editCat.nombre, descripcion: editCat.descripcion ?? "", orden: editCat.orden, activo: editCat.activo });
+        reset({
+          codigo: editCat.codigo,
+          nombre: editCat.nombre,
+          descripcion: editCat.descripcion ?? "",
+          orden: editCat.orden,
+          activo: editCat.activo,
+        });
       } else {
         reset({ codigo: "", nombre: "", descripcion: "", orden: 0, activo: true });
       }
@@ -67,7 +72,11 @@ export function CategoriaFormSheet({ open, onOpenChange, categoriaId, categorias
           <SheetDescription>Administración de categorías de documentos clínicos</SheetDescription>
         </SheetHeader>
 
-        <form id="cat-form" onSubmit={handleSubmit(onSubmit)} className="flex flex-1 flex-col gap-4 overflow-y-auto px-4">
+        <form
+          id="cat-form"
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-1 flex-col gap-4 overflow-y-auto px-4"
+        >
           <Controller
             control={control}
             name="codigo"

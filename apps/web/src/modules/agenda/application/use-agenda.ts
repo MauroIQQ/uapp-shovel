@@ -16,7 +16,7 @@ export function useAgenda(fecha: string): UseAgendaReturn {
   const [citas, setCitas] = React.useState<AgendaCita[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
-  const [refetchKey, setRefetchKey] = React.useState(0);
+  const [_refetchKey, setRefetchKey] = React.useState(0);
 
   const refresh = React.useCallback(() => setRefetchKey((k) => k + 1), []);
 
@@ -44,7 +44,7 @@ export function useAgenda(fecha: string): UseAgendaReturn {
     return () => {
       cancelled = true;
     };
-  }, [fecha, refetchKey]);
+  }, [fecha]);
 
   return { citas, loading, error, refresh };
 }

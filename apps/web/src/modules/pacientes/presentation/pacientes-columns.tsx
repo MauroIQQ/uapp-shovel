@@ -22,30 +22,28 @@ export function usePacientesColumns({ onEdit, onDelete }: PacientesColumnsOption
     {
       accessorKey: "rut",
       header: "RUT",
-      cell: ({ row }) => (
-        <span className="font-medium tabular-nums">{row.getValue<string>("rut")}</span>
-      ),
+      cell: ({ row }) => <span className="font-medium tabular-nums">{row.getValue<string>("rut")}</span>,
     },
     {
       accessorKey: "nombre_completo",
       header: "Nombre",
-    cell: ({ row }) => (
-      <div className="flex items-center gap-2">
-        <span className="flex size-8 items-center justify-center rounded-md border bg-muted">
-          <UserRound className="size-4 text-muted-foreground" />
-        </span>
-        <span className="whitespace-nowrap" title={row.getValue<string>("nombre_completo")}>
-          {row.getValue("nombre_completo")}
-        </span>
-      </div>
-    ),
+      cell: ({ row }) => (
+        <div className="flex items-center gap-2">
+          <span className="flex size-8 items-center justify-center rounded-md border bg-muted">
+            <UserRound className="size-4 text-muted-foreground" />
+          </span>
+          <span className="whitespace-nowrap" title={row.getValue<string>("nombre_completo")}>
+            {row.getValue("nombre_completo")}
+          </span>
+        </div>
+      ),
     },
     {
       accessorKey: "sexo",
       header: "Sexo",
       cell: ({ row }) => {
         const val = row.getValue<string | null>("sexo");
-        return <span className="text-xs text-muted-foreground">{val ?? "-"}</span>;
+        return <span className="text-muted-foreground text-xs">{val ?? "-"}</span>;
       },
     },
     {
@@ -60,22 +58,18 @@ export function usePacientesColumns({ onEdit, onDelete }: PacientesColumnsOption
     {
       accessorKey: "telefono",
       header: "Teléfono",
-      cell: ({ row }) => (
-        <span className="text-xs tabular-nums">{row.getValue<string | null>("telefono") ?? "-"}</span>
-      ),
+      cell: ({ row }) => <span className="text-xs tabular-nums">{row.getValue<string | null>("telefono") ?? "-"}</span>,
     },
     {
       accessorKey: "celular",
       header: "Celular",
-      cell: ({ row }) => (
-        <span className="text-xs tabular-nums">{row.getValue<string | null>("celular") ?? "-"}</span>
-      ),
+      cell: ({ row }) => <span className="text-xs tabular-nums">{row.getValue<string | null>("celular") ?? "-"}</span>,
     },
     {
       accessorKey: "correo",
       header: "Correo",
       cell: ({ row }) => (
-        <span className="text-xs text-muted-foreground line-clamp-1">
+        <span className="line-clamp-1 text-muted-foreground text-xs">
           {row.getValue<string | null>("correo") ?? "-"}
         </span>
       ),
@@ -85,10 +79,10 @@ export function usePacientesColumns({ onEdit, onDelete }: PacientesColumnsOption
       header: "Estado",
       cell: ({ row }) => {
         const estado = row.getValue<string | null>("estado");
-        if (!estado) return <span className="text-xs text-muted-foreground">-</span>;
+        if (!estado) return <span className="text-muted-foreground text-xs">-</span>;
         return (
           <span
-            className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${
+            className={`inline-block rounded-full px-2 py-0.5 font-medium text-xs ${
               estado === "activo"
                 ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400"
                 : "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"

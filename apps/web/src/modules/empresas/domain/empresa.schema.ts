@@ -1,6 +1,5 @@
-import { z } from "zod";
-
 import { validarRut } from "@uapp/shared";
+import { z } from "zod";
 
 export const baseEmpresaSchema = z.object({
   rut_empresa: z.string().min(1, "RUT empresa es requerido"),

@@ -1,25 +1,19 @@
 "use client";
 
 import * as React from "react";
+
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
 import { Loader2, Plus, Save } from "lucide-react";
+import { Controller, useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 
-import { crearMedicamentoSchema, type MedicamentoFormData } from "../domain/medicamento.schema";
 import type { CategoriaMedicamento, Medicamento } from "../domain/medicamento.entity";
+import { crearMedicamentoSchema, type MedicamentoFormData } from "../domain/medicamento.schema";
 import {
   createCategoria,
   createMedicamento,
@@ -101,7 +95,7 @@ export function MedicamentoFormSheet({ open, onOpenChange, medicamento, onSucces
     setSaving(true);
     try {
       if (isEditing) {
-        await updateMedicamento(medicamento!.id, data);
+        await updateMedicamento(medicamento?.id, data);
       } else {
         await createMedicamento(data);
       }
@@ -120,9 +114,7 @@ export function MedicamentoFormSheet({ open, onOpenChange, medicamento, onSucces
         <SheetHeader>
           <SheetTitle>{isEditing ? "Editar Medicamento" : "Nuevo Medicamento"}</SheetTitle>
           <SheetDescription>
-            {isEditing
-              ? "Modifica los datos del medicamento"
-              : "Ingresa los datos del nuevo medicamento"}
+            {isEditing ? "Modifica los datos del medicamento" : "Ingresa los datos del nuevo medicamento"}
           </SheetDescription>
         </SheetHeader>
 
@@ -178,7 +170,7 @@ export function MedicamentoFormSheet({ open, onOpenChange, medicamento, onSucces
                     type="button"
                     variant="outline"
                     size="icon"
-                    className="shrink-0 mt-0"
+                    className="mt-0 shrink-0"
                     onClick={() => setShowNewCategoria(true)}
                     aria-label="Agregar nueva categoría"
                   >
@@ -188,7 +180,7 @@ export function MedicamentoFormSheet({ open, onOpenChange, medicamento, onSucces
                 {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
 
                 {showNewCategoria && (
-                  <div className="flex items-center gap-2 mt-2">
+                  <div className="mt-2 flex items-center gap-2">
                     <Input
                       placeholder="Nombre de la nueva categoría"
                       value={newCategoriaNombre}

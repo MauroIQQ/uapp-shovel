@@ -35,6 +35,4 @@ export const SISTEMA_MODULOS: PermisoItem[] = [
   { id_item: "config-dias-bloqueados", nombre: "Días Bloqueados", grupo: "Administración" },
 ];
 
-export const SISTEMA_GRUPOS: string[] = [
-  ...new Set(SISTEMA_MODULOS.map((m) => m.grupo)),
-];
+export const SISTEMA_GRUPOS: string[] = [...new Set(SISTEMA_MODULOS.map((m) => m.grupo))];

@@ -1,17 +1,18 @@
 "use client";
 
-import * as React from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, FileText, Activity, FolderOpen } from "lucide-react";
+
+import { Activity, ArrowLeft, FileText, FolderOpen } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import { useFicha } from "../application/use-ficha";
-import { DatosGeneralesTab } from "./tabs/datos-generales-tab";
 import { AntecedentesTab } from "./tabs/antecedentes-tab";
-import { AtencionesTab } from "./tabs/atenciones-tab";
 import { ArchivosTab } from "./tabs/archivos-tab";
+import { AtencionesTab } from "./tabs/atenciones-tab";
+import { DatosGeneralesTab } from "./tabs/datos-generales-tab";
 
 interface FichaPageProps {
   rut: string;
@@ -33,9 +34,11 @@ export function FichaPage({ rut, nombrePaciente }: FichaPageProps) {
 
   if (error || !ficha) {
     return (
-      <div className="flex flex-col items-center justify-center h-64 gap-4">
+      <div className="flex h-64 flex-col items-center justify-center gap-4">
         <p className="text-destructive">{error || "Ficha no encontrada"}</p>
-        <Button variant="outline" onClick={() => router.back()}>Volver</Button>
+        <Button variant="outline" onClick={() => router.back()}>
+          Volver
+        </Button>
       </div>
     );
   }
@@ -47,8 +50,8 @@ export function FichaPage({ rut, nombrePaciente }: FichaPageProps) {
           <ArrowLeft className="size-4" />
         </Button>
         <div className="flex-1">
-          <h1 className="text-xl font-semibold">Ficha Clínica</h1>
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <h1 className="font-semibold text-xl">Ficha Clínica</h1>
+          <div className="flex items-center gap-2 text-muted-foreground text-sm">
             <span className="font-medium">{nombrePaciente || "Paciente"}</span>
             <span className="text-muted-foreground/40">|</span>
             <span className="font-mono">{rut}</span>
@@ -77,9 +80,12 @@ export function FichaPage({ rut, nombrePaciente }: FichaPageProps) {
         </TabsList>
 
         <TabsContent value="datos-generales">
-          <DatosGeneralesTab ficha={ficha} onUpdate={(data) => {
-            // ficha is refreshed via useFicha
-          }} />
+          <DatosGeneralesTab
+            ficha={ficha}
+            onUpdate={(_data) => {
+              // ficha is refreshed via useFicha
+            }}
+          />
         </TabsContent>
 
         <TabsContent value="antecedentes">

@@ -1,27 +1,21 @@
 "use client";
 
 import * as React from "react";
+
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
 import { Loader2, Save } from "lucide-react";
+import { Controller, useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Switch } from "@/components/ui/switch";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
 
-import { crearPacienteSchema, type PacienteFormData } from "../domain/paciente.schema";
 import type { Paciente } from "../domain/paciente.entity";
-import { createPaciente, updatePaciente, fetchPrevisiones } from "../infrastructure/pacientes.service";
+import { crearPacienteSchema, type PacienteFormData } from "../domain/paciente.schema";
+import { createPaciente, fetchPrevisiones, updatePaciente } from "../infrastructure/pacientes.service";
 
 interface PacienteFormSheetProps {
   open: boolean;
@@ -55,7 +49,9 @@ export function PacienteFormSheet({ open, onOpenChange, paciente, onSuccess }: P
 
   React.useEffect(() => {
     if (open) {
-      fetchPrevisiones().then(setPrevisiones).catch(() => {});
+      fetchPrevisiones()
+        .then(setPrevisiones)
+        .catch(() => {});
       if (paciente) {
         form.reset({
           rut: paciente.rut,
@@ -92,7 +88,7 @@ export function PacienteFormSheet({ open, onOpenChange, paciente, onSuccess }: P
     setSaving(true);
     try {
       if (isEditing) {
-        await updatePaciente(paciente!.rut, data);
+        await updatePaciente(paciente?.rut, data);
       } else {
         await createPaciente(data);
       }
@@ -111,9 +107,7 @@ export function PacienteFormSheet({ open, onOpenChange, paciente, onSuccess }: P
         <SheetHeader>
           <SheetTitle>{isEditing ? "Editar Paciente" : "Nuevo Paciente"}</SheetTitle>
           <SheetDescription>
-            {isEditing
-              ? "Modifica los datos del paciente"
-              : "Ingresa los datos del nuevo paciente"}
+            {isEditing ? "Modifica los datos del paciente" : "Ingresa los datos del nuevo paciente"}
           </SheetDescription>
         </SheetHeader>
 
@@ -139,7 +133,7 @@ export function PacienteFormSheet({ open, onOpenChange, paciente, onSuccess }: P
                     value={field.value ?? ""}
                     className="flex-1"
                   />
-                  <div className="flex items-center gap-1.5 shrink-0">
+                  <div className="flex shrink-0 items-center gap-1.5">
                     <Switch
                       id="paciente-extranjero"
                       checked={form.watch("extranjero") ?? false}
@@ -147,7 +141,7 @@ export function PacienteFormSheet({ open, onOpenChange, paciente, onSuccess }: P
                     />
                     <label
                       htmlFor="paciente-extranjero"
-                      className="text-sm cursor-pointer select-none text-muted-foreground whitespace-nowrap"
+                      className="cursor-pointer select-none whitespace-nowrap text-muted-foreground text-sm"
                     >
                       Extranjero
                     </label>
@@ -182,10 +176,7 @@ export function PacienteFormSheet({ open, onOpenChange, paciente, onSuccess }: P
             render={({ field }) => (
               <Field className="gap-1.5">
                 <FieldLabel htmlFor="paciente-sexo">Sexo</FieldLabel>
-                <Select
-                  value={field.value ?? ""}
-                  onValueChange={(v) => field.onChange(v || null)}
-                >
+                <Select value={field.value ?? ""} onValueChange={(v) => field.onChange(v || null)}>
                   <SelectTrigger id="paciente-sexo" className="w-full">
                     <SelectValue placeholder="Seleccionar..." />
                   </SelectTrigger>
@@ -205,12 +196,7 @@ export function PacienteFormSheet({ open, onOpenChange, paciente, onSuccess }: P
             render={({ field }) => (
               <Field className="gap-1.5">
                 <FieldLabel htmlFor="paciente-fecha">Fecha de nacimiento</FieldLabel>
-                <Input
-                  {...field}
-                  id="paciente-fecha"
-                  type="date"
-                  value={field.value ?? ""}
-                />
+                <Input {...field} id="paciente-fecha" type="date" value={field.value ?? ""} />
               </Field>
             )}
           />
@@ -221,12 +207,7 @@ export function PacienteFormSheet({ open, onOpenChange, paciente, onSuccess }: P
             render={({ field }) => (
               <Field className="gap-1.5">
                 <FieldLabel htmlFor="paciente-telefono">Teléfono</FieldLabel>
-                <Input
-                  {...field}
-                  id="paciente-telefono"
-                  placeholder="+56 9 1234 5678"
-                  value={field.value ?? ""}
-                />
+                <Input {...field} id="paciente-telefono" placeholder="+56 9 1234 5678" value={field.value ?? ""} />
               </Field>
             )}
           />
@@ -237,12 +218,7 @@ export function PacienteFormSheet({ open, onOpenChange, paciente, onSuccess }: P
             render={({ field }) => (
               <Field className="gap-1.5">
                 <FieldLabel htmlFor="paciente-celular">Celular</FieldLabel>
-                <Input
-                  {...field}
-                  id="paciente-celular"
-                  placeholder="+56 9 1234 5678"
-                  value={field.value ?? ""}
-                />
+                <Input {...field} id="paciente-celular" placeholder="+56 9 1234 5678" value={field.value ?? ""} />
               </Field>
             )}
           />
@@ -313,10 +289,7 @@ export function PacienteFormSheet({ open, onOpenChange, paciente, onSuccess }: P
             render={({ field }) => (
               <Field className="gap-1.5">
                 <FieldLabel htmlFor="paciente-estado">Estado</FieldLabel>
-                <Select
-                  value={field.value ?? "activo"}
-                  onValueChange={(v) => field.onChange(v)}
-                >
+                <Select value={field.value ?? "activo"} onValueChange={(v) => field.onChange(v)}>
                   <SelectTrigger id="paciente-estado" className="w-full">
                     <SelectValue />
                   </SelectTrigger>

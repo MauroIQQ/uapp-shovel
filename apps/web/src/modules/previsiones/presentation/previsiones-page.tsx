@@ -2,14 +2,23 @@
 
 import * as React from "react";
 
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { ServerDataTable } from "@/app/(main)/dashboard/componentes/datatable/_components/server-data-table";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 import { useBuscarPrevisiones } from "../application/buscar-previsiones.use-case";
 import type { Prevision } from "../domain/prevision.entity";
 import { deletePrevision } from "../infrastructure/previsiones.service";
-import { usePrevisionesColumns } from "./previsiones-columns";
 import { PrevisionFormSheet } from "./prevision-form-sheet";
+import { usePrevisionesColumns } from "./previsiones-columns";
 
 export function PrevisionesPage() {
   const { data, loading, error, refresh } = useBuscarPrevisiones();
@@ -19,14 +28,25 @@ export function PrevisionesPage() {
   const [sheetOpen, setSheetOpen] = React.useState(false);
 
   const columns = usePrevisionesColumns({
-    onEdit: (item) => { setEditing(item); setSheetOpen(true); },
+    onEdit: (item) => {
+      setEditing(item);
+      setSheetOpen(true);
+    },
     onDelete: (item) => setDeleteTarget(item),
   });
 
   async function handleDelete() {
     if (!deleteTarget) return;
     setDeleting(true);
-    try { await deletePrevision(deleteTarget.id); setDeleteTarget(null); refresh(); } catch { /* silent */ } finally { setDeleting(false); }
+    try {
+      await deletePrevision(deleteTarget.id);
+      setDeleteTarget(null);
+      refresh();
+    } catch {
+      /* silent */
+    } finally {
+      setDeleting(false);
+    }
   }
 
   return (
@@ -42,8 +62,11 @@ export function PrevisionesPage() {
         filterBar={
           <div className="flex items-center gap-2">
             <button
-              className="rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary/90"
-              onClick={() => { setEditing(null); setSheetOpen(true); }}
+              className="rounded-md bg-primary px-3 py-1.5 font-medium text-primary-foreground text-xs hover:bg-primary/90"
+              onClick={() => {
+                setEditing(null);
+                setSheetOpen(true);
+              }}
             >
               + Nueva previsión
             </button>
@@ -52,12 +75,7 @@ export function PrevisionesPage() {
         hideColumnsButton
       />
 
-      <PrevisionFormSheet
-        open={sheetOpen}
-        onOpenChange={setSheetOpen}
-        prevision={editing}
-        onSuccess={refresh}
-      />
+      <PrevisionFormSheet open={sheetOpen} onOpenChange={setSheetOpen} prevision={editing} onSuccess={refresh} />
 
       <AlertDialog open={!!deleteTarget} onOpenChange={(o) => !o && setDeleteTarget(null)}>
         <AlertDialogContent>

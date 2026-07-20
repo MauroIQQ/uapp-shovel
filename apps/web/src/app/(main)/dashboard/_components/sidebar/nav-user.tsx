@@ -36,7 +36,7 @@ export function NavUser({
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground h-auto min-h-12 py-1.5"
+              className="h-auto min-h-12 py-1.5 data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg grayscale">
                 <AvatarImage src={user.avatar || undefined} alt={user.name} />
@@ -44,9 +44,7 @@ export function NavUser({
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{user.name}</span>
-                {user.perfil && (
-                  <span className="truncate text-muted-foreground text-xs">{user.perfil}</span>
-                )}
+                {user.perfil && <span className="truncate text-muted-foreground text-xs">{user.perfil}</span>}
               </div>
               <EllipsisVertical className="ml-auto size-4" />
             </SidebarMenuButton>
@@ -66,12 +64,8 @@ export function NavUser({
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">{user.name}</span>
                   <span className="truncate text-muted-foreground text-xs">{user.email}</span>
-                  {user.company && (
-                    <span className="text-[11px] text-muted-foreground">{user.company}</span>
-                  )}
-                  {user.perfil && (
-                    <span className="text-[11px] text-muted-foreground">{user.perfil}</span>
-                  )}
+                  {user.company && <span className="text-[11px] text-muted-foreground">{user.company}</span>}
+                  {user.perfil && <span className="text-[11px] text-muted-foreground">{user.perfil}</span>}
                 </div>
               </div>
             </DropdownMenuLabel>
