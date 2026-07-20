@@ -10,6 +10,11 @@ import {
   getSortedRowModel,
   flexRender,
   type ColumnDef,
+  type SortingState,
+  type ColumnFiltersState,
+  type VisibilityState,
+  type RowSelectionState,
+  type PaginationState,
 } from "@tanstack/react-table";
 import { AlertCircle, ChevronDown, RefreshCw } from "lucide-react";
 
@@ -69,7 +74,7 @@ function TableSkeleton({ rows = 5, columns: colCount = 6 }) {
   );
 }
 
-export function ServerDataTable<TData extends Record<string, unknown>>({
+export function ServerDataTable<TData extends Record<string, any>>({
   columns,
   data,
   loading = false,
@@ -90,11 +95,11 @@ export function ServerDataTable<TData extends Record<string, unknown>>({
   filterBar?: React.ReactNode;
   hideColumnsButton?: boolean;
 }) {
-  const [sorting, setSorting] = React.useState([]);
-  const [columnFilters, setColumnFilters] = React.useState([]);
-  const [columnVisibility, setColumnVisibility] = React.useState({});
-  const [rowSelection, setRowSelection] = React.useState({});
-  const [pagination, setPagination] = React.useState({ pageIndex: 0, pageSize: 10 });
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
+  const [pagination, setPagination] = React.useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
 
   const table = useReactTable({
     data,

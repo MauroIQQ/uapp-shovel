@@ -214,16 +214,13 @@ export function AgendaPage({
           <AlertDialogHeader>
             <AlertDialogTitle>Día bloqueado</AlertDialogTitle>
             <AlertDialogDescription>
-              <div className="space-y-2">
-                <p>
-                  El día <strong>{bloqueadoDialog?.fecha}</strong> se encuentra bloqueado.
-                </p>
-                {bloqueadoDialog?.motivo && (
-                  <p className="text-sm text-muted-foreground">
-                    Motivo: {bloqueadoDialog.motivo}
-                  </p>
-                )}
-              </div>
+              El día <strong>{bloqueadoDialog?.fecha}</strong> se encuentra bloqueado.
+              {bloqueadoDialog?.motivo && (
+                <>
+                  <br />
+                  <span className="text-muted-foreground">Motivo: {bloqueadoDialog.motivo}</span>
+                </>
+              )}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
