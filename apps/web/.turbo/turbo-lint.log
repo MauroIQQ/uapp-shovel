@@ -1,0 +1,519 @@
+
+> @uapp/web@1.0.0 lint
+> biome lint
+
+src\app\(main)\dashboard\componentes\_components\component-card.tsx:16:30 lint/nursery/useSortedClasses  FIXABLE  ━━━━━━━━━━
+
+  i These CSS classes should be sorted.
+  
+    14 │     <Card className={className}>
+    15 │       <CardHeader>
+  > 16 │         <CardTitle className="font-mono text-sm font-semibold">{title}</CardTitle>
+       │                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    17 │       </CardHeader>
+    18 │       <CardContent>
+  
+  i This rule is still being actively worked on, so it may be missing features or have rough edges. Visit https://github.com/biomejs/biome/issues/1274 for more information or to report possible bugs.
+  
+  i This rule belongs to the nursery group, which means it is not yet stable and may change in the future. Visit https://biomejs.dev/linter/#nursery for more information.
+  
+  i Unsafe fix: Sort the classes.
+  
+    14 14 │       <Card className={className}>
+    15 15 │         <CardHeader>
+    16    │ - ········<CardTitle·className="font-mono·text-sm·font-semibold">{title}</CardTitle>
+       16 │ + ········<CardTitle·className="font-mono·font-semibold·text-sm">{title}</CardTitle>
+    17 17 │         </CardHeader>
+    18 18 │         <CardContent>
+  
+
+src\app\(main)\dashboard\componentes\_components\section-title.tsx:5:19 lint/nursery/useSortedClasses  FIXABLE  ━━━━━━━━━━
+
+  i These CSS classes should be sorted.
+  
+    3 │ export function SectionTitle({ children }: { children: ReactNode }) {
+    4 │   return (
+  > 5 │     <h2 className="mb-4 mt-8 text-base font-semibold tracking-tight first:mt-0">
+      │                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    6 │       {children}
+    7 │     </h2>
+  
+  i This rule is still being actively worked on, so it may be missing features or have rough edges. Visit https://github.com/biomejs/biome/issues/1274 for more information or to report possible bugs.
+  
+  i This rule belongs to the nursery group, which means it is not yet stable and may change in the future. Visit https://biomejs.dev/linter/#nursery for more information.
+  
+  i Unsafe fix: Sort the classes.
+  
+     3  3 │   export function SectionTitle({ children }: { children: ReactNode }) {
+     4  4 │     return (
+     5    │ - ····<h2·className="mb-4·mt-8·text-base·font-semibold·tracking-tight·first:mt-0">
+        5 │ + ····<h2·className="mt-8·mb-4·font-semibold·text-base·tracking-tight·first:mt-0">
+     6  6 │         {children}
+     7  7 │       </h2>
+  
+
+src\app\(main)\dashboard\componentes\compuestos\page.tsx:26:23 lint/nursery/useSortedClasses  FIXABLE  ━━━━━━━━━━
+
+  i These CSS classes should be sorted.
+  
+    24 │     <div className="p-6">
+    25 │       <div className="mb-8">
+  > 26 │         <h1 className="text-2xl font-bold tracking-tight">Componentes Compuestos</h1>
+       │                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    27 │         <p className="mt-1 text-sm text-muted-foreground">
+    28 │           Componentes complejos armados combinando varias primitivas.
+  
+  i This rule is still being actively worked on, so it may be missing features or have rough edges. Visit https://github.com/biomejs/biome/issues/1274 for more information or to report possible bugs.
+  
+  i This rule belongs to the nursery group, which means it is not yet stable and may change in the future. Visit https://biomejs.dev/linter/#nursery for more information.
+  
+  i Unsafe fix: Sort the classes.
+  
+     24  24 │       <div className="p-6">
+     25  25 │         <div className="mb-8">
+     26     │ - ········<h1·className="text-2xl·font-bold·tracking-tight">Componentes·Compuestos</h1>
+         26 │ + ········<h1·className="font-bold·text-2xl·tracking-tight">Componentes·Compuestos</h1>
+     27  27 │           <p className="mt-1 text-sm text-muted-foreground">
+     28  28 │             Componentes complejos armados combinando varias primitivas.
+  
+
+src\app\(main)\dashboard\componentes\compuestos\page.tsx:27:22 lint/nursery/useSortedClasses  FIXABLE  ━━━━━━━━━━
+
+  i These CSS classes should be sorted.
+  
+    25 │       <div className="mb-8">
+    26 │         <h1 className="text-2xl font-bold tracking-tight">Componentes Compuestos</h1>
+  > 27 │         <p className="mt-1 text-sm text-muted-foreground">
+       │                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    28 │           Componentes complejos armados combinando varias primitivas.
+    29 │         </p>
+  
+  i This rule is still being actively worked on, so it may be missing features or have rough edges. Visit https://github.com/biomejs/biome/issues/1274 for more information or to report possible bugs.
+  
+  i This rule belongs to the nursery group, which means it is not yet stable and may change in the future. Visit https://biomejs.dev/linter/#nursery for more information.
+  
+  i Unsafe fix: Sort the classes.
+  
+     25  25 │         <div className="mb-8">
+     26  26 │           <h1 className="text-2xl font-bold tracking-tight">Componentes Compuestos</h1>
+     27     │ - ········<p·className="mt-1·text-sm·text-muted-foreground">
+         27 │ + ········<p·className="mt-1·text-muted-foreground·text-sm">
+     28  28 │             Componentes complejos armados combinando varias primitivas.
+     29  29 │           </p>
+  
+
+src\app\(main)\dashboard\componentes\compuestos\page.tsx:33:20 lint/nursery/useSortedClasses  FIXABLE  ━━━━━━━━━━
+
+  i These CSS classes should be sorted.
+  
+    32 │       <SectionTitle>KPIs y Metricas</SectionTitle>
+  > 33 │       <p className="mb-4 text-sm text-muted-foreground">
+       │                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    34 │         Tarjetas de indicadores clave con valores numericos.
+    35 │       </p>
+  
+  i This rule is still being actively worked on, so it may be missing features or have rough edges. Visit https://github.com/biomejs/biome/issues/1274 for more information or to report possible bugs.
+  
+  i This rule belongs to the nursery group, which means it is not yet stable and may change in the future. Visit https://biomejs.dev/linter/#nursery for more information.
+  
+  i Unsafe fix: Sort the classes.
+  
+     31  31 │   
+     32  32 │         <SectionTitle>KPIs y Metricas</SectionTitle>
+     33     │ - ······<p·className="mb-4·text-sm·text-muted-foreground">
+         33 │ + ······<p·className="mb-4·text-muted-foreground·text-sm">
+     34  34 │           Tarjetas de indicadores clave con valores numericos.
+     35  35 │         </p>
+  
+
+src\app\(main)\dashboard\componentes\compuestos\page.tsx:41:30 lint/nursery/useSortedClasses  FIXABLE  ━━━━━━━━━━
+
+  i These CSS classes should be sorted.
+  
+    39 │             <Card key={m.label}>
+    40 │               <CardContent className="p-4">
+  > 41 │                 <p className="text-xs text-muted-foreground">{m.label}</p>
+       │                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    42 │                 <p className="mt-1 text-xl font-bold">{m.valor}</p>
+    43 │                 <p className={`text-xs ${m.color}`}>{m.cambio}</p>
+  
+  i This rule is still being actively worked on, so it may be missing features or have rough edges. Visit https://github.com/biomejs/biome/issues/1274 for more information or to report possible bugs.
+  
+  i This rule belongs to the nursery group, which means it is not yet stable and may change in the future. Visit https://biomejs.dev/linter/#nursery for more information.
+  
+  i Unsafe fix: Sort the classes.
+  
+     39  39 │               <Card key={m.label}>
+     40  40 │                 <CardContent className="p-4">
+     41     │ - ················<p·className="text-xs·text-muted-foreground">{m.label}</p>
+         41 │ + ················<p·className="text-muted-foreground·text-xs">{m.label}</p>
+     42  42 │                   <p className="mt-1 text-xl font-bold">{m.valor}</p>
+     43  43 │                   <p className={`text-xs ${m.color}`}>{m.cambio}</p>
+  
+
+src\app\(main)\dashboard\componentes\compuestos\page.tsx:42:30 lint/nursery/useSortedClasses  FIXABLE  ━━━━━━━━━━
+
+  i These CSS classes should be sorted.
+  
+    40 │               <CardContent className="p-4">
+    41 │                 <p className="text-xs text-muted-foreground">{m.label}</p>
+  > 42 │                 <p className="mt-1 text-xl font-bold">{m.valor}</p>
+       │                              ^^^^^^^^^^^^^^^^^^^^^^^^
+    43 │                 <p className={`text-xs ${m.color}`}>{m.cambio}</p>
+    44 │               </CardContent>
+  
+  i This rule is still being actively worked on, so it may be missing features or have rough edges. Visit https://github.com/biomejs/biome/issues/1274 for more information or to report possible bugs.
+  
+  i This rule belongs to the nursery group, which means it is not yet stable and may change in the future. Visit https://biomejs.dev/linter/#nursery for more information.
+  
+  i Unsafe fix: Sort the classes.
+  
+     40  40 │                 <CardContent className="p-4">
+     41  41 │                   <p className="text-xs text-muted-foreground">{m.label}</p>
+     42     │ - ················<p·className="mt-1·text-xl·font-bold">{m.valor}</p>
+         42 │ + ················<p·className="mt-1·font-bold·text-xl">{m.valor}</p>
+     43  43 │                   <p className={`text-xs ${m.color}`}>{m.cambio}</p>
+     44  44 │                 </CardContent>
+  
+
+src\app\(main)\dashboard\componentes\compuestos\page.tsx:51:20 lint/nursery/useSortedClasses  FIXABLE  ━━━━━━━━━━
+
+  i These CSS classes should be sorted.
+  
+    50 │       <SectionTitle>Tablero Kanban</SectionTitle>
+  > 51 │       <p className="mb-4 text-sm text-muted-foreground">
+       │                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    52 │         Columnas con tareas, prioridades y equipo asignado.
+    53 │       </p>
+  
+  i This rule is still being actively worked on, so it may be missing features or have rough edges. Visit https://github.com/biomejs/biome/issues/1274 for more information or to report possible bugs.
+  
+  i This rule belongs to the nursery group, which means it is not yet stable and may change in the future. Visit https://biomejs.dev/linter/#nursery for more information.
+  
+  i Unsafe fix: Sort the classes.
+  
+     49  49 │   
+     50  50 │         <SectionTitle>Tablero Kanban</SectionTitle>
+     51     │ - ······<p·className="mb-4·text-sm·text-muted-foreground">
+         51 │ + ······<p·className="mb-4·text-muted-foreground·text-sm">
+     52  52 │           Columnas con tareas, prioridades y equipo asignado.
+     53  53 │         </p>
+  
+
+src\app\(main)\dashboard\componentes\compuestos\page.tsx:62:34 lint/nursery/useSortedClasses  FIXABLE  ━━━━━━━━━━
+
+  i These CSS classes should be sorted.
+  
+    60 │                 <Card key={t.id}>
+    61 │                   <CardContent className="p-3">
+  > 62 │                     <p className="truncate text-sm font-medium">{t.titulo}</p>
+       │                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    63 │                     <p className="line-clamp-2 text-xs text-muted-foreground">{t.desc}</p>
+    64 │                     <div className="mt-1.5 flex items-center gap-2 text-xs text-muted-foreground">
+  
+  i This rule is still being actively worked on, so it may be missing features or have rough edges. Visit https://github.com/biomejs/biome/issues/1274 for more information or to report possible bugs.
+  
+  i This rule belongs to the nursery group, which means it is not yet stable and may change in the future. Visit https://biomejs.dev/linter/#nursery for more information.
+  
+  i Unsafe fix: Sort the classes.
+  
+     60  60 │                   <Card key={t.id}>
+     61  61 │                     <CardContent className="p-3">
+     62     │ - ····················<p·className="truncate·text-sm·font-medium">{t.titulo}</p>
+         62 │ + ····················<p·className="truncate·font-medium·text-sm">{t.titulo}</p>
+     63  63 │                       <p className="line-clamp-2 text-xs text-muted-foreground">{t.desc}</p>
+     64  64 │                       <div className="mt-1.5 flex items-center gap-2 text-xs text-muted-foreground">
+  
+
+src\app\(main)\dashboard\componentes\compuestos\page.tsx:63:34 lint/nursery/useSortedClasses  FIXABLE  ━━━━━━━━━━
+
+  i These CSS classes should be sorted.
+  
+    61 │                   <CardContent className="p-3">
+    62 │                     <p className="truncate text-sm font-medium">{t.titulo}</p>
+  > 63 │                     <p className="line-clamp-2 text-xs text-muted-foreground">{t.desc}</p>
+       │                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    64 │                     <div className="mt-1.5 flex items-center gap-2 text-xs text-muted-foreground">
+    65 │                       <Badge variant="secondary" className="rounded-sm px-1 text-[10px]">
+  
+  i This rule is still being actively worked on, so it may be missing features or have rough edges. Visit https://github.com/biomejs/biome/issues/1274 for more information or to report possible bugs.
+  
+  i This rule belongs to the nursery group, which means it is not yet stable and may change in the future. Visit https://biomejs.dev/linter/#nursery for more information.
+  
+  i Unsafe fix: Sort the classes.
+  
+     61  61 │                     <CardContent className="p-3">
+     62  62 │                       <p className="truncate text-sm font-medium">{t.titulo}</p>
+     63     │ - ····················<p·className="line-clamp-2·text-xs·text-muted-foreground">{t.desc}</p>
+         63 │ + ····················<p·className="line-clamp-2·text-muted-foreground·text-xs">{t.desc}</p>
+     64  64 │                       <div className="mt-1.5 flex items-center gap-2 text-xs text-muted-foreground">
+     65  65 │                         <Badge variant="secondary" className="rounded-sm px-1 text-[10px]">
+  
+
+src\app\(main)\dashboard\componentes\compuestos\page.tsx:64:36 lint/nursery/useSortedClasses  FIXABLE  ━━━━━━━━━━
+
+  i These CSS classes should be sorted.
+  
+    62 │                     <p className="truncate text-sm font-medium">{t.titulo}</p>
+    63 │                     <p className="line-clamp-2 text-xs text-muted-foreground">{t.desc}</p>
+  > 64 │                     <div className="mt-1.5 flex items-center gap-2 text-xs text-muted-foreground">
+       │                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    65 │                       <Badge variant="secondary" className="rounded-sm px-1 text-[10px]">
+    66 │                         {t.equipo}
+  
+  i This rule is still being actively worked on, so it may be missing features or have rough edges. Visit https://github.com/biomejs/biome/issues/1274 for more information or to report possible bugs.
+  
+  i This rule belongs to the nursery group, which means it is not yet stable and may change in the future. Visit https://biomejs.dev/linter/#nursery for more information.
+  
+  i Unsafe fix: Sort the classes.
+  
+     62  62 │                       <p className="truncate text-sm font-medium">{t.titulo}</p>
+     63  63 │                       <p className="line-clamp-2 text-xs text-muted-foreground">{t.desc}</p>
+     64     │ - ····················<div·className="mt-1.5·flex·items-center·gap-2·text-xs·text-muted-foreground">
+         64 │ + ····················<div·className="mt-1.5·flex·items-center·gap-2·text-muted-foreground·text-xs">
+     65  65 │                         <Badge variant="secondary" className="rounded-sm px-1 text-[10px]">
+     66  66 │                           {t.equipo}
+  
+
+src\app\(main)\dashboard\componentes\compuestos\page.tsx:79:20 lint/nursery/useSortedClasses  FIXABLE  ━━━━━━━━━━
+
+  i These CSS classes should be sorted.
+  
+    78 │       <SectionTitle>Date Range Picker</SectionTitle>
+  > 79 │       <p className="mb-4 text-sm text-muted-foreground">
+       │                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    80 │         Selector de rango de fechas con calendario doble.
+    81 │       </p>
+  
+  i This rule is still being actively worked on, so it may be missing features or have rough edges. Visit https://github.com/biomejs/biome/issues/1274 for more information or to report possible bugs.
+  
+  i This rule belongs to the nursery group, which means it is not yet stable and may change in the future. Visit https://biomejs.dev/linter/#nursery for more information.
+  
+  i Unsafe fix: Sort the classes.
+  
+     77  77 │   
+     78  78 │         <SectionTitle>Date Range Picker</SectionTitle>
+     79     │ - ······<p·className="mb-4·text-sm·text-muted-foreground">
+         79 │ + ······<p·className="mb-4·text-muted-foreground·text-sm">
+     80  80 │           Selector de rango de fechas con calendario doble.
+     81  81 │         </p>
+  
+
+src\app\(main)\dashboard\componentes\datatable\_components\showcase-examples.tsx:34:25 lint/nursery/useSortedClasses  FIXABLE  ━━━━━━━━━━
+
+  i These CSS classes should be sorted.
+  
+    32 │     >
+    33 │       <div className="mb-3 flex w-full flex-wrap items-center gap-2">
+  > 34 │         <span className="text-xs text-muted-foreground">
+       │                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    35 │           Sort activo: <span className="font-mono font-medium">{currentSort}</span>
+    36 │         </span>
+  
+  i This rule is still being actively worked on, so it may be missing features or have rough edges. Visit https://github.com/biomejs/biome/issues/1274 for more information or to report possible bugs.
+  
+  i This rule belongs to the nursery group, which means it is not yet stable and may change in the future. Visit https://biomejs.dev/linter/#nursery for more information.
+  
+  i Unsafe fix: Sort the classes.
+  
+     32  32 │       >
+     33  33 │         <div className="mb-3 flex w-full flex-wrap items-center gap-2">
+     34     │ - ········<span·className="text-xs·text-muted-foreground">
+         34 │ + ········<span·className="text-muted-foreground·text-xs">
+     35  35 │             Sort activo: <span className="font-mono font-medium">{currentSort}</span>
+     36  36 │           </span>
+  
+
+src\app\(main)\dashboard\componentes\datatable\page.tsx:14:21 lint/nursery/useSortedClasses  FIXABLE  ━━━━━━━━━━
+
+  i These CSS classes should be sorted.
+  
+    12 │   return (
+    13 │     <div className="p-6">
+  > 14 │       <h1 className="text-2xl font-bold tracking-tight">Datatable</h1>
+       │                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    15 │       <p className="mt-1 mb-6 text-sm text-muted-foreground">
+    16 │         DataTable reutilizable basado en @tanstack/react-table con búsqueda, column visibility, sorting, selección y
+  
+  i This rule is still being actively worked on, so it may be missing features or have rough edges. Visit https://github.com/biomejs/biome/issues/1274 for more information or to report possible bugs.
+  
+  i This rule belongs to the nursery group, which means it is not yet stable and may change in the future. Visit https://biomejs.dev/linter/#nursery for more information.
+  
+  i Unsafe fix: Sort the classes.
+  
+    12 12 │     return (
+    13 13 │       <div className="p-6">
+    14    │ - ······<h1·className="text-2xl·font-bold·tracking-tight">Datatable</h1>
+       14 │ + ······<h1·className="font-bold·text-2xl·tracking-tight">Datatable</h1>
+    15 15 │         <p className="mt-1 mb-6 text-sm text-muted-foreground">
+    16 16 │           DataTable reutilizable basado en @tanstack/react-table con búsqueda, column visibility, sorting, selección y
+  
+
+src\app\(main)\dashboard\componentes\datatable\page.tsx:15:20 lint/nursery/useSortedClasses  FIXABLE  ━━━━━━━━━━
+
+  i These CSS classes should be sorted.
+  
+    13 │     <div className="p-6">
+    14 │       <h1 className="text-2xl font-bold tracking-tight">Datatable</h1>
+  > 15 │       <p className="mt-1 mb-6 text-sm text-muted-foreground">
+       │                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    16 │         DataTable reutilizable basado en @tanstack/react-table con búsqueda, column visibility, sorting, selección y
+    17 │         paginación.
+  
+  i This rule is still being actively worked on, so it may be missing features or have rough edges. Visit https://github.com/biomejs/biome/issues/1274 for more information or to report possible bugs.
+  
+  i This rule belongs to the nursery group, which means it is not yet stable and may change in the future. Visit https://biomejs.dev/linter/#nursery for more information.
+  
+  i Unsafe fix: Sort the classes.
+  
+    13 13 │       <div className="p-6">
+    14 14 │         <h1 className="text-2xl font-bold tracking-tight">Datatable</h1>
+    15    │ - ······<p·className="mt-1·mb-6·text-sm·text-muted-foreground">
+       15 │ + ······<p·className="mt-1·mb-6·text-muted-foreground·text-sm">
+    16 16 │           DataTable reutilizable basado en @tanstack/react-table con búsqueda, column visibility, sorting, selección y
+    17 17 │           paginación.
+  
+
+src\app\(main)\dashboard\componentes\datatable\page.tsx:25:34 lint/nursery/useSortedClasses  FIXABLE  ━━━━━━━━━━
+
+  i These CSS classes should be sorted.
+  
+    23 │         <CardHeader>
+    24 │           <div className="flex items-center justify-between">
+  > 25 │             <CardTitle className="font-mono text-sm font-semibold">@tanstack/react-table</CardTitle>
+       │                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    26 │             <a
+    27 │               href="https://tanstack.com/table/latest"
+  
+  i This rule is still being actively worked on, so it may be missing features or have rough edges. Visit https://github.com/biomejs/biome/issues/1274 for more information or to report possible bugs.
+  
+  i This rule belongs to the nursery group, which means it is not yet stable and may change in the future. Visit https://biomejs.dev/linter/#nursery for more information.
+  
+  i Unsafe fix: Sort the classes.
+  
+    23 23 │           <CardHeader>
+    24 24 │             <div className="flex items-center justify-between">
+    25    │ - ············<CardTitle·className="font-mono·text-sm·font-semibold">@tanstack/react-table</CardTitle>
+       25 │ + ············<CardTitle·className="font-mono·font-semibold·text-sm">@tanstack/react-table</CardTitle>
+    26 26 │               <a
+    27 27 │                 href="https://tanstack.com/table/latest"
+  
+
+src\app\(main)\dashboard\componentes\datatable\page.tsx:30:25 lint/nursery/useSortedClasses  FIXABLE  ━━━━━━━━━━
+
+  i These CSS classes should be sorted.
+  
+    28 │               target="_blank"
+    29 │               rel="noopener noreferrer"
+  > 30 │               className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
+       │                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    31 │             >
+    32 │               Documentación <ExternalLink className="size-3" />
+  
+  i This rule is still being actively worked on, so it may be missing features or have rough edges. Visit https://github.com/biomejs/biome/issues/1274 for more information or to report possible bugs.
+  
+  i This rule belongs to the nursery group, which means it is not yet stable and may change in the future. Visit https://biomejs.dev/linter/#nursery for more information.
+  
+  i Unsafe fix: Sort the classes.
+  
+    28 28 │                 target="_blank"
+    29 29 │                 rel="noopener noreferrer"
+    30    │ - ··············className="inline-flex·items-center·gap-1·text-xs·text-muted-foreground·hover:text-foreground"
+       30 │ + ··············className="inline-flex·items-center·gap-1·text-muted-foreground·text-xs·hover:text-foreground"
+    31 31 │               >
+    32 32 │                 Documentación <ExternalLink className="size-3" />
+  
+
+src\app\(main)\dashboard\componentes\datatable\page.tsx:41:26 lint/nursery/useSortedClasses  FIXABLE  ━━━━━━━━━━
+
+  i These CSS classes should be sorted.
+  
+    39 │         <CardContent className="grid gap-4 sm:grid-cols-2">
+    40 │           <div>
+  > 41 │             <p className="mb-2 text-xs font-medium text-muted-foreground">Instalación</p>
+       │                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    42 │             <pre className="rounded-lg border bg-muted p-3 text-xs">
+    43 │               <code>npm install @tanstack/react-table</code>
+  
+  i This rule is still being actively worked on, so it may be missing features or have rough edges. Visit https://github.com/biomejs/biome/issues/1274 for more information or to report possible bugs.
+  
+  i This rule belongs to the nursery group, which means it is not yet stable and may change in the future. Visit https://biomejs.dev/linter/#nursery for more information.
+  
+  i Unsafe fix: Sort the classes.
+  
+    39 39 │           <CardContent className="grid gap-4 sm:grid-cols-2">
+    40 40 │             <div>
+    41    │ - ············<p·className="mb-2·text-xs·font-medium·text-muted-foreground">Instalación</p>
+       41 │ + ············<p·className="mb-2·font-medium·text-muted-foreground·text-xs">Instalación</p>
+    42 42 │               <pre className="rounded-lg border bg-muted p-3 text-xs">
+    43 43 │                 <code>npm install @tanstack/react-table</code>
+  
+
+src\app\(main)\dashboard\componentes\datatable\page.tsx:47:26 lint/nursery/useSortedClasses  FIXABLE  ━━━━━━━━━━
+
+  i These CSS classes should be sorted.
+  
+    45 │           </div>
+    46 │           <div>
+  > 47 │             <p className="mb-2 text-xs font-medium text-muted-foreground">Importaciones principales</p>
+       │                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    48 │             <pre className="rounded-lg border bg-muted p-3 text-xs leading-relaxed">
+    49 │               <code>{`import {
+  
+  i This rule is still being actively worked on, so it may be missing features or have rough edges. Visit https://github.com/biomejs/biome/issues/1274 for more information or to report possible bugs.
+  
+  i This rule belongs to the nursery group, which means it is not yet stable and may change in the future. Visit https://biomejs.dev/linter/#nursery for more information.
+  
+  i Unsafe fix: Sort the classes.
+  
+    45 45 │             </div>
+    46 46 │             <div>
+    47    │ - ············<p·className="mb-2·text-xs·font-medium·text-muted-foreground">Importaciones·principales</p>
+       47 │ + ············<p·className="mb-2·font-medium·text-muted-foreground·text-xs">Importaciones·principales</p>
+    48 48 │               <pre className="rounded-lg border bg-muted p-3 text-xs leading-relaxed">
+    49 49 │                 <code>{`import {
+  
+
+src\app\(main)\dashboard\componentes\datatable\_components\columns.tsx:7:8 lint/correctness/noUnusedImports  FIXABLE  ━━━━━━━━━━
+
+  ! This import is unused.
+  
+    5 │ import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+    6 │ 
+  > 7 │ import { Badge } from "@/components/ui/badge";
+      │        ^^^^^^^^^
+    8 │ import { Button } from "@/components/ui/button";
+    9 │ import { Checkbox } from "@/components/ui/checkbox";
+  
+  i Unused imports might be the result of an incomplete refactoring.
+  
+  i Unsafe fix: Remove the unused imports.
+  
+      3   3 │   
+      4   4 │   import type { ColumnDef } from "@tanstack/react-table";
+      5     │ - import·{·ArrowUpDown,·MoreHorizontal·}·from·"lucide-react";
+          5 │ + import·{·ArrowUpDown,·MoreHorizontal·}·from·"lucide-react";
+      6   6 │   
+      7     │ - import·{·Badge·}·from·"@/components/ui/badge";
+      8   7 │   import { Button } from "@/components/ui/button";
+      9   8 │   import { Checkbox } from "@/components/ui/checkbox";
+  
+
+The number of diagnostics exceeds the limit allowed. Use --max-diagnostics to increase it.
+Diagnostics not shown: 422.
+Checked 238 files in 861ms. No fixes applied.
+Found 87 errors.
+Found 103 warnings.
+Found 252 infos.
+lint ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Some errors were emitted while running checks.
+  
+
+npm error Lifecycle script `lint` failed with error:
+npm error code 1
+npm error path C:\netcore\uapp-shovel\apps\web
+npm error workspace @uapp/web@1.0.0
+npm error location C:\netcore\uapp-shovel\apps\web
+npm error command failed
+npm error command C:\Windows\system32\cmd.exe /d /s /c biome lint

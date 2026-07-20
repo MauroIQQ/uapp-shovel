@@ -1,0 +1,523 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model uapp_ante_personales {
+  id             Int                  @id @default(autoincrement())
+  id_ficha       Int
+  tipo           String               // diabetes, hta, asma, epilepsia, etc.
+  observaciones  String?
+  created        DateTime             @default(now())
+  uapp_fichas_clinicas uapp_fichas_clinicas @relation(fields: [id_ficha], references: [id], onDelete: Cascade)
+
+  @@unique([id_ficha, tipo])
+}
+
+model uapp_ante_quirurgicos {
+  id             Int                  @id @default(autoincrement())
+  id_ficha       Int
+  fecha          DateTime?            @db.Date
+  procedimiento  String
+  centro_medico  String?
+  observaciones  String?
+  created        DateTime             @default(now())
+  uapp_fichas_clinicas uapp_fichas_clinicas @relation(fields: [id_ficha], references: [id], onDelete: Cascade)
+}
+
+model uapp_ante_familiares {
+  id               Int                  @id @default(autoincrement())
+  id_ficha         Int
+  parentesco       String
+  enfermedad       String
+  edad_diagnostico Int?
+  observaciones    String?
+  created          DateTime             @default(now())
+  uapp_fichas_clinicas uapp_fichas_clinicas @relation(fields: [id_ficha], references: [id], onDelete: Cascade)
+}
+
+model uapp_alergias {
+  id          Int                  @id @default(autoincrement())
+  id_ficha    Int
+  tipo        String               // medicamento / alimento / latex / otro
+  descripcion String
+  severidad   String?              // leve / moderada / grave
+  reaccion    String?
+  activa      Boolean              @default(true)
+  created     DateTime             @default(now())
+  uapp_fichas_clinicas uapp_fichas_clinicas @relation(fields: [id_ficha], references: [id], onDelete: Cascade)
+}
+
+model uapp_medicacion_cronica {
+  id            Int                  @id @default(autoincrement())
+  id_ficha      Int
+  medicamento   String
+  dosis         String?
+  frecuencia    String?
+  via           String?
+  fecha_inicio  DateTime?            @db.Date
+  indicacion    String?
+  activo        Boolean              @default(true)
+  created       DateTime             @default(now())
+  uapp_fichas_clinicas uapp_fichas_clinicas @relation(fields: [id_ficha], references: [id], onDelete: Cascade)
+}
+
+model uapp_problemas_activos {
+  id            Int                  @id @default(autoincrement())
+  id_ficha      Int
+  codigo_cie10  String?
+  diagnostico   String
+  fecha_inicio  DateTime?            @db.Date
+  estado        String?              @default("activo")  // activo / resuelto / controlado
+  observaciones String?
+  created       DateTime             @default(now())
+  uapp_fichas_clinicas uapp_fichas_clinicas @relation(fields: [id_ficha], references: [id], onDelete: Cascade)
+}
+
+model uapp_habitos {
+  id_ficha         Int                  @id
+  tabaquismo       Boolean?             @default(false)
+  cantidad_diaria  Int?
+  alcohol          Boolean?             @default(false)
+  frecuencia_alcohol String?
+  drogas           Boolean?             @default(false)
+  actividad_fisica Boolean?             @default(false)
+  horas_sueno      Int?
+  alimentacion     String?
+  created          DateTime             @default(now())
+  updated          DateTime
+  uapp_fichas_clinicas uapp_fichas_clinicas @relation(fields: [id_ficha], references: [id], onDelete: Cascade)
+}
+
+model uapp_bitacoras {
+  id                   Int                  @id @default(autoincrement())
+  id_ficha_clinica     Int
+  id_hora              Int?                 // opcional: relación con la cita en agenda
+  motivo_consulta      String
+  enfermedad_actual    String?
+  anamnesis            String?
+  examen_fisico        String?
+  // Signos vitales
+  peso                 Decimal?             @db.Decimal(5, 2)
+  talla                Decimal?             @db.Decimal(5, 2)
+  imc                  Decimal?             @db.Decimal(5, 2)
+  presion_sistolica    Int?
+  presion_diastolica   Int?
+  pulso                Int?
+  frecuencia_respiratoria Int?
+  saturacion_o2        Int?
+  temperatura          Decimal?             @db.Decimal(4, 2)
+  glicemia             Decimal?             @db.Decimal(5, 2)
+  perimetro_abdominal  Decimal?             @db.Decimal(5, 2)
+  // Plan
+  plan_terapeutico     String?
+  indicaciones         String?
+  // Próximo control
+  proximo_control_fecha DateTime?            @db.Date
+  proximo_control_motivo String?
+  // Metadata
+  created              DateTime             @default(now())
+  updated              DateTime
+  // Relaciones
+  uapp_fichas_clinicas uapp_fichas_clinicas @relation(fields: [id_ficha_clinica], references: [id], onDelete: Cascade)
+  uapp_recetas         uapp_recetas[]
+  uapp_diagnosticos    uapp_diagnosticos[]
+  uapp_ordenes_medicas uapp_ordenes_medicas[]
+  uapp_procedimientos  uapp_procedimientos[]
+  uapp_documentos_emitidos uapp_documentos_emitidos[]
+  uapp_adjuntos        uapp_adjuntos[]
+}
+
+model uapp_categorias_medicamentos {
+  id                Int                 @id @default(autoincrement())
+  nombre            String
+  rut_empresa       String
+  created           DateTime            @default(now())
+  updated           DateTime
+  uapp_empresas     uapp_empresas       @relation(fields: [rut_empresa], references: [rut_empresa])
+  uapp_medicamentos uapp_medicamentos[]
+
+  @@unique([nombre, rut_empresa])
+}
+
+model uapp_dias_bloqueados {
+  fecha         DateTime      @db.Date
+  rut_empresa   String
+  motivo        String?
+  created       DateTime      @default(now())
+  uapp_empresas uapp_empresas @relation(fields: [rut_empresa], references: [rut_empresa])
+
+  @@id([fecha, rut_empresa])
+}
+
+model uapp_empresas {
+  rut_empresa                  String                         @id
+  giro                         String?
+  direccion                    String?
+  correo                       String?
+  comuna                       String?
+  ciudad                       String?
+  telefono                     String?
+  celular                      String?
+  rut_representante            String?
+  nombre_representante         String?
+  password                     String?
+  fecha_creacion               DateTime?
+  version                      Int                            @default(0)
+  dias                         Int                            @default(0)
+  estado                       Boolean                        @default(true)
+  created                      DateTime                       @default(now())
+  updated                      DateTime
+  uapp_categorias_medicamentos uapp_categorias_medicamentos[]
+  uapp_dias_bloqueados         uapp_dias_bloqueados[]
+  uapp_fichas_clinicas         uapp_fichas_clinicas[]
+  uapp_horarios                uapp_horarios[]
+  uapp_horas                   uapp_horas[]
+  uapp_kardex                  uapp_kardex[]
+  uapp_medicamentos            uapp_medicamentos[]
+  uapp_pacientes               uapp_pacientes[]
+  uapp_permisos                uapp_permisos[]
+  uapp_previsiones             uapp_previsiones[]
+  uapp_usuarios                uapp_usuarios[]
+}
+
+model uapp_fichas_clinicas {
+  id                             Int                @id @default(autoincrement())
+  rut_paciente                   String
+  rut_empresa                    String
+  // Signos vitales de referencia (últimos registrados)
+  peso                           Decimal?           @db.Decimal(5, 2)
+  talla                          Decimal?           @db.Decimal(5, 2)
+  imc                            Decimal?           @db.Decimal(5, 2)
+  circunferencia_cintura         Decimal?           @db.Decimal(5, 2)
+  pliegues                       Decimal?           @db.Decimal(5, 2)
+  bioimpedancia                  Decimal?           @db.Decimal(5, 2)
+  // Datos generales
+  genero                         String?
+  ocupacion                      String?
+  grupo_sanguineo                String?
+  factor_rh                      String?
+  donante_organos                Boolean?
+  observaciones_generales        String?
+  estado                         String?            @default("activa")  // activa / cerrada
+  // Contacto emergencia
+  contacto_emergencia_nombre     String?
+  contacto_emergencia_parentezco String?
+  contacto_emergencia_telefono   String?
+  contacto_emergencia_direccion  String?
+  // Metadata
+  created                        DateTime           @default(now())
+  updated                        DateTime
+  // Relaciones
+  uapp_empresas                  uapp_empresas      @relation(fields: [rut_empresa], references: [rut_empresa])
+  uapp_pacientes                 uapp_pacientes     @relation(fields: [rut_paciente, rut_empresa], references: [rut, rut_empresa])
+  uapp_bitacoras                 uapp_bitacoras[]
+  uapp_ante_personales           uapp_ante_personales[]
+  uapp_ante_quirurgicos          uapp_ante_quirurgicos[]
+  uapp_ante_familiares           uapp_ante_familiares[]
+  uapp_alergias                  uapp_alergias[]
+  uapp_medicacion_cronica        uapp_medicacion_cronica[]
+  uapp_problemas_activos         uapp_problemas_activos[]
+  uapp_habitos                   uapp_habitos?
+  uapp_archivos_generales        uapp_archivos_generales[]
+
+  @@unique([rut_paciente, rut_empresa])
+}
+
+model uapp_horarios {
+  id            Int           @id @default(autoincrement())
+  hora          String
+  activo        Boolean       @default(true)
+  rut_empresa   String
+  created       DateTime      @default(now())
+  updated       DateTime
+  uapp_empresas uapp_empresas @relation(fields: [rut_empresa], references: [rut_empresa])
+}
+
+model uapp_horas {
+  id               Int               @id @default(autoincrement())
+  rut_empresa      String
+  rut_paciente     String
+  id_prevision     Int?
+  fecha_hora       DateTime
+  id_tipo_consulta Int               @default(6)
+  observacion      String?
+  estado           Boolean           @default(true)
+  confirmada       String?           @default("NO")
+  atendido         String?           @default("NO")
+  num_llegada      Int               @default(0)
+  sobrecupo        Boolean           @default(false)
+  origen           String?           @default("org")
+  total            Int               @default(0)
+  created          DateTime          @default(now())
+  updated          DateTime
+  uapp_previsiones uapp_previsiones? @relation(fields: [id_prevision], references: [id])
+  uapp_empresas    uapp_empresas     @relation(fields: [rut_empresa], references: [rut_empresa])
+  uapp_pacientes   uapp_pacientes    @relation(fields: [rut_paciente, rut_empresa], references: [rut, rut_empresa])
+}
+
+model uapp_kardex {
+  id_articulo   Int           @id @default(autoincrement())
+  descripcion   String
+  stock_actual  Int           @default(0)
+  rut_empresa   String
+  created       DateTime      @default(now())
+  updated       DateTime
+  uapp_empresas uapp_empresas @relation(fields: [rut_empresa], references: [rut_empresa])
+}
+
+model uapp_logs {
+  id          Int      @id @default(autoincrement())
+  rut_empresa String
+  nivel       String   @default("ERROR")
+  origen      String?  @default("backend")
+  modulo      String   @default("unknown")
+  detalle     String?
+  error       String?
+  url         String?
+  ip          String?
+  created     DateTime @default(now())
+  usuario     String?  @db.VarChar(100)
+}
+
+model uapp_medicamentos {
+  id                           Int                          @id @default(autoincrement())
+  id_categoria                 Int
+  nombre                       String
+  rut_empresa                  String
+  created                      DateTime                     @default(now())
+  updated                      DateTime
+  uapp_categorias_medicamentos uapp_categorias_medicamentos @relation(fields: [id_categoria], references: [id])
+  uapp_empresas                uapp_empresas                @relation(fields: [rut_empresa], references: [rut_empresa])
+
+  @@unique([nombre, rut_empresa])
+}
+
+model uapp_pacientes {
+  rut                  String
+  id_prevision         Int?
+  rut_empresa          String
+  nombre_completo      String
+  direccion            String?
+  correo               String?
+  ciudad               String?
+  comuna               String?
+  pais                 String?               @default("Chile")
+  telefono             String?
+  celular              String?
+  sexo                 String?
+  fecha_nacimiento     DateTime?             @db.Date
+  edad                 Int?
+  estado_civil         String?
+  estado               Boolean               @default(true)
+  extranjero           Boolean               @default(false)
+  created              DateTime              @default(now())
+  updated              DateTime
+  uapp_fichas_clinicas uapp_fichas_clinicas?
+  uapp_horas           uapp_horas[]
+  uapp_previsiones     uapp_previsiones?     @relation(fields: [id_prevision], references: [id])
+  uapp_empresas        uapp_empresas         @relation(fields: [rut_empresa], references: [rut_empresa])
+
+  @@id([rut, rut_empresa])
+}
+
+model uapp_parametros {
+  id      Int      @id @default(autoincrement())
+  nombre  String   @unique
+  valor   Int      @default(0)
+  created DateTime @default(now())
+  updated DateTime
+}
+
+model uapp_permisos {
+  id            Int           @id @default(autoincrement())
+  perfil        Int
+  rut_empresa   String
+  created       DateTime      @default(now())
+  id_item       String
+  nombre        String
+  uapp_empresas uapp_empresas @relation(fields: [rut_empresa], references: [rut_empresa])
+
+  @@unique([id_item, perfil, rut_empresa])
+}
+
+model uapp_previsiones {
+  id             Int              @id @default(autoincrement())
+  rut_empresa    String
+  nombre         String
+  valor          Int              @default(0)
+  estado         Boolean          @default(true)
+  created        DateTime         @default(now())
+  updated        DateTime
+  uapp_horas     uapp_horas[]
+  uapp_pacientes uapp_pacientes[]
+  uapp_empresas  uapp_empresas    @relation(fields: [rut_empresa], references: [rut_empresa])
+}
+
+model uapp_recetas {
+  id             Int                   @id @default(autoincrement())
+  id_bitacora    Int
+  validez        String?               // días de validez
+  estado         String?               @default("activa")  // activa / anulada / entregada
+  observaciones  String?
+  created        DateTime              @default(now())
+  uapp_bitacoras uapp_bitacoras        @relation(fields: [id_bitacora], references: [id], onDelete: Cascade)
+  uapp_recetas_detalle uapp_recetas_detalle[]
+}
+
+model uapp_recetas_detalle {
+  id                Int         @id @default(autoincrement())
+  id_receta         Int
+  medicamento       String
+  concentracion     String?
+  forma_farmaceutica String?
+  presentacion      String?
+  dosis             String?
+  frecuencia        String?
+  duracion          String?
+  cantidad          Int?
+  via_administracion String?
+  indicaciones      String?
+  observaciones     String?
+  created           DateTime    @default(now())
+  uapp_recetas      uapp_recetas @relation(fields: [id_receta], references: [id], onDelete: Cascade)
+}
+
+model uapp_diagnosticos {
+  id           Int            @id @default(autoincrement())
+  id_bitacora  Int
+  codigo_cie10 String?
+  diagnostico  String
+  principal    Boolean        @default(false)
+  observaciones String?
+  created      DateTime       @default(now())
+  uapp_bitacoras uapp_bitacoras @relation(fields: [id_bitacora], references: [id], onDelete: Cascade)
+}
+
+model uapp_ordenes_medicas {
+  id           Int            @id @default(autoincrement())
+  id_bitacora  Int
+  tipo         String         // laboratorio / imagenologia / procedimiento / interconsulta / hospitalizacion
+  descripcion  String
+  urgencia     String?        // normal / urgente
+  observaciones String?
+  created      DateTime       @default(now())
+  uapp_bitacoras uapp_bitacoras @relation(fields: [id_bitacora], references: [id], onDelete: Cascade)
+}
+
+model uapp_procedimientos {
+  id           Int            @id @default(autoincrement())
+  id_bitacora  Int
+  procedimiento String
+  fecha        DateTime?      @db.Date
+  resultado    String?
+  observaciones String?
+  created      DateTime       @default(now())
+  uapp_bitacoras uapp_bitacoras @relation(fields: [id_bitacora], references: [id], onDelete: Cascade)
+}
+
+model uapp_documentos_emitidos {
+  id           Int            @id @default(autoincrement())
+  id_bitacora  Int
+  nombre       String
+  tipo         String         // receta / certificado / derivacion / consentimiento / informe
+  ruta         String?
+  usuario      String?
+  created      DateTime       @default(now())
+  uapp_bitacoras uapp_bitacoras @relation(fields: [id_bitacora], references: [id], onDelete: Cascade)
+}
+
+model uapp_adjuntos {
+  id           Int            @id @default(autoincrement())
+  id_bitacora  Int
+  nombre       String
+  categoria    String?
+  tipo_mime    String?
+  tamaño       Int?
+  ruta         String
+  comentario   String?
+  usuario      String?
+  created      DateTime       @default(now())
+  uapp_bitacoras uapp_bitacoras @relation(fields: [id_bitacora], references: [id], onDelete: Cascade)
+}
+
+model uapp_document_categories {
+  id            Int                         @id @default(autoincrement())
+  codigo        String                      @unique
+  nombre        String
+  descripcion   String?
+  orden         Int                         @default(0)
+  activo        Boolean                     @default(true)
+  created       DateTime                    @default(now())
+  updated       DateTime
+  subcategorias uapp_document_subcategories[]
+}
+
+model uapp_document_subcategories {
+  id            Int                         @id @default(autoincrement())
+  id_categoria  Int
+  codigo        String                      @unique
+  nombre        String
+  descripcion   String?
+  orden         Int                         @default(0)
+  activo        Boolean                     @default(true)
+  created       DateTime                    @default(now())
+  updated       DateTime
+  categoria     uapp_document_categories     @relation(fields: [id_categoria], references: [id])
+  archivos      uapp_archivos_generales[]
+}
+
+model uapp_archivos_generales {
+  id             Int                        @id @default(autoincrement())
+  id_ficha       Int
+  nombre         String
+  categoria      String?
+  id_subcategoria Int?
+  tipo_mime      String?
+  tamaño         Int?
+  ruta           String
+  observacion    String?
+  usuario        String?
+  created        DateTime                   @default(now())
+  uapp_fichas_clinicas        uapp_fichas_clinicas        @relation(fields: [id_ficha], references: [id], onDelete: Cascade)
+  uapp_document_subcategories uapp_document_subcategories? @relation(fields: [id_subcategoria], references: [id])
+}
+
+model uapp_reportes_config {
+  id         Int      @id @default(autoincrement())
+  id_reporte Int
+  parametro  String?
+  x          Int      @default(0)
+  y          Int      @default(0)
+  width      Int      @default(0)
+  x_global   Int      @default(0)
+  y_global   Int      @default(0)
+  created    DateTime @default(now())
+  updated    DateTime
+}
+
+model uapp_tipos_horas {
+  id          Int      @id @default(autoincrement())
+  rut_empresa String
+  descripcion String
+  estado      Boolean  @default(true)
+  created     DateTime @default(now())
+  updated     DateTime
+}
+
+model uapp_usuarios {
+  rut           String        @id
+  rut_empresa   String
+  nombre        String
+  paterno       String
+  materno       String?
+  perfil        Int           @default(1)
+  correo        String?
+  password      String
+  created       DateTime      @default(now())
+  updated       DateTime
+  uapp_empresas uapp_empresas @relation(fields: [rut_empresa], references: [rut_empresa])
+}

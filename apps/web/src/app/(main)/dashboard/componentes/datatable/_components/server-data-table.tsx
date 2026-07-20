@@ -1,0 +1,225 @@
+"use client";
+"use no memo";
+
+import * as React from "react";
+import {
+  useReactTable,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  flexRender,
+  type ColumnDef,
+} from "@tanstack/react-table";
+import { AlertCircle, ChevronDown, RefreshCw } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { cn } from "@/lib/utils";
+
+const columnWidths: Record<string, string> = {
+  select: "w-10",
+  status: "w-24",
+  email: "w-auto",
+  amount: "w-28",
+  actions: "w-12",
+};
+
+function TableSkeleton({ rows = 5, columns: colCount = 6 }) {
+  return (
+    <div className="overflow-hidden rounded-md border">
+      <Table className="table-fixed">
+        <TableHeader>
+          <TableRow>
+            {Array.from({ length: colCount }).map((_, i) => (
+              <TableHead key={i}>
+                <Skeleton className="h-4 w-16" />
+              </TableHead>
+            ))}
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {Array.from({ length: rows }).map((_, rowIdx) => (
+            <TableRow key={rowIdx}>
+              {Array.from({ length: colCount }).map((_, colIdx) => (
+                <TableCell key={colIdx}>
+                  <Skeleton className="h-4 w-full" />
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  );
+}
+
+export function ServerDataTable<TData extends Record<string, unknown>>({
+  columns,
+  data,
+  loading = false,
+  error = null,
+  onRefresh,
+  searchColumn = "email",
+  searchPlaceholder = `Filter ${searchColumn}...`,
+  filterBar,
+  hideColumnsButton = false,
+}: {
+  columns: ColumnDef<TData>[];
+  data: TData[];
+  loading?: boolean;
+  error?: string | null;
+  onRefresh?: () => void;
+  searchColumn?: string;
+  searchPlaceholder?: string;
+  filterBar?: React.ReactNode;
+  hideColumnsButton?: boolean;
+}) {
+  const [sorting, setSorting] = React.useState([]);
+  const [columnFilters, setColumnFilters] = React.useState([]);
+  const [columnVisibility, setColumnVisibility] = React.useState({});
+  const [rowSelection, setRowSelection] = React.useState({});
+  const [pagination, setPagination] = React.useState({ pageIndex: 0, pageSize: 10 });
+
+  const table = useReactTable({
+    data,
+    columns,
+    state: { sorting, columnFilters, columnVisibility, rowSelection, pagination },
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
+    onPaginationChange: setPagination,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+  });
+
+  const searchQuery = table.getColumn(searchColumn)?.getFilterValue() ?? "";
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center gap-3 rounded-md border border-destructive/20 bg-destructive/5 py-12">
+        <AlertCircle className="size-8 text-destructive" />
+        <p className="text-sm text-destructive">{error}</p>
+        {onRefresh && (
+          <Button variant="outline" size="sm" onClick={onRefresh}>
+            <RefreshCw />
+            {" Reintentar"}
+          </Button>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-full">
+      <div className="flex items-center py-4">
+        <Input
+          placeholder={searchPlaceholder}
+          value={searchQuery as string}
+          onChange={(event) => {
+            table.getColumn(searchColumn)?.setFilterValue(event.target.value);
+          }}
+          className="max-w-sm"
+        />
+        {onRefresh && (
+          <Button variant="outline" size="sm" className="ml-2" onClick={onRefresh}>
+            <RefreshCw />
+          </Button>
+        )}
+        {filterBar && <div className="ml-2 flex items-center gap-2">{filterBar}</div>}
+        {!hideColumnsButton && (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="ml-auto">
+                Columns <ChevronDown />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {table.getAllColumns().filter((col) => col.getCanHide()).map((col) => (
+                <DropdownMenuCheckboxItem
+                  key={col.id}
+                  checked={col.getIsVisible()}
+                  onCheckedChange={(value) => col.toggleVisibility(!!value)}
+                >
+                  {col.id}
+                </DropdownMenuCheckboxItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
+      </div>
+      {loading ? (
+        <TableSkeleton rows={pagination.pageSize} columns={columns.length} />
+      ) : (
+        <div className="overflow-hidden rounded-md border">
+          <Table className="table-fixed">
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => (
+                    <TableHead key={header.id} className={cn(columnWidths[header.column.id])}>
+                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                    </TableHead>
+                  ))}
+                </TableRow>
+              ))}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell
+                        key={cell.id}
+                        className={cn(columnWidths[cell.column.id], "break-words whitespace-normal")}
+                      >
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={columns.length} className="h-24 text-center">
+                    No results.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
+      )}
+      <div className="flex items-center justify-end space-x-2 py-4">
+        <div className="flex-1 text-sm text-muted-foreground">
+          {table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s) selected.
+        </div>
+        <div className="space-x-2">
+          <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
+            Previous
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+            Next
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
