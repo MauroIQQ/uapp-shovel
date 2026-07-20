@@ -128,9 +128,9 @@ export default function RenacimientoPage() {
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10">
-                <Link href={`/${config.slug}#servicios`}>Conoce Más</Link>
-              </Button>
+<Button asChild size="lg" variant="outline" className="border-gray-300 text-gray-700 hover:bg-gray-100">
+  <Link href={`/${config.slug}#servicios`}>Conoce Más</Link>
+</Button>
             </div>
           </div>
         </div>

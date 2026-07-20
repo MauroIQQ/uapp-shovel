@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { LandingHeader } from "../_components/landing-header";
 import { LandingFooter } from "../_components/landing-footer";
 import { getLandingConfig } from "@/lib/landing-config";
+import { ChatWidgetWrapper } from "../_components/chat-widget/chat-widget-wrapper";
 
 const config = getLandingConfig("renacimiento")!;
 
@@ -29,6 +30,7 @@ export default function RenacimientoLayout({ children }: { children: ReactNode }
       <LandingHeader slug="renacimiento" />
       <main className="pt-16">{children}</main>
       <LandingFooter slug="renacimiento" />
+      <ChatWidgetWrapper slug={config.slug} rutEmpresa={config.rut_empresa} theme={config.theme} />
     </div>
   );
 }
