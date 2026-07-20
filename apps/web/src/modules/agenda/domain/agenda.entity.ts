@@ -34,4 +34,6 @@ export interface HorarioSlot {
 export interface ResumenMes {
   fecha: string;
   count: number;
+  bloqueado?: boolean;
+  motivo?: string | null;
 }

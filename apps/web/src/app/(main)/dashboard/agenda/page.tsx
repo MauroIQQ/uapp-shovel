@@ -10,7 +10,7 @@ export default async function AgendaRoute() {
   const start = new Date(today.getFullYear(), today.getMonth(), 1);
   const end = new Date(today.getFullYear(), today.getMonth() + 1, 0, 23, 59, 59);
 
-  const [tipos, horarios, citasMes] = await Promise.all([
+  const [tipos, horarios, citasMes] = (await Promise.all([
     prisma.uapp_tipos_horas.findMany({
       where: { rut_empresa: RUT_EMPRESA_FALLBACK, estado: true },
       orderBy: { descripcion: "asc" },
@@ -26,7 +26,11 @@ export default async function AgendaRoute() {
       },
       select: { fecha_hora: true },
     }),
-  ]);
+  ])) as [
+    { id: number; descripcion: string; estado: boolean }[],
+    { id: number; hora: string; activo: boolean }[],
+    { fecha_hora: Date }[],
+  ];
 
   const counts = new Map<string, number>();
   for (const c of citasMes) {

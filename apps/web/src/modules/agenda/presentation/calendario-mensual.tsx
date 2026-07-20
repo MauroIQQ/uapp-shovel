@@ -36,9 +36,13 @@ export function CalendarioMensual({
   const [viewMonth, setViewMonth] = React.useState(new Date().getMonth());
 
   const resumenMap = React.useMemo(() => {
-    const map = new Map<string, number>();
-    for (const r of resumen) map.set(r.fecha, r.count);
-    return map;
+    const countMap = new Map<string, number>();
+    const blockedMap = new Map<string, string | null>();
+    for (const r of resumen) {
+      countMap.set(r.fecha, r.count);
+      if (r.bloqueado) blockedMap.set(r.fecha, r.motivo ?? null);
+    }
+    return { countMap, blockedMap };
   }, [resumen]);
 
   const firstDayOfMonth = new Date(viewYear, viewMonth, 1);
@@ -176,7 +180,8 @@ export function CalendarioMensual({
         {weeks.map((week, wi) => (
           <div key={wi} className="grid grid-cols-7 [&:last-child>*]:border-b-0">
             {week.map((cell) => {
-              const count = resumenMap.get(cell.dateStr) ?? 0;
+              const count = resumenMap.countMap.get(cell.dateStr) ?? 0;
+              const isBlocked = resumenMap.blockedMap.has(cell.dateStr);
               const isToday = cell.dateStr === todayStr;
               const isSelected = cell.dateStr === selectedFecha;
 
@@ -189,6 +194,7 @@ export function CalendarioMensual({
                     "group border-border/70 border-r border-b last:border-r-0 cursor-pointer transition-colors hover:bg-muted/20",
                     cell.isOutside && "bg-muted/25 text-muted-foreground/70",
                     isSelected && "bg-primary/[0.04] ring-1 ring-inset ring-primary/30",
+                    isBlocked && "bg-destructive/5 hover:bg-destructive/10",
                   )}
                   onClick={() => onDayClick(cell.dateStr)}
                 >
@@ -198,6 +204,7 @@ export function CalendarioMensual({
                         "mt-1 inline-flex size-6 items-center justify-center rounded-full text-sm",
                         isToday &&
                           "bg-primary text-primary-foreground font-semibold",
+                        isBlocked && "text-destructive/70 line-through",
                       )}
                     >
                       {cell.day}
@@ -205,7 +212,14 @@ export function CalendarioMensual({
                     <div
                       className="flex flex-col gap-[var(--event-gap)] min-h-[calc((var(--event-height)+var(--event-gap))*1)] sm:min-h-[calc((var(--event-height)+var(--event-gap))*2)]"
                     >
-                      {count > 0 && (
+                      {isBlocked && (
+                        <div
+                          className="mt-[var(--event-gap)] flex h-[var(--event-height)] items-center overflow-hidden rounded px-1.5 text-[10px] font-medium sm:text-xs bg-destructive/15 text-destructive"
+                        >
+                          <span className="truncate">Bloqueado</span>
+                        </div>
+                      )}
+                      {!isBlocked && count > 0 && (
                         <div
                           className={cn(
                             "mt-[var(--event-gap)] flex h-[var(--event-height)] items-center overflow-hidden rounded px-1.5 text-[10px] font-medium backdrop-blur-md sm:text-xs",

@@ -34,9 +34,28 @@ export async function GET(req: Request) {
       counts.set(d, (counts.get(d) ?? 0) + 1);
     }
 
-    const resumen = Array.from(counts.entries()).map(([fecha, count]) => ({
+    const bloqueados = await prisma.uapp_dias_bloqueados.findMany({
+      where: {
+        rut_empresa,
+        fecha: { gte: start, lte: end },
+      },
+    });
+
+    const bloqueadosMap = new Map(bloqueados.map((b) => [
+      b.fecha.toISOString().slice(0, 10),
+      b.motivo,
+    ]));
+
+    const allDates = new Set<string>([
+      ...counts.keys(),
+      ...bloqueadosMap.keys(),
+    ]);
+
+    const resumen = Array.from(allDates).map((fecha) => ({
       fecha,
-      count,
+      count: counts.get(fecha) ?? 0,
+      bloqueado: bloqueadosMap.has(fecha),
+      motivo: bloqueadosMap.get(fecha) ?? null,
     }));
 
     return NextResponse.json({ data: resumen });

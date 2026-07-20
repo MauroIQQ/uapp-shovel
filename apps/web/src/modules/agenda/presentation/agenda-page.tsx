@@ -14,7 +14,7 @@ import {
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAgenda } from "../application/use-agenda";
 
-import type { AgendaCita, HorarioSlot, TipoHora } from "../domain/agenda.entity";
+import type { AgendaCita, HorarioSlot, ResumenMes, TipoHora } from "../domain/agenda.entity";
 import { deleteCita, fetchResumenMes } from "../infrastructure/agenda.service";
 import { CalendarioMensual } from "./calendario-mensual";
 import { CitaFormSheet } from "./cita-form-sheet";
@@ -23,7 +23,7 @@ import { ListaCitas } from "./lista-citas";
 interface AgendaPageProps {
   tipos: TipoHora[];
   horarios: HorarioSlot[];
-  resumen: { fecha: string; count: number }[];
+  resumen: ResumenMes[];
 }
 
 export function AgendaPage({
@@ -61,11 +61,20 @@ export function AgendaPage({
   const [editingCita, setEditingCita] = React.useState<AgendaCita | null>(null);
   const [deleteTarget, setDeleteTarget] = React.useState<AgendaCita | null>(null);
   const [deleting, setDeleting] = React.useState(false);
+  const [bloqueadoDialog, setBloqueadoDialog] = React.useState<{ fecha: string; motivo: string | null } | null>(null);
 
   const [tipos] = React.useState(initialTipos);
   const [horarios] = React.useState(initialHorarios);
 
   const mesStr = `${currentMes.year}-${String(currentMes.month).padStart(2, "0")}`;
+
+  const resumenBloqueados = React.useMemo(() => {
+    const map = new Map<string, string | null>();
+    for (const r of resumen) {
+      if (r.bloqueado) map.set(r.fecha, r.motivo ?? null);
+    }
+    return map;
+  }, [resumen]);
 
   React.useEffect(() => {
     async function loadResumen() {
@@ -87,7 +96,11 @@ export function AgendaPage({
   }
 
   function handleDayClick(fecha: string) {
-    setCurrentFecha(fecha);
+    if (resumenBloqueados.has(fecha)) {
+      setBloqueadoDialog({ fecha, motivo: resumenBloqueados.get(fecha) ?? null });
+    } else {
+      setCurrentFecha(fecha);
+    }
   }
 
   function handleEdit(cita: AgendaCita) {
@@ -191,6 +204,32 @@ export function AgendaPage({
             <AlertDialogAction disabled={deleting} onClick={handleDelete}>
               {deleting ? "Eliminando..." : "Eliminar"}
             </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Bloqueado Dialog */}
+      <AlertDialog open={!!bloqueadoDialog} onOpenChange={(o) => !o && setBloqueadoDialog(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Día bloqueado</AlertDialogTitle>
+            <AlertDialogDescription>
+              <div className="space-y-2">
+                <p>
+                  El día <strong>{bloqueadoDialog?.fecha}</strong> se encuentra bloqueado.
+                </p>
+                {bloqueadoDialog?.motivo && (
+                  <p className="text-sm text-muted-foreground">
+                    Motivo: {bloqueadoDialog.motivo}
+                  </p>
+                )}
+              </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setBloqueadoDialog(null)}>
+              Cerrar
+            </AlertDialogCancel>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
