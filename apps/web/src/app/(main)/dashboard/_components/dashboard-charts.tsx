@@ -212,7 +212,7 @@ export function DashboardCharts({ data }: DashboardChartsProps) {
                   content={
                     <ChartTooltipContent
                       labelKey="fecha"
-                      labelFormatter={(label: string) => formatTooltipDate(label, rango)}
+                      labelFormatter={(label) => formatTooltipDate(String(label), rango)}
                     />
                   }
                   cursor={{ stroke: "var(--border)", strokeWidth: 1 }}
