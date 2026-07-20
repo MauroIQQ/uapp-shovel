@@ -1,8 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useRouter } from "next/navigation";
-import { Earth, FileText, MoreHorizontal } from "lucide-react";
+import { Earth, MoreHorizontal } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -35,7 +34,6 @@ export function ListaCitas({
   onDelete,
   onAdd,
 }: ListaCitasProps) {
-  const router = useRouter();
   const fechaFormateada = React.useMemo(() => {
     if (!fecha) return "";
     const d = new Date(fecha + "T12:00:00");
@@ -172,11 +170,6 @@ export function ListaCitas({
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => router.push(`/dashboard/fichas/${cita.rut_paciente}`)}>
-                      <FileText className="mr-2 size-4" />
-                      Ficha Clínica
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={() => onEdit(cita)}>
                       Editar
                     </DropdownMenuItem>
