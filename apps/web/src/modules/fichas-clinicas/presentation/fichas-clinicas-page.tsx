@@ -18,7 +18,7 @@ export function FichasClinicasPage() {
   const [pacientes, setPacientes] = React.useState<PacienteDia[]>([]);
   const [loading, setLoading] = React.useState(false);
 
-  async function load(f: Date) {
+  const load = React.useCallback(async (f: Date) => {
     setLoading(true);
     try {
       const ymd = format(f, "yyyy-MM-dd");
@@ -44,7 +44,7 @@ export function FichasClinicasPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, []);
 
   React.useEffect(() => {
     void load(fecha);

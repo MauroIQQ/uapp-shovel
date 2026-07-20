@@ -17,7 +17,7 @@ export function useCategorias() {
   const [data, setData] = React.useState<CategoriaConSubcategorias[]>([]);
   const [loading, setLoading] = React.useState(false);
 
-  async function load() {
+  const load = React.useCallback(async () => {
     setLoading(true);
     try {
       setData(await fetchCategorias());
@@ -26,7 +26,7 @@ export function useCategorias() {
     } finally {
       setLoading(false);
     }
-  }
+  }, []);
 
   React.useEffect(() => {
     void load();
@@ -52,7 +52,7 @@ export function useCategoriasDropdown() {
   const [data, setData] = React.useState<CategoriaConSubcategorias[]>([]);
   const [loading, setLoading] = React.useState(false);
 
-  async function load() {
+  const load = React.useCallback(async () => {
     setLoading(true);
     try {
       const res = await fetch("/api/categorias-documentos");
@@ -62,7 +62,7 @@ export function useCategoriasDropdown() {
     } finally {
       setLoading(false);
     }
-  }
+  }, []);
 
   React.useEffect(() => {
     void load();
