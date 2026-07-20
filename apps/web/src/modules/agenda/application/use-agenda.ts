@@ -44,7 +44,7 @@ export function useAgenda(fecha: string): UseAgendaReturn {
     return () => {
       cancelled = true;
     };
-  }, [fecha]);
+  }, [fecha, _refetchKey]);
 
   return { citas, loading, error, refresh };
 }

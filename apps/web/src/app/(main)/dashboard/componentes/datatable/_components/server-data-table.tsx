@@ -37,8 +37,14 @@ const columnWidths: Record<string, string> = {
   email: "w-auto",
   amount: "w-28",
   actions: "w-12",
-  nombre_completo: "min-w-40 w-auto",
-  estado: "w-20",
+  rut: "w-[10%]",
+  nombre_completo: "w-[30%]",
+  edad: "w-[10%]",
+  telefono: "w-[10%]",
+  celular: "w-[10%]",
+  correo: "w-[10%]",
+  estado: "w-[10%]",
+  estado_cita: "w-[10%]",
 };
 
 function TableSkeleton({ rows = 5, columns: colCount = 6 }) {

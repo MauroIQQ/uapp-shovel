@@ -28,6 +28,7 @@ export const SISTEMA_MODULOS: PermisoItem[] = [
   { id_item: "config-perfiles", nombre: "Perfiles", grupo: "Configuración" },
   { id_item: "config-categorias-documentos", nombre: "Categorías Documentos", grupo: "Configuración" },
   { id_item: "agenda", nombre: "Agenda", grupo: "Asistencia" },
+  { id_item: "busqueda-pacientes", nombre: "Búsqueda Pacientes", grupo: "Asistencia" },
   { id_item: "fichas-clinicas", nombre: "Fichas Clínicas", grupo: "Profesional" },
   { id_item: "config-previsiones", nombre: "Previsiones", grupo: "Administración" },
   { id_item: "config-horarios", nombre: "Horarios", grupo: "Administración" },

@@ -32,19 +32,16 @@ export function usePacientesColumns({ onEdit, onDelete }: PacientesColumnsOption
           <span className="flex size-8 items-center justify-center rounded-md border bg-muted">
             <UserRound className="size-4 text-muted-foreground" />
           </span>
-          <span className="whitespace-nowrap" title={row.getValue<string>("nombre_completo")}>
-            {row.getValue("nombre_completo")}
-          </span>
+          <div className="flex flex-col">
+            <span className="truncate" title={row.getValue<string>("nombre_completo")}>
+              {row.getValue("nombre_completo")}
+            </span>
+            <span className="text-muted-foreground text-xs">
+              {row.original.sexo ?? "-"}
+            </span>
+          </div>
         </div>
       ),
-    },
-    {
-      accessorKey: "sexo",
-      header: "Sexo",
-      cell: ({ row }) => {
-        const val = row.getValue<string | null>("sexo");
-        return <span className="text-muted-foreground text-xs">{val ?? "-"}</span>;
-      },
     },
     {
       id: "edad",
