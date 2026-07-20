@@ -6,12 +6,14 @@ import {
   Coins,
   FileText,
   FolderTree,
+  LayoutDashboard,
   Lock,
   type LucideIcon,
   Package,
   Pill,
   Search,
   Settings,
+  Table2,
   UserCog,
   Users,
 } from "lucide-react";
@@ -56,6 +58,17 @@ export interface NavGroup {
 
 export const sidebarItems: NavGroup[] = [
   {
+    id: 0,
+    items: [
+      {
+        id: "inicio",
+        title: "Inicio",
+        url: "/dashboard",
+        icon: LayoutDashboard,
+      },
+    ],
+  },
+  {
     id: 1,
     label: "Asistencia",
     items: [
@@ -70,6 +83,12 @@ export const sidebarItems: NavGroup[] = [
         title: "Agenda",
         url: "/dashboard/agenda",
         icon: CalendarDays,
+      },
+      {
+        id: "agenda-vertical",
+        title: "Agenda Vertical",
+        url: "/dashboard/agenda-vertical",
+        icon: Table2,
       },
       {
         id: "busqueda-pacientes",
