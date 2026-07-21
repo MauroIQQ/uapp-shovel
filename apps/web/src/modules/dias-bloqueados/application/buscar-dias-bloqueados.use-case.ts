@@ -38,7 +38,7 @@ export function useBuscarDiasBloqueados(): UseBuscarDiasBloqueadosReturn {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [_refetchKey]);
 
   return { data, loading, error, refresh };
 }

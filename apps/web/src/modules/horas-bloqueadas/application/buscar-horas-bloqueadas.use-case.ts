@@ -38,7 +38,7 @@ export function useBuscarHorasBloqueadas(): UseBuscarHorasBloqueadasReturn {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [_refetchKey]);
 
   return { data, loading, error, refresh };
 }
