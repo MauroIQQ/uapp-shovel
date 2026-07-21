@@ -628,7 +628,7 @@ export default function MensajesPage() {
                 <TabsContent value="reply" className="m-0">
                   <div className="flex flex-col gap-2 px-2 pb-2">
                     <div className="flex flex-wrap gap-1.5 px-1">
-                      {["Agendado para el próximo mes", "Gracias por confirmar", "Te contactaremos pronto"].map(
+                      {["Para continuar, necesito su RUT. ¿Me lo puede indicar?", "Gracias por confirmar", "Te contactaremos pronto"].map(
                         (text) => (
                           <button
                             key={text}
