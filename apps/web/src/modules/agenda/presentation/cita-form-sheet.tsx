@@ -5,7 +5,7 @@ import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { validarRut } from "@uapp/shared";
 import { format } from "date-fns";
-import { CalendarDays, Loader2, Save, Search, UserPlus } from "lucide-react";
+import { AlertTriangle, CalendarDays, Loader2, Save, Search, UserPlus } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
@@ -27,6 +27,9 @@ import {
   fetchPrevisiones,
   updateCita,
 } from "../infrastructure/agenda.service";
+import { checkBlacklistStatus } from "@/lib/blacklist-actions";
+import type { BlacklistStatus } from "@/lib/blacklist-actions";
+import { useAuth } from "@/lib/auth-context";
 
 interface CitaFormSheetProps {
   open: boolean;
@@ -57,6 +60,8 @@ export function CitaFormSheet({ open, onOpenChange, cita, fecha, tipos, horarios
     correo: "",
     extranjero: false,
   });
+  const [blacklistStatus, setBlacklistStatus] = React.useState<BlacklistStatus | null>(null);
+  const { user: authUser } = useAuth();
 
   const form = useForm<CrearCitaFormData>({
     resolver: zodResolver(crearCitaSchema) as never,
@@ -104,6 +109,10 @@ export function CitaFormSheet({ open, onOpenChange, cita, fecha, tipos, horarios
         const timeStr = d.toTimeString().slice(0, 5);
         setRutBusqueda(cita.rut_paciente);
         setPacienteEncontrado({ rut: cita.rut_paciente, nombre_completo: cita.paciente_nombre });
+        setBlacklistStatus(null);
+        if (authUser) {
+          checkBlacklistStatus(authUser.rut_empresa, cita.rut_paciente).then(setBlacklistStatus).catch(() => {});
+        }
         form.reset({
           rut_paciente: cita.rut_paciente,
           fecha: dateStr,
@@ -120,6 +129,7 @@ export function CitaFormSheet({ open, onOpenChange, cita, fecha, tipos, horarios
         setRutError(null);
         setSubmitError(null);
         setPacienteEncontrado(undefined);
+        setBlacklistStatus(null);
         setNuevoPaciente({ nombre_completo: "", telefono: "", celular: "", correo: "", extranjero: false });
         form.reset({
           rut_paciente: "",
@@ -157,6 +167,9 @@ export function CitaFormSheet({ open, onOpenChange, cita, fecha, tipos, horarios
       if (p) {
         setPacienteEncontrado(p);
         form.setValue("rut_paciente", rut);
+        if (authUser) {
+          checkBlacklistStatus(authUser.rut_empresa, rut).then(setBlacklistStatus).catch(() => {});
+        }
       } else {
         setPacienteEncontrado(null);
         form.setValue("rut_paciente", rut);
@@ -312,6 +325,15 @@ export function CitaFormSheet({ open, onOpenChange, cita, fecha, tipos, horarios
                       {(pacienteEncontrado as Record<string, unknown>).rut as string}
                     </p>
                   </div>
+                  {blacklistStatus?.blacklisted && (
+                    <div className="mt-3 flex items-start gap-2 rounded-md border border-red-200 bg-red-50 p-3 text-red-700 dark:border-red-900 dark:bg-red-950/20 dark:text-red-400">
+                      <AlertTriangle className="mt-0.5 size-4 shrink-0" />
+                      <div>
+                        <p className="font-medium">Paciente en lista negra</p>
+                        <p className="text-xs">{blacklistStatus.no_show_count} inasistencias registradas</p>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
 

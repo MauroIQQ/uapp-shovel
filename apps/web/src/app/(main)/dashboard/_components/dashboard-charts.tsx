@@ -6,6 +6,8 @@ import {
   AreaChart,
   Bar,
   CartesianGrid,
+  Line,
+  LineChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -29,6 +31,17 @@ const chartConfig = {
   atenciones: {
     label: "Atenciones",
     color: "var(--foreground)",
+  },
+} satisfies ChartConfig;
+
+const chartConfigConfirmadas = {
+  confirmadas: {
+    label: "Confirmadas",
+    color: "var(--foreground)",
+  },
+  no_asisten: {
+    label: "No asisten",
+    color: "var(--destructive)",
   },
 } satisfies ChartConfig;
 
@@ -79,26 +92,46 @@ interface AggregatedPoint {
   atenciones: number;
 }
 
+interface ConfirmedPoint {
+  fecha: string;
+  confirmadas: number;
+  no_asisten: number;
+}
+
 function aggregate(data: RawRow[], rango: Rango): AggregatedPoint[] {
   if (!data.length) return [];
-  if (rango === "30d") {
-    const map = new Map<string, number>();
-    for (const p of data) {
-      map.set(p.fecha, (map.get(p.fecha) ?? 0) + 1);
-    }
-    return Array.from(map.entries())
-      .map(([fecha, atenciones]) => ({ fecha, atenciones }))
-      .sort((a, b) => a.fecha.localeCompare(b.fecha));
-  }
-
   const map = new Map<string, number>();
   for (const p of data) {
     const d = new Date(`${p.fecha}T12:00:00`);
-    const key = rango === "3m" ? getWeekKey(d) : getMonthKey(d);
+    const key = rango === "30d" ? p.fecha : (rango === "3m" ? getWeekKey(d) : getMonthKey(d));
     map.set(key, (map.get(key) ?? 0) + 1);
   }
   return Array.from(map.entries())
     .map(([fecha, atenciones]) => ({ fecha, atenciones }))
+    .sort((a, b) => a.fecha.localeCompare(b.fecha));
+}
+
+function aggregateConfirmadas(data: RawRow[], rango: Rango): ConfirmedPoint[] {
+  if (!data.length) return [];
+  const confirmadas = new Map<string, number>();
+  const noAsisten = new Map<string, number>();
+  for (const p of data) {
+    const d = new Date(`${p.fecha}T12:00:00`);
+    const key = rango === "30d" ? p.fecha : (rango === "3m" ? getWeekKey(d) : getMonthKey(d));
+    if (p.confirmada === "SI") {
+      confirmadas.set(key, (confirmadas.get(key) ?? 0) + 1);
+      if (p.atendido !== "SI") {
+        noAsisten.set(key, (noAsisten.get(key) ?? 0) + 1);
+      }
+    }
+  }
+  const keys = new Set([...confirmadas.keys(), ...noAsisten.keys()]);
+  return Array.from(keys)
+    .map((fecha) => ({
+      fecha,
+      confirmadas: confirmadas.get(fecha) ?? 0,
+      no_asisten: noAsisten.get(fecha) ?? 0,
+    }))
     .sort((a, b) => a.fecha.localeCompare(b.fecha));
 }
 
@@ -140,6 +173,8 @@ export function DashboardCharts({ data }: DashboardChartsProps) {
 
   const chartData = React.useMemo(() => aggregate(filtered, rango), [filtered, rango]);
 
+  const chartDataConfirmadas = React.useMemo(() => aggregateConfirmadas(filtered, rango), [filtered, rango]);
+
   const resumen = React.useMemo(() => {
     const total = filtered.length;
     const confirmadas = filtered.filter((r) => r.confirmada === "SI").length;
@@ -150,7 +185,7 @@ export function DashboardCharts({ data }: DashboardChartsProps) {
   }, [filtered]);
 
   return (
-    <div className="flex flex-col gap-4 lg:flex-row">
+    <><div className="flex flex-col gap-4 lg:flex-row">
       {/* Chart card */}
       <Card className="flex-1 rounded-none border-0 ring-0">
         <CardHeader className="flex-row items-center justify-between">
@@ -278,5 +313,94 @@ export function DashboardCharts({ data }: DashboardChartsProps) {
         </CardContent>
       </Card>
     </div>
+
+    <Card className="rounded-none border-0 ring-0">
+      <CardHeader className="flex-row items-center justify-between">
+        <CardTitle className="font-heading font-normal text-muted-foreground text-sm">
+          Citas confirmadas/Sin asistencia
+        </CardTitle>
+        <div className="flex items-center gap-1 rounded-lg border bg-muted/20 p-0.5">
+          {RANGOS.map((r) => (
+            <button
+              key={r.key}
+              type="button"
+              data-active={rango === r.key ? true : undefined}
+              className="inline-flex items-center justify-center whitespace-nowrap rounded-md px-2.5 py-1 font-medium text-muted-foreground text-xs transition-all hover:text-foreground data-active:bg-background data-active:text-foreground data-active:shadow-xs"
+              onClick={() => setRango(r.key)}
+            >
+              {r.label}
+            </button>
+          ))}
+        </div>
+      </CardHeader>
+      <CardContent>
+        <div className="flex items-center gap-2 mb-4">
+          <span className="text-foreground text-xl tabular-nums leading-none tracking-tight">
+            {resumen.confirmadas.toLocaleString("es-CL")}
+          </span>
+          <span className="text-xs text-muted-foreground">Citas confirmadas</span>
+        </div>
+        <div className="flex items-center gap-4 pb-3 justify-end">
+          <div className="flex items-center gap-1.5">
+            <div className="h-2 w-2 shrink-0 rounded-[2px]" style={{ backgroundColor: "var(--foreground)" }} />
+            Confirmadas
+          </div>
+          <div className="flex items-center gap-1.5">
+            <div className="h-2 w-2 shrink-0 rounded-[2px]" style={{ backgroundColor: "var(--destructive)" }} />
+            Sin asistencia
+          </div>
+        </div>
+        <ChartContainer config={chartConfigConfirmadas} className="aspect-video h-54 w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={chartDataConfirmadas} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+              <CartesianGrid vertical={false} stroke="var(--border)" strokeDasharray="3 3" />
+              <XAxis
+                dataKey="fecha"
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
+                tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
+                tickFormatter={(value: string) => formatAxisDate(value, rango)}
+                interval="preserveStartEnd"
+                minTickGap={40}
+              />
+              <YAxis
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
+                tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
+                allowDecimals={false}
+              />
+              <Tooltip
+                content={
+                  <ChartTooltipContent
+                    labelKey="fecha"
+                    labelFormatter={(label) => formatTooltipDate(String(label), rango)}
+                  />
+                }
+                cursor={{ stroke: "var(--border)", strokeWidth: 1 }}
+              />
+              <Area
+                type="monotone"
+                dataKey="confirmadas"
+                stroke="var(--foreground)"
+                strokeWidth={2}
+                fill="var(--foreground)"
+                fillOpacity={0.06}
+              />
+              <Line
+                type="monotone"
+                dataKey="no_asisten"
+                stroke="var(--destructive)"
+                strokeWidth={2}
+                strokeDasharray="5 3"
+                dot={false}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </ChartContainer>
+      </CardContent>
+    </Card>
+  </>
   );
 }

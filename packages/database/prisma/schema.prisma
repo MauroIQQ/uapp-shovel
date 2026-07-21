@@ -328,6 +328,8 @@ model uapp_pacientes {
   estado_civil         String?
   estado               Boolean               @default(true)
   extranjero           Boolean               @default(false)
+  no_show_count        Int                   @default(0)
+  blacklisted          Boolean               @default(false)
   created              DateTime              @default(now())
   updated              DateTime
   uapp_fichas_clinicas uapp_fichas_clinicas?

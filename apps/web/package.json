@@ -11,7 +11,9 @@
     "check": "biome check",
     "check:fix": "biome check --write",
     "prepare": "husky",
-    "generate:presets": "ts-node -P tsconfig.scripts.json src/scripts/generate-theme-presets.ts"
+    "generate:presets": "ts-node -P tsconfig.scripts.json src/scripts/generate-theme-presets.ts",
+    "import:horas": "ts-node -P tsconfig.scripts.json src/scripts/import-horas.ts",
+    "recalcular:no-shows": "ts-node -P tsconfig.scripts.json src/scripts/recalcular-no-shows.ts"
   },
   "lint-staged": {
     "*.{js,ts,jsx,tsx}": ["biome check --write --no-errors-on-unmatched"]
