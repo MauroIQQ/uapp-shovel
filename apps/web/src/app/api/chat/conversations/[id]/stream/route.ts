@@ -34,12 +34,15 @@ export async function GET(
               conversation_id: id,
               created_at: { gt: new Date(since) },
               sender: "staff",
+              type: "message",
             },
             orderBy: { created_at: "asc" },
             select: {
               id: true,
               sender: true,
               content: true,
+              type: true,
+              sender_name: true,
               created_at: true,
             },
           });

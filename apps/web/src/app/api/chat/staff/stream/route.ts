@@ -59,6 +59,7 @@ export async function GET(req: Request) {
               conversation_id: true,
               sender: true,
               content: true,
+              sender_name: true,
               created_at: true,
             },
           });

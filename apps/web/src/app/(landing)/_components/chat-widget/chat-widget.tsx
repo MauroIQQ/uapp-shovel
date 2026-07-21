@@ -25,6 +25,7 @@ interface MessageItem {
   id: string;
   sender: string;
   content: string;
+  sender_name?: string;
   created_at: string;
 }
 
@@ -283,6 +284,9 @@ export function ChatWidget({ slug, rutEmpresa, brandPrimary, brandPrimaryLight }
               {messages.map((msg) => (
                 <Message key={msg.id} align={msg.sender === "patient" ? "end" : "start"}>
                   <MessageContent>
+                    {msg.sender === "staff" && msg.sender_name && (
+                      <p className="text-[10px] text-gray-500 font-medium px-1 mb-0.5">{msg.sender_name}</p>
+                    )}
                     <Bubble variant={msg.sender === "patient" ? "default" : "secondary"}>
                       <BubbleContent>{msg.content}</BubbleContent>
                     </Bubble>

@@ -544,6 +544,8 @@ model chat_messages {
   conversation_id String
   sender          String             // "patient" | "staff"
   content         String
+  type            String             @default("message") // "message" | "internal_note"
+  sender_name     String?
   created_at      DateTime           @default(now())
   conversation    chat_conversations @relation(fields: [conversation_id], references: [id], onDelete: Cascade)
 

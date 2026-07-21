@@ -31,6 +31,9 @@ export async function GET(
   if (since) {
     where.created_at = { gt: new Date(since) };
   }
+  if (isPatient) {
+    where.type = "message";
+  }
 
   const messages = await prisma.chat_messages.findMany({
     where,
@@ -39,6 +42,8 @@ export async function GET(
       id: true,
       sender: true,
       content: true,
+      type: true,
+      sender_name: true,
       created_at: true,
     },
   });

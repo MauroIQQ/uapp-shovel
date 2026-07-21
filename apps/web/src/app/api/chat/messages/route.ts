@@ -3,7 +3,7 @@ import { prisma } from "@uapp/database";
 import { verifyAuth } from "@/lib/verify-auth";
 
 export async function POST(req: Request) {
-  const { conversation_id, content, sender, token } = await req.json();
+  const { conversation_id, content, sender, token, type, sender_name } = await req.json();
 
   if (!conversation_id || !content?.trim() || !sender) {
     return NextResponse.json({ error: "Faltan campos requeridos" }, { status: 400 });
@@ -29,11 +29,15 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "No autorizado" }, { status: 401 });
   }
 
+  const msgType = type === "internal_note" && isStaff ? "internal_note" : "message";
+
   const message = await prisma.chat_messages.create({
     data: {
       conversation_id,
       sender,
       content: content.trim(),
+      type: msgType,
+      sender_name: sender_name || null,
     },
   });
 
@@ -50,6 +54,8 @@ export async function POST(req: Request) {
     id: message.id,
     sender: message.sender,
     content: message.content,
+    type: message.type,
+    sender_name: message.sender_name,
     created_at: message.created_at,
   });
 }
