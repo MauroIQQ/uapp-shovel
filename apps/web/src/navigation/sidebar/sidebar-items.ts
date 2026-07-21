@@ -133,6 +133,12 @@ export const sidebarItems: NavGroup[] = [
         url: "/dashboard/administracion/dias-bloqueados",
         icon: CalendarX,
       },
+      {
+        id: "config-horas-bloqueadas",
+        title: "Horas Bloqueadas",
+        url: "/dashboard/administracion/horas-bloqueadas",
+        icon: Clock,
+      },
     ],
   },
   {

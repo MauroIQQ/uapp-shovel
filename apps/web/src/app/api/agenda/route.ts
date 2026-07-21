@@ -45,13 +45,27 @@ export async function GET(req: Request) {
 
     const bloqueadosMap = new Map(bloqueados.map((b) => [b.fecha.toISOString().slice(0, 10), b.motivo]));
 
-    const allDates = new Set<string>([...counts.keys(), ...bloqueadosMap.keys()]);
+    const horasBloqueadas = await prisma.uapp_horas_bloqueadas.findMany({
+      where: {
+        rut_empresa,
+        fecha: { gte: start, lte: end },
+      },
+    });
+
+    const horasBloqueadasCount = new Map<string, number>();
+    for (const hb of horasBloqueadas) {
+      const key = hb.fecha.toISOString().slice(0, 10);
+      horasBloqueadasCount.set(key, (horasBloqueadasCount.get(key) ?? 0) + 1);
+    }
+
+    const allDates = new Set<string>([...counts.keys(), ...bloqueadosMap.keys(), ...horasBloqueadasCount.keys()]);
 
     const resumen = Array.from(allDates).map((fecha) => ({
       fecha,
       count: counts.get(fecha) ?? 0,
       bloqueado: bloqueadosMap.has(fecha),
       motivo: bloqueadosMap.get(fecha) ?? null,
+      horasBloqueadas: horasBloqueadasCount.get(fecha) ?? 0,
     }));
 
     return NextResponse.json({ data: resumen });

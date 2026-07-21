@@ -73,6 +73,26 @@ export function CitaFormSheet({ open, onOpenChange, cita, fecha, tipos, horarios
     },
   });
 
+  const [horasBloqueadasFecha, setHorasBloqueadasFecha] = React.useState<Set<string>>(new Set());
+
+  const fechaWatch = form.watch("fecha");
+
+  React.useEffect(() => {
+    if (fechaWatch) {
+      fetch(`/api/horas-bloqueadas?fecha=${fechaWatch}`)
+        .then((r) => (r.ok ? r.json() : { data: [] }))
+        .then((json) => setHorasBloqueadasFecha(new Set((json.data ?? []).map((h: { hora: string }) => h.hora))))
+        .catch(() => setHorasBloqueadasFecha(new Set()));
+    } else {
+      setHorasBloqueadasFecha(new Set());
+    }
+  }, [fechaWatch]);
+
+  const horariosDisponibles = React.useMemo(
+    () => horarios.filter((h) => !horasBloqueadasFecha.has(h.hora.slice(0, 5))),
+    [horarios, horasBloqueadasFecha],
+  );
+
   React.useEffect(() => {
     if (open) {
       fetchPrevisiones()
@@ -406,11 +426,17 @@ export function CitaFormSheet({ open, onOpenChange, cita, fecha, tipos, horarios
                           <SelectValue placeholder="Seleccionar hora..." />
                         </SelectTrigger>
                         <SelectContent>
-                          {horarios.map((h) => (
-                            <SelectItem key={h.id} value={h.hora.slice(0, 5)}>
-                              {h.hora.slice(0, 5)}
-                            </SelectItem>
-                          ))}
+                          {horariosDisponibles.length > 0 ? (
+                            horariosDisponibles.map((h) => (
+                              <SelectItem key={h.id} value={h.hora.slice(0, 5)}>
+                                {h.hora.slice(0, 5)}
+                              </SelectItem>
+                            ))
+                          ) : (
+                            <div className="px-2 py-4 text-center text-muted-foreground text-sm">
+                              No hay horarios disponibles para esta fecha
+                            </div>
+                          )}
                         </SelectContent>
                       </Select>
                       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}

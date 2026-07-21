@@ -41,6 +41,11 @@ export async function getAvailableSlots(
       select: { fecha_hora: true },
     })
 
+    const horasBloqueadas = await prisma.uapp_horas_bloqueadas.findMany({
+      where: { rut_empresa, fecha: date },
+    })
+    const blockedTimes = new Set(horasBloqueadas.map((h) => h.hora))
+
     const occupiedTimes = new Set(
       ocupadas.map((h) => {
         const local = new Date(h.fecha_hora)
@@ -53,6 +58,7 @@ export async function getAvailableSlots(
 
     const slots: AvailableSlot[] = horarios
       .filter((h) => {
+        if (blockedTimes.has(h.hora)) return false
         if (occupiedTimes.has(h.hora)) return false
         if (isToday) {
           const [hh, mm] = h.hora.split(":").map(Number)

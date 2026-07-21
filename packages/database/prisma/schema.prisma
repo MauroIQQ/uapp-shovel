@@ -153,6 +153,18 @@ model uapp_dias_bloqueados {
   @@id([fecha, rut_empresa])
 }
 
+model uapp_horas_bloqueadas {
+  id            Int           @id @default(autoincrement())
+  rut_empresa   String
+  fecha         DateTime      @db.Date
+  hora          String
+  motivo        String?
+  created       DateTime      @default(now())
+  uapp_empresas uapp_empresas @relation(fields: [rut_empresa], references: [rut_empresa])
+
+  @@unique([fecha, hora, rut_empresa])
+}
+
 model uapp_empresas {
   rut_empresa                  String                         @id
   giro                         String?
@@ -176,6 +188,7 @@ model uapp_empresas {
   uapp_fichas_clinicas         uapp_fichas_clinicas[]
   uapp_horarios                uapp_horarios[]
   uapp_horas                   uapp_horas[]
+  uapp_horas_bloqueadas        uapp_horas_bloqueadas[]
   uapp_kardex                  uapp_kardex[]
   uapp_medicamentos            uapp_medicamentos[]
   uapp_pacientes               uapp_pacientes[]
