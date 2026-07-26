@@ -155,6 +155,7 @@ export async function createBooking(data: CreateBookingInput): Promise<{ ok: boo
           empresaNombre: data.rut_empresa,
           empresaDireccion: empresa?.direccion,
           direccion,
+          agendada: true,
         }),
       ).catch((err) => console.error("Error al enviar email:", err))
     }

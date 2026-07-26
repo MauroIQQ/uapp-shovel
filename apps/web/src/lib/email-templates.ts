@@ -27,9 +27,11 @@ export function confirmacionTemplate(props: {
   fecha: string;
   hora: string;
   empresaNombre: string;
+  agendada?: boolean;
   empresaDireccion?: string | null;
   direccion?: { nombre?: string | null; direccion?: string | null; piso?: string | null; oficina?: string | null } | null;
 }) {
+  const titulo = props.agendada ? "¡Cita Agendada!" : "¡Cita Confirmada!";
   return `
 <!DOCTYPE html>
 <html>
@@ -38,7 +40,7 @@ export function confirmacionTemplate(props: {
   <table style="max-width: 600px; margin: 20px auto; background: white; border-radius: 8px; overflow: hidden;">
     <tr>
       <td style="background: #2563eb; padding: 24px; text-align: center;">
-        <h1 style="color: white; margin: 0; font-size: 22px;">¡Cita Confirmada!</h1>
+        <h1 style="color: white; margin: 0; font-size: 22px;">${titulo}</h1>
       </td>
     </tr>
     <tr>

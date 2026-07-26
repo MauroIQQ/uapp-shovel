@@ -45,6 +45,7 @@ export async function sendCitaConfirmation(citaId: number): Promise<{ ok: boolea
         empresaNombre: cita.uapp_empresas.giro ?? cita.rut_empresa,
         empresaDireccion: cita.uapp_empresas.direccion,
         direccion: cita.uapp_direcciones ?? undefined,
+        agendada: !isConfirmada,
       }),
     );
 
