@@ -77,7 +77,7 @@ export function CitaFormSheet({ open, onOpenChange, cita, fecha, tipos, horarios
       id_prevision: undefined as unknown as number,
       id_direccion: undefined as unknown as number,
       observacion: "",
-      confirmada: "false",
+      confirmada: "NO",
       sobrecupo: false,
       num_llegada: undefined,
     },
@@ -129,7 +129,7 @@ export function CitaFormSheet({ open, onOpenChange, cita, fecha, tipos, horarios
           id_tipo_consulta: cita.id_tipo_consulta,
           id_prevision: cita.id_prevision ?? (undefined as unknown as number),
           observacion: cita.observacion ?? "",
-          confirmada: cita.confirmada ?? "false",
+          confirmada: cita.confirmada ?? "NO",
           sobrecupo: cita.sobrecupo,
           num_llegada: cita.num_llegada,
         });
@@ -147,7 +147,7 @@ export function CitaFormSheet({ open, onOpenChange, cita, fecha, tipos, horarios
           id_tipo_consulta: undefined as unknown as number,
           id_prevision: undefined as unknown as number,
           observacion: "",
-          confirmada: "false",
+          confirmada: "NO",
           sobrecupo: false,
           num_llegada: undefined,
         });

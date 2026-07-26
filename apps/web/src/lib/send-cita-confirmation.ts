@@ -32,7 +32,8 @@ export async function sendCitaConfirmation(citaId: number): Promise<{ ok: boolea
       minute: "2-digit",
     });
 
-    const subject = cita.confirmada === "SI" ? "Cita Confirmada" : "Cita Agendada";
+    const isConfirmada = cita.confirmada === "SI" || cita.confirmada === "true";
+    const subject = isConfirmada ? "Cita Confirmada" : "Cita Agendada";
 
     await sendEmail(
       cita.uapp_pacientes.correo,
