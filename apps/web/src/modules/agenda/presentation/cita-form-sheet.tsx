@@ -5,11 +5,12 @@ import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { validarRut } from "@uapp/shared";
 import { format } from "date-fns";
-import { AlertTriangle, CalendarDays, Loader2, Save, Search, UserPlus } from "lucide-react";
+import { AlertTriangle, CalendarDays, Loader2, Mail, Save, Search, UserPlus } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -27,6 +28,7 @@ import {
   fetchPrevisiones,
   updateCita,
 } from "../infrastructure/agenda.service";
+import { sendCitaConfirmation } from "@/lib/send-cita-confirmation";
 import { checkBlacklistStatus } from "@/lib/blacklist-actions";
 import type { BlacklistStatus } from "@/lib/blacklist-actions";
 import { useAuth } from "@/lib/auth-context";
@@ -60,6 +62,7 @@ export function CitaFormSheet({ open, onOpenChange, cita, fecha, tipos, horarios
     correo: "",
     extranjero: false,
   });
+  const [sendEmail, setSendEmail] = React.useState(false);
   const [blacklistStatus, setBlacklistStatus] = React.useState<BlacklistStatus | null>(null);
   const { user: authUser } = useAuth();
 
@@ -221,7 +224,10 @@ export function CitaFormSheet({ open, onOpenChange, cita, fecha, tipos, horarios
             estado: "activo",
           });
         }
-        await createCita(data);
+        const nuevaCita = await createCita(data);
+        if (sendEmail && nuevaCita?.id) {
+          sendCitaConfirmation(nuevaCita.id).catch((err) => console.error("Error al enviar confirmación:", err));
+        }
       }
       onSuccess();
       onOpenChange(false);
@@ -325,6 +331,14 @@ export function CitaFormSheet({ open, onOpenChange, cita, fecha, tipos, horarios
                       {(pacienteEncontrado as Record<string, unknown>).rut as string}
                     </p>
                   </div>
+                  {(pacienteEncontrado as Record<string, unknown>)?.correo ? (
+                    <label className="mt-3 flex cursor-pointer items-center gap-2 rounded-md border bg-muted/30 px-3 py-2 text-sm transition-colors hover:bg-muted/50">
+                      <Checkbox checked={sendEmail} onCheckedChange={(c) => setSendEmail(c as boolean)} />
+                      <Mail className="size-4 text-muted-foreground" />
+                      <span>Enviar confirmación al correo del paciente</span>
+                    </label>
+                  ) : null}
+
                   {blacklistStatus?.blacklisted && (
                     <div className="mt-3 flex items-start gap-2 rounded-md border border-red-200 bg-red-50 p-3 text-red-700 dark:border-red-900 dark:bg-red-950/20 dark:text-red-400">
                       <AlertTriangle className="mt-0.5 size-4 shrink-0" />
