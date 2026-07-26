@@ -2,11 +2,32 @@ import { prisma } from "@uapp/database";
 import { NextResponse } from "next/server";
 
 import { sendEmail } from "@/lib/email";
-import { recordatorioTemplate } from "@/lib/email-templates";
+import { confirmacionTemplate, recordatorioTemplate } from "@/lib/email-templates";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const test = searchParams.get("test");
+
+  if (test) {
+    try {
+      await sendEmail(test, "Test SMTP - UAPP Shovel", confirmacionTemplate({
+        pacienteNombre: "Paciente de Prueba",
+        fecha: "26 de julio de 2026",
+        hora: "15:00",
+        empresaNombre: "UAPP Shovel",
+      }));
+      return NextResponse.json({ ok: true, message: `Email de prueba enviado a ${test}` });
+    } catch (err) {
+      return NextResponse.json({
+        ok: false,
+        error: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : undefined,
+      }, { status: 500 });
+    }
+  }
+
   const now = new Date();
   const in2h = new Date(now.getTime() + 2 * 60 * 60 * 1000);
 
