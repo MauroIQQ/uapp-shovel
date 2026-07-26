@@ -5,7 +5,11 @@ import { prisma } from "@uapp/database";
 import { verifyAuth } from "@/lib/verify-auth";
 
 export async function GET(req: Request) {
-  const { rut_empresa } = await verifyAuth(req);
+  const auth = await verifyAuth(req);
+  const { searchParams } = new URL(req.url);
+  const queryRutEmpresa = searchParams.get("rut_empresa");
+  const rut_empresa = queryRutEmpresa && auth.perfil === 0 ? queryRutEmpresa : auth.rut_empresa;
+
   const data = await prisma.uapp_direcciones.findMany({
     where: { rut_empresa },
     orderBy: { nombre: "asc" },
@@ -14,8 +18,9 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
-  const { rut_empresa } = await verifyAuth(req);
+  const auth = await verifyAuth(req);
   const body = await req.json();
+  const rut_empresa = body.rut_empresa && auth.perfil === 0 ? body.rut_empresa : auth.rut_empresa;
 
   if (!body.nombre || !body.direccion) {
     return NextResponse.json({ error: "nombre y direccion son requeridos" }, { status: 400 });

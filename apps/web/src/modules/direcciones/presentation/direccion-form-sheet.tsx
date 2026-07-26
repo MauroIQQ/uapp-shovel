@@ -20,10 +20,11 @@ interface DireccionFormSheetProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   direccion?: Direccion | null;
+  rutEmpresa?: string;
   onSuccess: () => void;
 }
 
-export function DireccionFormSheet({ open, onOpenChange, direccion, onSuccess }: DireccionFormSheetProps) {
+export function DireccionFormSheet({ open, onOpenChange, direccion, rutEmpresa, onSuccess }: DireccionFormSheetProps) {
   const [saving, setSaving] = React.useState(false);
   const isEditing = !!direccion;
 
@@ -64,7 +65,7 @@ export function DireccionFormSheet({ open, onOpenChange, direccion, onSuccess }:
       if (isEditing && direccion) {
         await updateDireccion(direccion.id, data);
       } else {
-        await createDireccion(data);
+        await createDireccion(rutEmpresa ? { ...data, rut_empresa: rutEmpresa } : data);
       }
       onSuccess();
       onOpenChange(false);

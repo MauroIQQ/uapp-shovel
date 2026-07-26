@@ -157,7 +157,9 @@ export function EmpresasPage() {
         </TabsContent>
 
         <TabsContent value="direcciones">
-          <DireccionesSection />
+          <DireccionesSection
+            empresas={data.map((e) => ({ rut_empresa: e.rut_empresa, nombre: e.giro ?? e.rut_empresa }))}
+          />
         </TabsContent>
       </Tabs>
     </div>

@@ -12,7 +12,7 @@ interface UseDireccionesReturn {
   refresh: () => void;
 }
 
-export function useDirecciones(): UseDireccionesReturn {
+export function useDirecciones(rutEmpresa?: string): UseDireccionesReturn {
   const [data, setData] = React.useState<Direccion[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
@@ -26,7 +26,7 @@ export function useDirecciones(): UseDireccionesReturn {
       setLoading(true);
       setError(null);
       try {
-        const result = await fetchDirecciones();
+        const result = await fetchDirecciones(rutEmpresa);
         if (!cancelled) setData(result);
       } catch (err) {
         if (!cancelled) setError(err instanceof Error ? err.message : "Error al cargar direcciones");
@@ -38,7 +38,7 @@ export function useDirecciones(): UseDireccionesReturn {
     return () => {
       cancelled = true;
     };
-  }, [_refetchKey]);
+  }, [_refetchKey, rutEmpresa]);
 
   return { data, loading, error, refresh };
 }

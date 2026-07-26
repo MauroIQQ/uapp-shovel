@@ -16,18 +16,37 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 import { useDirecciones } from "../application/use-direcciones";
 import type { Direccion } from "../domain/direccion.entity";
-import { deleteDireccion } from "../infrastructure/direcciones.service";
+import { createDireccion, deleteDireccion } from "../infrastructure/direcciones.service";
 import { DireccionFormSheet } from "./direccion-form-sheet";
 import { useDireccionesColumns } from "./direcciones-columns";
 
-export function DireccionesSection() {
-  const { data, loading, error, refresh } = useDirecciones();
+interface EmpresaOption {
+  rut_empresa: string;
+  nombre: string;
+}
+
+interface DireccionesSectionProps {
+  empresas: EmpresaOption[];
+}
+
+export function DireccionesSection({ empresas }: DireccionesSectionProps) {
+  const [selectedEmpresa, setSelectedEmpresa] = React.useState<string>("");
+  const { data, loading, error, refresh } = useDirecciones(selectedEmpresa || undefined);
   const [sheetOpen, setSheetOpen] = React.useState(false);
   const [editDireccion, setEditDireccion] = React.useState<Direccion | null>(null);
   const [deleteTarget, setDeleteTarget] = React.useState<Direccion | null>(null);
+
+  const empresaSeleccionada = empresas.find((e) => e.rut_empresa === selectedEmpresa);
 
   const columns = useDireccionesColumns({
     onEdit: (d) => {
@@ -49,40 +68,76 @@ export function DireccionesSection() {
     }
   }
 
+  async function handleCreateSuccess() {
+    refresh();
+    setSheetOpen(false);
+  }
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
           <h3 className="font-semibold text-lg">Direcciones</h3>
-          <p className="text-muted-foreground text-sm">Sucursales y lugares de atención de la empresa</p>
+          <p className="text-muted-foreground text-sm">
+            {empresaSeleccionada
+              ? `Lugares de atención de ${empresaSeleccionada.nombre}`
+              : "Selecciona una empresa para gestionar sus direcciones"}
+          </p>
         </div>
-        <Button
-          onClick={() => {
-            setEditDireccion(null);
-            setSheetOpen(true);
-          }}
-        >
-          <Plus />
-          Nueva Dirección
-        </Button>
       </div>
 
-      <ServerDataTable
-        columns={columns}
-        data={data}
-        loading={loading}
-        error={error}
-        onRefresh={refresh}
-        searchColumn="nombre"
-        searchPlaceholder="Filtrar por nombre..."
-        hideColumnsButton
-      />
+      <div className="flex items-center gap-4">
+        <div className="w-72">
+          <Select value={selectedEmpresa} onValueChange={setSelectedEmpresa}>
+            <SelectTrigger>
+              <SelectValue placeholder="Seleccionar empresa..." />
+            </SelectTrigger>
+            <SelectContent>
+              {empresas.map((emp) => (
+                <SelectItem key={emp.rut_empresa} value={emp.rut_empresa}>
+                  {emp.nombre}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        {selectedEmpresa && (
+          <Button
+            onClick={() => {
+              setEditDireccion(null);
+              setSheetOpen(true);
+            }}
+          >
+            <Plus />
+            Nueva Dirección
+          </Button>
+        )}
+      </div>
+
+      {selectedEmpresa ? (
+        <ServerDataTable
+          columns={columns}
+          data={data}
+          loading={loading}
+          error={error}
+          onRefresh={refresh}
+          searchColumn="nombre"
+          searchPlaceholder="Filtrar por nombre..."
+          hideColumnsButton
+        />
+      ) : (
+        <div className="flex items-center justify-center rounded-lg border border-dashed py-12 text-muted-foreground text-sm">
+          Selecciona una empresa para ver sus direcciones
+        </div>
+      )}
 
       <DireccionFormSheet
         open={sheetOpen}
         onOpenChange={setSheetOpen}
         direccion={editDireccion}
-        onSuccess={refresh}
+        rutEmpresa={selectedEmpresa || undefined}
+        onSuccess={handleCreateSuccess}
       />
 
       <AlertDialog

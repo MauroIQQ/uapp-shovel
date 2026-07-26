@@ -3,13 +3,14 @@ import { apiFetch } from "@/lib/api-fetch";
 import type { Direccion } from "../domain/direccion.entity";
 import type { DireccionFormData } from "../domain/direccion.schema";
 
-export async function fetchDirecciones(): Promise<Direccion[]> {
-  const res = await apiFetch("/api/direcciones");
+export async function fetchDirecciones(rutEmpresa?: string): Promise<Direccion[]> {
+  const params = rutEmpresa ? `?rut_empresa=${encodeURIComponent(rutEmpresa)}` : "";
+  const res = await apiFetch(`/api/direcciones${params}`);
   if (!res.ok) throw new Error(`Error ${res.status}: ${res.statusText}`);
   return (await res.json()).data ?? [];
 }
 
-export async function createDireccion(dto: DireccionFormData): Promise<Direccion> {
+export async function createDireccion(dto: DireccionFormData & { rut_empresa?: string }): Promise<Direccion> {
   const res = await apiFetch("/api/direcciones", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
