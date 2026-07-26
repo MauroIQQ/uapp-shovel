@@ -9,7 +9,10 @@ export async function sendCitaConfirmation(citaId: number): Promise<{ ok: boolea
   try {
     const cita = await prisma.uapp_horas.findUnique({
       where: { id: citaId },
-      include: {
+      select: {
+        confirmada: true,
+        fecha_hora: true,
+        rut_empresa: true,
         uapp_pacientes: { select: { nombre_completo: true, correo: true } },
         uapp_empresas: { select: { giro: true, direccion: true } },
         uapp_direcciones: { select: { nombre: true, direccion: true, piso: true, oficina: true } },
@@ -29,9 +32,11 @@ export async function sendCitaConfirmation(citaId: number): Promise<{ ok: boolea
       minute: "2-digit",
     });
 
+    const subject = cita.confirmada === "SI" ? "Cita Confirmada" : "Cita Agendada";
+
     await sendEmail(
       cita.uapp_pacientes.correo,
-      "Cita Confirmada",
+      subject,
       confirmacionTemplate({
         pacienteNombre: cita.uapp_pacientes.nombre_completo,
         fecha: dateStr,

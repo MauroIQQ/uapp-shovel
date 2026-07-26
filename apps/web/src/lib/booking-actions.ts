@@ -147,7 +147,7 @@ export async function createBooking(data: CreateBookingInput): Promise<{ ok: boo
       }
       sendEmail(
         paciente.correo,
-        "Cita Confirmada",
+        "Cita Agendada",
         confirmacionTemplate({
           pacienteNombre: paciente.nombre_completo,
           fecha: dateStr,
