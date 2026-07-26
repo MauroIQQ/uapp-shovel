@@ -2,6 +2,9 @@
 
 import { prisma } from "@uapp/database";
 
+import { sendEmail } from "./email";
+import { confirmacionTemplate } from "./email-templates";
+
 export interface AvailableSlot {
   time: string
   label: string
@@ -126,9 +129,25 @@ export async function createBooking(data: CreateBookingInput): Promise<{ ok: boo
         num_llegada: 0,
         sobrecupo: false,
         total: 0,
+        recordatorio_creado: true,
         updated: new Date(),
       },
     })
+
+    if (paciente.correo) {
+      const dateStr = fechaHora.toLocaleDateString("es-CL", { day: "numeric", month: "long", year: "numeric" })
+      const timeStr = fechaHora.toLocaleTimeString("es-CL", { hour: "2-digit", minute: "2-digit" })
+      sendEmail(
+        paciente.correo,
+        "Cita Confirmada",
+        confirmacionTemplate({
+          pacienteNombre: paciente.nombre_completo,
+          fecha: dateStr,
+          hora: timeStr,
+          empresaNombre: data.rut_empresa,
+        }),
+      ).catch(() => {})
+    }
 
     return { ok: true }
   } catch (e) {

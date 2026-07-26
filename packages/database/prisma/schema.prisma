@@ -266,6 +266,8 @@ model uapp_horas {
   sobrecupo        Boolean           @default(false)
   origen           String?           @default("org")
   total            Int               @default(0)
+  recordatorio_creado  Boolean       @default(false)
+  recordatorio_enviado Boolean       @default(false)
   created          DateTime          @default(now())
   updated          DateTime
   uapp_previsiones uapp_previsiones? @relation(fields: [id_prevision], references: [id])
