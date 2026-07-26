@@ -110,7 +110,7 @@ export function CitaFormSheet({ open, onOpenChange, cita, fecha, tipos, horarios
         .catch(() => {});
       fetch("/api/direcciones")
         .then((r) => (r.ok ? r.json() : { data: [] }))
-        .then((json) => setDirecciones(json.data ?? []))
+        .then((json) => setDirecciones((json.data ?? []).filter((d: { activo: boolean }) => d.activo)))
         .catch(() => {});
       if (cita) {
         const d = new Date(cita.fecha_hora);

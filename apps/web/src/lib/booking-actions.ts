@@ -139,6 +139,7 @@ export async function createBooking(data: CreateBookingInput): Promise<{ ok: boo
     if (paciente.correo) {
       const dateStr = fechaHora.toLocaleDateString("es-CL", { day: "numeric", month: "long", year: "numeric" })
       const timeStr = fechaHora.toLocaleTimeString("es-CL", { hour: "2-digit", minute: "2-digit" })
+      const empresa = await prisma.uapp_empresas.findUnique({ where: { rut_empresa: data.rut_empresa }, select: { direccion: true } })
       let direccion: { nombre?: string; direccion?: string; piso?: string | null; oficina?: string | null } | undefined
       if (data.id_direccion) {
         const dir = await prisma.uapp_direcciones.findUnique({ where: { id: data.id_direccion } })
@@ -152,6 +153,7 @@ export async function createBooking(data: CreateBookingInput): Promise<{ ok: boo
           fecha: dateStr,
           hora: timeStr,
           empresaNombre: data.rut_empresa,
+          empresaDireccion: empresa?.direccion,
           direccion,
         }),
       ).catch((err) => console.error("Error al enviar email:", err))

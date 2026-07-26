@@ -1,14 +1,21 @@
-function direccionHtml(direccion?: {
-  nombre?: string | null;
-  direccion?: string | null;
-  piso?: string | null;
-  oficina?: string | null;
-} | null) {
-  if (!direccion?.nombre && !direccion?.direccion) return "";
+function direccionHtml(
+  direccion?: {
+    nombre?: string | null;
+    direccion?: string | null;
+    piso?: string | null;
+    oficina?: string | null;
+  } | null,
+  empresaDireccion?: string | null,
+) {
+  const dir = direccion?.nombre || direccion?.direccion ? direccion : null;
+  if (!dir) {
+    if (!empresaDireccion) return "";
+    return `<tr><td style="padding: 4px 0; color: #64748b; vertical-align: top;">Dirección:</td><td style="padding: 4px 0; font-weight: bold;">${empresaDireccion}</td></tr>`;
+  }
   const parts = [
-    direccion.nombre,
-    direccion.direccion,
-    [direccion.piso && `Piso ${direccion.piso}`, direccion.oficina && `Of. ${direccion.oficina}`]
+    dir.nombre,
+    dir.direccion,
+    [dir.piso && `Piso ${dir.piso}`, dir.oficina && `Of. ${dir.oficina}`]
       .filter(Boolean)
       .join(" — "),
   ].filter(Boolean);
@@ -20,6 +27,7 @@ export function confirmacionTemplate(props: {
   fecha: string;
   hora: string;
   empresaNombre: string;
+  empresaDireccion?: string | null;
   direccion?: { nombre?: string | null; direccion?: string | null; piso?: string | null; oficina?: string | null } | null;
 }) {
   return `
@@ -40,7 +48,7 @@ export function confirmacionTemplate(props: {
         <table style="background: #f8fafc; border-radius: 8px; padding: 16px; margin: 20px 0;">
           <tr><td style="padding: 4px 0; color: #64748b;">Fecha:</td><td style="padding: 4px 0; font-weight: bold;">${props.fecha}</td></tr>
           <tr><td style="padding: 4px 0; color: #64748b;">Hora:</td><td style="padding: 4px 0; font-weight: bold;">${props.hora}</td></tr>
-          ${direccionHtml(props.direccion)}
+          ${direccionHtml(props.direccion, props.empresaDireccion)}
         </table>
         <p style="font-size: 14px; color: #64748b;">Te recordamos asistir 10 minutos antes de tu hora agendada.</p>
       </td>
@@ -60,6 +68,7 @@ export function recordatorioTemplate(props: {
   fecha: string;
   hora: string;
   empresaNombre: string;
+  empresaDireccion?: string | null;
   direccion?: { nombre?: string | null; direccion?: string | null; piso?: string | null; oficina?: string | null } | null;
 }) {
   return `
@@ -80,7 +89,7 @@ export function recordatorioTemplate(props: {
         <table style="background: #fefce8; border-radius: 8px; padding: 16px; margin: 20px 0;">
           <tr><td style="padding: 4px 0; color: #64748b;">Fecha:</td><td style="padding: 4px 0; font-weight: bold;">${props.fecha}</td></tr>
           <tr><td style="padding: 4px 0; color: #64748b;">Hora:</td><td style="padding: 4px 0; font-weight: bold;">${props.hora}</td></tr>
-          ${direccionHtml(props.direccion)}
+          ${direccionHtml(props.direccion, props.empresaDireccion)}
         </table>
         <p style="font-size: 14px; color: #64748b;">Por favor, llega 10 minutos antes. Si no puedes asistir, contáctanos para reagendar.</p>
       </td>
