@@ -15,6 +15,8 @@ export interface AgendaCita {
   origen: string | null;
   num_llegada: number;
   total: number;
+  recordatorio_creado?: boolean;
+  recordatorio_enviado?: boolean;
   created: string | null;
   updated: string | null;
 }

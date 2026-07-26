@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { Earth, MoreHorizontal } from "lucide-react";
+import { Earth, Mail, MailCheck, MoreHorizontal } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -123,20 +123,36 @@ export function ListaCitas({ citas, loading, fecha, onEdit, onDelete, onAdd }: L
                     {cita.prevision_nombre && ` · ${cita.prevision_nombre}`}
                   </p>
                 </div>
-                <div className="flex items-center gap-3 self-center">
-                  <div className="flex items-center gap-1.5">
-                    <Checkbox id={`confirmada-${cita.id}`} checked={cita.confirmada === "SI"} disabled />
-                    <label htmlFor={`confirmada-${cita.id}`} className="select-none text-muted-foreground text-xs">
-                      Confirmado
-                    </label>
+                  <div className="flex items-center gap-3 self-center">
+                    <div className="flex items-center gap-1.5">
+                      <Checkbox id={`confirmada-${cita.id}`} checked={cita.confirmada === "SI"} disabled />
+                      <label htmlFor={`confirmada-${cita.id}`} className="select-none text-muted-foreground text-xs">
+                        Confirmado
+                      </label>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <Checkbox id={`atendido-${cita.id}`} checked={cita.atendido === "SI"} disabled />
+                      <label htmlFor={`atendido-${cita.id}`} className="select-none text-muted-foreground text-xs">
+                        Atendido
+                      </label>
+                    </div>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <span className="inline-flex cursor-pointer items-center">
+                            {cita.recordatorio_creado ? (
+                              <MailCheck className="size-4 text-emerald-600" />
+                            ) : (
+                              <Mail className="size-4 text-muted-foreground/40" />
+                            )}
+                          </span>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>{cita.recordatorio_creado ? "Email enviado" : "Sin email"}</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                   </div>
-                  <div className="flex items-center gap-1.5">
-                    <Checkbox id={`atendido-${cita.id}`} checked={cita.atendido === "SI"} disabled />
-                    <label htmlFor={`atendido-${cita.id}`} className="select-none text-muted-foreground text-xs">
-                      Atendido
-                    </label>
-                  </div>
-                </div>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" size="icon-xs" aria-label="Menú">

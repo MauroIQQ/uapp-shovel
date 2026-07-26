@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import type { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal } from "lucide-react";
+import { Mail, MailCheck, MoreHorizontal } from "lucide-react";
 
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
@@ -110,6 +110,18 @@ export function AgendaVerticalPage({ tipos, horarios }: AgendaVerticalPageProps)
           ? <Badge variant="destructive" className="text-[10px]">SC</Badge>
           : null
       ),
+    },
+    {
+      id: "email",
+      header: "Email",
+      cell: ({ row }) => {
+        const cita = row.original;
+        return cita.recordatorio_creado
+          ? <MailCheck className="size-4 text-emerald-600" />
+          : <Mail className="size-4 text-muted-foreground/40" />;
+      },
+      enableSorting: false,
+      enableHiding: false,
     },
     {
       id: "actions",
