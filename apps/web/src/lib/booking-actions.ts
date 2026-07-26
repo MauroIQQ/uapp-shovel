@@ -90,6 +90,7 @@ export interface CreateBookingInput {
   correo?: string
   fecha_hora: string
   id_prevision?: number
+  id_direccion?: number
 }
 
 export async function createBooking(data: CreateBookingInput): Promise<{ ok: boolean; error?: string }> {
@@ -122,6 +123,7 @@ export async function createBooking(data: CreateBookingInput): Promise<{ ok: boo
         rut_paciente: paciente.rut,
         fecha_hora: fechaHora,
         id_prevision: data.id_prevision ?? null,
+        id_direccion: data.id_direccion ?? null,
         origen: "pub",
         estado: true,
         confirmada: "NO",
@@ -137,6 +139,11 @@ export async function createBooking(data: CreateBookingInput): Promise<{ ok: boo
     if (paciente.correo) {
       const dateStr = fechaHora.toLocaleDateString("es-CL", { day: "numeric", month: "long", year: "numeric" })
       const timeStr = fechaHora.toLocaleTimeString("es-CL", { hour: "2-digit", minute: "2-digit" })
+      let direccion: { nombre?: string; direccion?: string; piso?: string | null; oficina?: string | null } | undefined
+      if (data.id_direccion) {
+        const dir = await prisma.uapp_direcciones.findUnique({ where: { id: data.id_direccion } })
+        if (dir) direccion = { nombre: dir.nombre, direccion: dir.direccion, piso: dir.piso, oficina: dir.oficina }
+      }
       sendEmail(
         paciente.correo,
         "Cita Confirmada",
@@ -145,6 +152,7 @@ export async function createBooking(data: CreateBookingInput): Promise<{ ok: boo
           fecha: dateStr,
           hora: timeStr,
           empresaNombre: data.rut_empresa,
+          direccion,
         }),
       ).catch((err) => console.error("Error al enviar email:", err))
     }

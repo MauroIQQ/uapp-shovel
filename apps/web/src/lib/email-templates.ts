@@ -1,8 +1,26 @@
+function direccionHtml(direccion?: {
+  nombre?: string | null;
+  direccion?: string | null;
+  piso?: string | null;
+  oficina?: string | null;
+} | null) {
+  if (!direccion?.nombre && !direccion?.direccion) return "";
+  const parts = [
+    direccion.nombre,
+    direccion.direccion,
+    [direccion.piso && `Piso ${direccion.piso}`, direccion.oficina && `Of. ${direccion.oficina}`]
+      .filter(Boolean)
+      .join(" — "),
+  ].filter(Boolean);
+  return `<tr><td style="padding: 4px 0; color: #64748b; vertical-align: top;">Lugar:</td><td style="padding: 4px 0; font-weight: bold;">${parts.join("<br>")}</td></tr>`;
+}
+
 export function confirmacionTemplate(props: {
   pacienteNombre: string;
   fecha: string;
   hora: string;
   empresaNombre: string;
+  direccion?: { nombre?: string | null; direccion?: string | null; piso?: string | null; oficina?: string | null } | null;
 }) {
   return `
 <!DOCTYPE html>
@@ -22,6 +40,7 @@ export function confirmacionTemplate(props: {
         <table style="background: #f8fafc; border-radius: 8px; padding: 16px; margin: 20px 0;">
           <tr><td style="padding: 4px 0; color: #64748b;">Fecha:</td><td style="padding: 4px 0; font-weight: bold;">${props.fecha}</td></tr>
           <tr><td style="padding: 4px 0; color: #64748b;">Hora:</td><td style="padding: 4px 0; font-weight: bold;">${props.hora}</td></tr>
+          ${direccionHtml(props.direccion)}
         </table>
         <p style="font-size: 14px; color: #64748b;">Te recordamos asistir 10 minutos antes de tu hora agendada.</p>
       </td>
@@ -41,6 +60,7 @@ export function recordatorioTemplate(props: {
   fecha: string;
   hora: string;
   empresaNombre: string;
+  direccion?: { nombre?: string | null; direccion?: string | null; piso?: string | null; oficina?: string | null } | null;
 }) {
   return `
 <!DOCTYPE html>
@@ -60,7 +80,7 @@ export function recordatorioTemplate(props: {
         <table style="background: #fefce8; border-radius: 8px; padding: 16px; margin: 20px 0;">
           <tr><td style="padding: 4px 0; color: #64748b;">Fecha:</td><td style="padding: 4px 0; font-weight: bold;">${props.fecha}</td></tr>
           <tr><td style="padding: 4px 0; color: #64748b;">Hora:</td><td style="padding: 4px 0; font-weight: bold;">${props.hora}</td></tr>
-          <tr><td style="padding: 4px 0; color: #64748b;">Lugar:</td><td style="padding: 4px 0; font-weight: bold;">${props.empresaNombre}</td></tr>
+          ${direccionHtml(props.direccion)}
         </table>
         <p style="font-size: 14px; color: #64748b;">Por favor, llega 10 minutos antes. Si no puedes asistir, contáctanos para reagendar.</p>
       </td>

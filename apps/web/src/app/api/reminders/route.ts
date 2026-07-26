@@ -43,6 +43,7 @@ export async function GET(req: Request) {
     include: {
       uapp_pacientes: { select: { nombre_completo: true, correo: true } },
       uapp_empresas: { select: { giro: true } },
+      uapp_direcciones: { select: { nombre: true, direccion: true, piso: true, oficina: true } },
     },
   });
 
@@ -70,6 +71,7 @@ export async function GET(req: Request) {
           fecha: dateStr,
           hora: timeStr,
           empresaNombre: cita.uapp_empresas.giro ?? cita.rut_empresa,
+          direccion: cita.uapp_direcciones ?? undefined,
         }),
       );
 

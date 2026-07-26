@@ -185,6 +185,7 @@ model uapp_empresas {
   updated                      DateTime
   uapp_categorias_medicamentos uapp_categorias_medicamentos[]
   uapp_dias_bloqueados         uapp_dias_bloqueados[]
+  uapp_direcciones             uapp_direcciones[]
   uapp_fichas_clinicas         uapp_fichas_clinicas[]
   uapp_horarios                uapp_horarios[]
   uapp_horas                   uapp_horas[]
@@ -251,11 +252,31 @@ model uapp_horarios {
   uapp_empresas uapp_empresas @relation(fields: [rut_empresa], references: [rut_empresa])
 }
 
+model uapp_direcciones {
+  id            Int           @id @default(autoincrement())
+  rut_empresa   String
+  nombre        String
+  direccion     String
+  piso          String?
+  oficina       String?
+  comuna        String?
+  ciudad        String?
+  activo        Boolean       @default(true)
+  created       DateTime      @default(now())
+  updated       DateTime
+  uapp_empresas uapp_empresas @relation(fields: [rut_empresa], references: [rut_empresa])
+  uapp_horas    uapp_horas[]
+
+  @@unique([nombre, rut_empresa])
+  @@index([rut_empresa])
+}
+
 model uapp_horas {
   id               Int               @id @default(autoincrement())
   rut_empresa      String
   rut_paciente     String
   id_prevision     Int?
+  id_direccion     Int?
   fecha_hora       DateTime
   id_tipo_consulta Int               @default(6)
   observacion      String?
@@ -273,6 +294,7 @@ model uapp_horas {
   uapp_previsiones uapp_previsiones? @relation(fields: [id_prevision], references: [id])
   uapp_empresas    uapp_empresas     @relation(fields: [rut_empresa], references: [rut_empresa])
   uapp_pacientes   uapp_pacientes    @relation(fields: [rut_paciente, rut_empresa], references: [rut, rut_empresa])
+  uapp_direcciones uapp_direcciones? @relation(fields: [id_direccion], references: [id])
 }
 
 model uapp_kardex {

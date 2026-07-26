@@ -86,6 +86,7 @@ export async function GET(req: Request) {
     include: {
       uapp_pacientes: true,
       uapp_previsiones: true,
+      uapp_direcciones: { select: { nombre: true, direccion: true, piso: true, oficina: true } },
     },
     orderBy: { fecha_hora: "asc" },
   });
@@ -101,6 +102,10 @@ export async function GET(req: Request) {
     paciente_nombre: c.uapp_pacientes.nombre_completo,
     prevision_nombre: c.uapp_previsiones?.nombre ?? null,
     tipo_descripcion: tipoMap.get(c.id_tipo_consulta) ?? "Desconocido",
+    direccion_nombre: c.uapp_direcciones?.nombre ?? null,
+    direccion_direccion: c.uapp_direcciones?.direccion ?? null,
+    direccion_piso: c.uapp_direcciones?.piso ?? null,
+    direccion_oficina: c.uapp_direcciones?.oficina ?? null,
   }));
 
   return NextResponse.json({ data: mapped });

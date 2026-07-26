@@ -1,26 +1,59 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { LandingConfig } from "@/lib/landing-config";
 import { StepSelectDate } from "./step-select-date";
 import { StepPatientForm } from "./step-patient-form";
 import { createBooking } from "@/lib/booking-actions";
 import type { CreateBookingInput } from "@/lib/booking-actions";
-import { CheckCircle2, Calendar, User } from "lucide-react";
+import { CheckCircle2, Calendar, MapPin, User } from "lucide-react";
 
 interface BookingFlowProps {
   config: LandingConfig
 }
 
-type Step = "date" | "form" | "confirm";
+interface DireccionItem {
+  id: number;
+  nombre: string;
+  direccion: string;
+  piso: string | null;
+  oficina: string | null;
+}
+
+type Step = "location" | "date" | "form" | "confirm";
 
 export function BookingFlow({ config }: BookingFlowProps) {
   const router = useRouter();
   const [step, setStep] = useState<Step>("date");
+  const [direcciones, setDirecciones] = useState<DireccionItem[]>([]);
+  const [selectedDirId, setSelectedDirId] = useState<number | undefined>(undefined);
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [selectedTime, setSelectedTime] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("/api/direcciones")
+      .then((r) => (r.ok ? r.json() : { data: [] }))
+      .then((json) => {
+        const list = (json.data ?? []).filter((d: DireccionItem & { activo: boolean }) => d.activo);
+        setDirecciones(list);
+        if (list.length === 0) {
+          setStep("date");
+        } else if (list.length === 1) {
+          setSelectedDirId(list[0].id);
+          setStep("date");
+        } else {
+          setStep("location");
+        }
+      })
+      .catch(() => setStep("date"));
+  }, []);
+
+  const handleLocationSelected = (id: number) => {
+    setSelectedDirId(id);
+    setStep("date");
+  };
 
   const handleDateSelected = (date: string, time: string) => {
     setSelectedDate(date);
@@ -43,6 +76,7 @@ export function BookingFlow({ config }: BookingFlowProps) {
       rut_empresa: config.rut_empresa,
       fecha_hora: fechaHora,
       ...data,
+      id_direccion: selectedDirId,
     };
 
     const result = await createBooking(input);
@@ -58,6 +92,7 @@ export function BookingFlow({ config }: BookingFlowProps) {
   };
 
   const steps = [
+    ...(direcciones.length > 1 ? [{ id: "location" as const, label: "Sucursal", icon: MapPin }] : []),
     { id: "date" as const, label: "Fecha y Hora", icon: Calendar },
     { id: "form" as const, label: "Tus Datos", icon: User },
     { id: "confirm" as const, label: "Confirmación", icon: CheckCircle2 },
@@ -98,6 +133,32 @@ export function BookingFlow({ config }: BookingFlowProps) {
 
       {error && (
         <div className="mb-6 p-4 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">{error}</div>
+      )}
+
+      {step === "location" && (
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold text-center">Selecciona la sucursal</h3>
+          <div className="grid gap-3">
+            {direcciones.map((d) => (
+              <button
+                key={d.id}
+                onClick={() => handleLocationSelected(d.id)}
+                className="flex items-start gap-3 rounded-lg border border-border bg-card p-4 text-left transition-all hover:border-primary hover:shadow-sm"
+              >
+                <MapPin className="mt-0.5 size-5 shrink-0" style={{ color: config.theme.primary }} />
+                <div>
+                  <p className="font-medium">{d.nombre}</p>
+                  <p className="text-muted-foreground text-sm">{d.direccion}</p>
+                  {(d.piso || d.oficina) && (
+                    <p className="text-muted-foreground text-xs">
+                      {[d.piso && `Piso ${d.piso}`, d.oficina && `Oficina ${d.oficina}`].filter(Boolean).join(" — ")}
+                    </p>
+                  )}
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
       )}
 
       {step === "date" && (

@@ -47,6 +47,7 @@ export function CitaFormSheet({ open, onOpenChange, cita, fecha, tipos, horarios
   const [saving, setSaving] = React.useState(false);
   const [submitError, setSubmitError] = React.useState<string | null>(null);
   const [previsiones, setPrevisiones] = React.useState<{ id: number; nombre: string }[]>([]);
+  const [direcciones, setDirecciones] = React.useState<{ id: number; nombre: string; direccion: string }[]>([]);
   const isEditing = !!cita;
 
   const [rutBusqueda, setRutBusqueda] = React.useState("");
@@ -74,6 +75,7 @@ export function CitaFormSheet({ open, onOpenChange, cita, fecha, tipos, horarios
       hora: "",
       id_tipo_consulta: undefined as unknown as number,
       id_prevision: undefined as unknown as number,
+      id_direccion: undefined as unknown as number,
       observacion: "",
       confirmada: "false",
       sobrecupo: false,
@@ -105,6 +107,10 @@ export function CitaFormSheet({ open, onOpenChange, cita, fecha, tipos, horarios
     if (open) {
       fetchPrevisiones()
         .then(setPrevisiones)
+        .catch(() => {});
+      fetch("/api/direcciones")
+        .then((r) => (r.ok ? r.json() : { data: [] }))
+        .then((json) => setDirecciones(json.data ?? []))
         .catch(() => {});
       if (cita) {
         const d = new Date(cita.fecha_hora);
@@ -533,6 +539,35 @@ export function CitaFormSheet({ open, onOpenChange, cita, fecha, tipos, horarios
                   </Field>
                 )}
               />
+
+              {direcciones.length > 0 && (
+                <Controller
+                  control={form.control}
+                  name="id_direccion"
+                  render={({ field, fieldState }) => (
+                    <Field className="gap-1.5" data-invalid={fieldState.invalid}>
+                      <FieldLabel htmlFor="cita-direccion">Lugar de atención</FieldLabel>
+                      <Select
+                        value={field.value ? String(field.value) : ""}
+                        onValueChange={(v) => field.onChange(v ? Number(v) : (undefined as unknown as number))}
+                      >
+                        <SelectTrigger id="cita-direccion" className="w-full">
+                          <SelectValue placeholder="Sin dirección específica" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="">Sin dirección específica</SelectItem>
+                          {direcciones.map((d) => (
+                            <SelectItem key={d.id} value={String(d.id)}>
+                              {d.nombre} — {d.direccion}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                    </Field>
+                  )}
+                />
+              )}
 
               <Controller
                 control={form.control}
