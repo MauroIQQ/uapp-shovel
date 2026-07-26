@@ -57,6 +57,7 @@ export function AgendaVerticalPage({ tipos, horarios }: AgendaVerticalPageProps)
     {
       accessorKey: "fecha_hora",
       header: "Hora",
+      size: 90,
       cell: ({ row }) => {
         const d = new Date(row.original.fecha_hora);
         return (
@@ -69,24 +70,20 @@ export function AgendaVerticalPage({ tipos, horarios }: AgendaVerticalPageProps)
     {
       accessorKey: "paciente_nombre",
       header: "Paciente",
+      size: 270,
       cell: ({ row }) => (
-        <div>
-          <span className="font-medium">{row.getValue<string>("paciente_nombre")}</span>
-          {row.original.atendido === "SI" && (
-            <Badge variant="secondary" className="ml-2 text-[10px]">
-              Atendido
-            </Badge>
-          )}
-        </div>
+        <span className="font-medium">{row.getValue<string>("paciente_nombre")}</span>
       ),
     },
     {
       accessorKey: "tipo_descripcion",
       header: "Tipo",
+      size: 90,
     },
     {
       accessorKey: "prevision_nombre",
       header: "Previsión",
+      size: 135,
       cell: ({ row }) => (
         <span className="text-muted-foreground">
           {row.getValue<string | null>("prevision_nombre") ?? "—"}
@@ -95,7 +92,8 @@ export function AgendaVerticalPage({ tipos, horarios }: AgendaVerticalPageProps)
     },
     {
       accessorKey: "confirmada",
-      header: "Conf",
+      header: "Confirmada",
+      size: 90,
       cell: ({ row }) => (
         row.getValue("confirmada") === "SI"
           ? <Badge variant="default" className="text-[10px]">Sí</Badge>
@@ -104,7 +102,8 @@ export function AgendaVerticalPage({ tipos, horarios }: AgendaVerticalPageProps)
     },
     {
       id: "sobrecupo",
-      header: "SC",
+      header: "S.Cupo",
+      size: 90,
       cell: ({ row }) => (
         row.original.sobrecupo
           ? <Badge variant="destructive" className="text-[10px]">SC</Badge>
@@ -112,8 +111,20 @@ export function AgendaVerticalPage({ tipos, horarios }: AgendaVerticalPageProps)
       ),
     },
     {
+      id: "atendido",
+      header: "Atendido",
+      size: 90,
+      cell: ({ row }) => (
+        row.original.atendido === "SI"
+          ? <Badge variant="secondary" className="text-[10px]">Sí</Badge>
+          : <Badge variant="outline" className="text-[10px]">No</Badge>
+      ),
+      enableSorting: false,
+    },
+    {
       id: "email",
       header: "Email",
+      size: 72,
       cell: ({ row }) => {
         const cita = row.original;
         return cita.recordatorio_creado
@@ -125,6 +136,7 @@ export function AgendaVerticalPage({ tipos, horarios }: AgendaVerticalPageProps)
     },
     {
       id: "actions",
+      size: 27,
       cell: ({ row }) => {
         const cita = row.original;
         return (
