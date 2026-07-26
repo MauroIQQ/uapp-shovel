@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { Building2, Plus } from "lucide-react";
+import { Building2, MapPin, Plus } from "lucide-react";
 
 import { ServerDataTable } from "@/app/(main)/dashboard/componentes/datatable/_components/server-data-table";
 import {
@@ -22,6 +22,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+import { DireccionesSection } from "@/modules/direcciones/presentation/direcciones-section";
 
 import { useBuscarEmpresas } from "../application/buscar-empresas.use-case";
 import type { Empresa } from "../domain/empresa.entity";
@@ -88,52 +91,75 @@ export function EmpresasPage() {
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="font-bold text-2xl tracking-tight">Empresas</h1>
-          <p className="mt-1 text-muted-foreground text-sm">Gestión de empresas del sistema</p>
+          <p className="mt-1 text-muted-foreground text-sm">Gestión de empresas y lugares de atención</p>
         </div>
-        <Button onClick={handleCreate}>
-          <Plus /> Nueva Empresa
-        </Button>
       </div>
 
-      <ServerDataTable
-        columns={columns}
-        data={filteredData}
-        loading={loading}
-        error={error}
-        onRefresh={refresh}
-        searchColumn="rut_empresa"
-        searchPlaceholder="Filtrar por RUT empresa"
-        filterBar={filterBar}
-        hideColumnsButton
-      />
+      <Tabs defaultValue="empresas">
+        <TabsList className="mb-6">
+          <TabsTrigger value="empresas">
+            <Building2 className="mr-2 size-4" />
+            Empresas
+          </TabsTrigger>
+          <TabsTrigger value="direcciones">
+            <MapPin className="mr-2 size-4" />
+            Direcciones
+          </TabsTrigger>
+        </TabsList>
 
-      <EmpresaFormSheet open={sheetOpen} onOpenChange={setSheetOpen} empresa={editEmpresa} onSuccess={refresh} />
+        <TabsContent value="empresas">
+          <div className="mb-6 flex items-center justify-between">
+            <div />
+            <Button onClick={handleCreate}>
+              <Plus /> Nueva Empresa
+            </Button>
+          </div>
 
-      <AlertDialog
-        open={!!deleteEmpresaData}
-        onOpenChange={(open) => {
-          if (!open) setDeleteEmpresaData(null);
-        }}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>¿Eliminar empresa?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Esta acción no se puede deshacer. Se eliminará la empresa{" "}
-              <strong>{deleteEmpresaData?.rut_empresa}</strong>.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleDeleteConfirm}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
-              Eliminar
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+          <ServerDataTable
+            columns={columns}
+            data={filteredData}
+            loading={loading}
+            error={error}
+            onRefresh={refresh}
+            searchColumn="rut_empresa"
+            searchPlaceholder="Filtrar por RUT empresa"
+            filterBar={filterBar}
+            hideColumnsButton
+          />
+
+          <EmpresaFormSheet open={sheetOpen} onOpenChange={setSheetOpen} empresa={editEmpresa} onSuccess={refresh} />
+
+          <AlertDialog
+            open={!!deleteEmpresaData}
+            onOpenChange={(open) => {
+              if (!open) setDeleteEmpresaData(null);
+            }}
+          >
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>¿Eliminar empresa?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Esta acción no se puede deshacer. Se eliminará la empresa{" "}
+                  <strong>{deleteEmpresaData?.rut_empresa}</strong>.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={handleDeleteConfirm}
+                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                >
+                  Eliminar
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </TabsContent>
+
+        <TabsContent value="direcciones">
+          <DireccionesSection />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
