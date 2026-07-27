@@ -145,7 +145,7 @@ export async function createBooking(data: CreateBookingInput): Promise<{ ok: boo
         const dir = await prisma.uapp_direcciones.findUnique({ where: { id: data.id_direccion } })
         if (dir) direccion = { nombre: dir.nombre, direccion: dir.direccion, piso: dir.piso, oficina: dir.oficina }
       }
-      sendEmail(
+      await sendEmail(
         paciente.correo,
         "Cita Agendada",
         confirmacionTemplate({
