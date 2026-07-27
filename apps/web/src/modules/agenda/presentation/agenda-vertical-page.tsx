@@ -8,6 +8,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { ServerDataTable } from "@/app/(main)/dashboard/componentes/datatable/_components/server-data-table";
 
 import { useAgenda } from "../application/use-agenda";
@@ -57,7 +58,6 @@ export function AgendaVerticalPage({ tipos, horarios }: AgendaVerticalPageProps)
     {
       accessorKey: "fecha_hora",
       header: "Hora",
-      size: 90,
       cell: ({ row }) => {
         const d = new Date(row.original.fecha_hora);
         return (
@@ -70,7 +70,6 @@ export function AgendaVerticalPage({ tipos, horarios }: AgendaVerticalPageProps)
     {
       accessorKey: "paciente_nombre",
       header: "Paciente",
-      size: 270,
       cell: ({ row }) => (
         <span className="font-medium">{row.getValue<string>("paciente_nombre")}</span>
       ),
@@ -78,12 +77,10 @@ export function AgendaVerticalPage({ tipos, horarios }: AgendaVerticalPageProps)
     {
       accessorKey: "tipo_descripcion",
       header: "Tipo",
-      size: 90,
     },
     {
       accessorKey: "prevision_nombre",
       header: "Previsión",
-      size: 135,
       cell: ({ row }) => (
         <span className="text-muted-foreground">
           {row.getValue<string | null>("prevision_nombre") ?? "—"}
@@ -93,7 +90,6 @@ export function AgendaVerticalPage({ tipos, horarios }: AgendaVerticalPageProps)
     {
       accessorKey: "confirmada",
       header: "Confirmada",
-      size: 90,
       cell: ({ row }) => (
         row.getValue("confirmada") === "SI"
           ? <Badge variant="default" className="text-[10px]">Sí</Badge>
@@ -103,7 +99,6 @@ export function AgendaVerticalPage({ tipos, horarios }: AgendaVerticalPageProps)
     {
       id: "sobrecupo",
       header: "S.Cupo",
-      size: 90,
       cell: ({ row }) => (
         row.original.sobrecupo
           ? <Badge variant="destructive" className="text-[10px]">SC</Badge>
@@ -113,7 +108,6 @@ export function AgendaVerticalPage({ tipos, horarios }: AgendaVerticalPageProps)
     {
       id: "atendido",
       header: "Atendido",
-      size: 90,
       cell: ({ row }) => (
         row.original.atendido === "SI"
           ? <Badge variant="secondary" className="text-[10px]">Sí</Badge>
@@ -124,19 +118,32 @@ export function AgendaVerticalPage({ tipos, horarios }: AgendaVerticalPageProps)
     {
       id: "email",
       header: "Email",
-      size: 72,
       cell: ({ row }) => {
         const cita = row.original;
-        return cita.recordatorio_creado
-          ? <MailCheck className="size-4 text-emerald-600" />
-          : <Mail className="size-4 text-muted-foreground/40" />;
+        return (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span className="inline-flex cursor-pointer">
+                  {cita.recordatorio_creado ? (
+                    <MailCheck className="size-4 text-emerald-600" />
+                  ) : (
+                    <Mail className="size-4 text-muted-foreground/40" />
+                  )}
+                </span>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{cita.recordatorio_creado ? "Email enviado" : "Sin email"}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        );
       },
       enableSorting: false,
       enableHiding: false,
     },
     {
       id: "actions",
-      size: 27,
       cell: ({ row }) => {
         const cita = row.original;
         return (

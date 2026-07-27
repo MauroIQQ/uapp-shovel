@@ -45,6 +45,13 @@ const columnWidths: Record<string, string> = {
   correo: "w-[10%]",
   estado: "w-[10%]",
   estado_cita: "w-[10%]",
+  fecha_hora: "w-[10%]",
+  paciente_nombre: "w-[35%]",
+  tipo_descripcion: "w-[10%]",
+  prevision_nombre: "w-[12%]",
+  confirmada: "w-[8%]",
+  sobrecupo: "w-[8%]",
+  atendido: "w-[8%]",
 };
 
 function TableSkeleton({ rows = 5, columns: colCount = 6 }) {
