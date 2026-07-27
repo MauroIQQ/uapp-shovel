@@ -39,7 +39,10 @@ export function CalendarioMensual({
   onDayClick,
   selectedFecha,
 }: CalendarioMensualProps) {
-  const todayStr = React.useMemo(() => new Date().toISOString().slice(0, 10), []);
+  const todayStr = React.useMemo(() => {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  }, []);
   const [viewYear, setViewYear] = React.useState(new Date().getFullYear());
   const [viewMonth, setViewMonth] = React.useState(new Date().getMonth());
 

@@ -22,7 +22,10 @@ interface AgendaVerticalPageProps {
 }
 
 export function AgendaVerticalPage({ tipos, horarios }: AgendaVerticalPageProps) {
-  const todayStr = React.useMemo(() => new Date().toISOString().slice(0, 10), []);
+  const todayStr = React.useMemo(() => {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  }, []);
   const { citas, loading, error, refresh } = useAgenda(todayStr);
 
   const [sheetOpen, setSheetOpen] = React.useState(false);

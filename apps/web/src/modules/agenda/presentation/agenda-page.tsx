@@ -33,7 +33,11 @@ export function AgendaPage({
   horarios: initialHorarios,
   resumen: initialResumen,
 }: AgendaPageProps) {
-  const [currentFecha, setCurrentFecha] = React.useState(new Date().toISOString().slice(0, 10));
+  const todayStr = (() => {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  })();
+  const [currentFecha, setCurrentFecha] = React.useState(todayStr);
   const [currentMes, setCurrentMes] = React.useState(() => {
     const now = new Date();
     return { year: now.getFullYear(), month: now.getMonth() + 1 };
